@@ -30,6 +30,9 @@ importers:
       '@unocss/preset-wind':
         specifier: ^66.6.0
         version: 66.6.0
+      '@unocss/reset':
+        specifier: ^66.6.0
+        version: 66.6.0
       unocss:
         specifier: ^66.6.0
         version: 66.6.0(postcss@8.5.6)(vite@6.4.1(jiti@2.6.1))
