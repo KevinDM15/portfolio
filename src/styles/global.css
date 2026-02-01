@@ -1,0 +1,18 @@
+/* Global styles */
+
+:root {
+	font-family: 'Inter', system-ui, -apple-system, sans-serif;
+	color-scheme: light dark;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+}
+
+main {
+	min-height: 100vh;
+}
