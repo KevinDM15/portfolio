@@ -11,4 +11,13 @@ export default defineConfig({
 			injectReset: true,
 		}),
 	],
+	vite: {
+		server: {
+			allowedHosts: [
+				'pyrolytic-duely-braden.ngrok-free.dev',
+				'*.ngrok-free.dev',
+				'*.ngrok.io',
+			],
+		},
+	},
 });

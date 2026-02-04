@@ -1,0 +1,14 @@
+---
+import { FloatingNav } from './ui/FloatingNav';
+import { ThemeToggle } from './ui/ThemeToggle';
+
+interface Props {
+	slot?: string;
+}
+---
+
+<div data-astro-rerun>
+	<FloatingNav client:only="react" />
+	<ThemeToggle client:only="react" />
+</div>
+<slot />

@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+import { FloatingNav } from '../components/ui/FloatingNav';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Kevin Díaz - Full-Stack Developer',
+	description = 'Desarrollador full-stack en Barranquilla, Colombia. Portfolio minimalista y profesional.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+
+		<ClientRouter fallback="none" />
+	</head>
+	<body>
+		<FloatingNav client:only="react" />
+		<ThemeToggle client:only="react" />
+
+		<main>
+			<slot />
+		</main>
+	</body>
+</html>
