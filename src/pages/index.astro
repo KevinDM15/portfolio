@@ -1,8 +1,49 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
+import '../styles/global.css';
+import { getCollection } from 'astro:content';
 import { SectionHero } from '../components/sections/Hero';
+import { SectionAbout } from '../components/sections/About';
+import { SectionExperience } from '../components/sections/Experience';
+import { Projects } from '../components/sections/Projects';
+import { SectionContact } from '../components/sections/Contact';
+import { FloatingNav } from '../components/ui/FloatingNav';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
+
+const title = 'Kevin Díaz - Full-Stack Developer';
+const description = 'Desarrollador full-stack en Barranquilla, Colombia. Portfolio minimalista y profesional.';
+
+// Load content collections
+const experienceEntries = await getCollection('experience');
+const projectEntries = await getCollection('projects');
+const aboutEntries = await getCollection('about');
+
+// Sort by order
+const experiences = experienceEntries.sort((a, b) => a.data.order - b.data.order);
+const projects = projectEntries.sort((a, b) => a.data.order - b.data.order);
+const aboutContent = aboutEntries.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<PageLayout title="Kevin Díaz - Full-Stack Developer">
-	<SectionHero client:load />
-</PageLayout>
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+	</head>
+	<body>
+		<FloatingNav client:only="react" />
+		<ThemeToggle client:only="react" />
+
+		<main>
+			<SectionHero client:load />
+			<SectionAbout aboutContent={aboutContent} client:visible />
+			<SectionExperience experiences={experiences} client:visible />
+			<Projects projects={projects} client:visible />
+			<SectionContact client:visible />
+		</main>
+	</body>
+</html>

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useThemeSync } from '../../hooks/useThemeSync';
 
 const socialLinks = [
 	{ id: 'github', url: 'https://github.com', label: 'GitHub' },
@@ -12,7 +11,6 @@ const socialLinks = [
 
 export function SectionContact() {
 	const sectionRef = useRef<HTMLElement>(null);
-	const { theme } = useThemeSync();
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -20,19 +18,7 @@ export function SectionContact() {
 	});
 
 	useEffect(() => {
-		const ctx = gsap.context(() => {
-			gsap.from('.contact-content', {
-				opacity: 0,
-				y: 30,
-				duration: 1,
-				scrollTrigger: {
-					trigger: '#contact',
-					start: 'top 70%',
-				},
-			});
-		}, sectionRef);
-
-		return () => ctx.revert();
+		// No animations for this section
 	}, []);
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -52,22 +38,19 @@ export function SectionContact() {
 		<section
 			id="contact"
 			ref={sectionRef}
-			className="min-h-screen flex items-center relative overflow-hidden px-8 md:px-16 pt-32 pb-24 transition-colors duration-300"
-			style={{
-				backgroundColor: theme === 'dark' ? '#0F1419' : '#F8F9FA',
-			}}
+			className="section-base dark:bg-dark light:bg-[#E8E8E8]"
 		>
-			<div className="max-w-4xl w-full mx-auto contact-content">
-				<h2 className="text-4xl md:text-5xl font-bold text-neutral-lightest mb-4">
+			<div className="max-w-4xl w-full mx-auto">
+				<h2 className="contact-title text-4xl md:text-5xl font-bold text-theme mb-4">
 					Conversemos
 				</h2>
-				<p className="text-lg text-neutral-light mb-12">
+				<p className="contact-subtitle text-lg text-theme-secondary mb-12">
 					¿Tienes un proyecto en mente? Escríbeme.
 				</p>
 
 				<form onSubmit={handleSubmit} className="space-y-6 mb-12">
-					<div>
-						<label htmlFor="name" className="text-sm text-neutral-light mb-2 block">
+					<div className="contact-field">
+						<label htmlFor="name" className="text-sm text-theme-secondary mb-2 block">
 							Nombre
 						</label>
 						<input
@@ -76,22 +59,14 @@ export function SectionContact() {
 							name="name"
 							value={formData.name}
 							onChange={handleChange}
-							className="w-full px-4 py-3 text-base text-neutral-lightest placeholder-neutral-dark focus:outline-none transition-all rounded-xl"
-							style={{
-								backdropFilter: 'blur(10px) saturate(150%)',
-								WebkitBackdropFilter: 'blur(10px) saturate(150%)',
-								background: 'rgba(255, 255, 255, 0.05)',
-								border: '1px solid rgba(255, 255, 255, 0.1)',
-							}}
-							onFocus={(e) => e.target.style.border = '1px solid rgba(224, 122, 95, 0.5)'}
-							onBlur={(e) => e.target.style.border = '1px solid rgba(255, 255, 255, 0.1)'}
+							className="w-full px-4 py-3 text-base text-theme dark:placeholder-neutral-dark light:placeholder-neutral focus:outline-none transition-all rounded-xl backdrop-blur-10 backdrop-saturate-150 dark:bg-white/5 light:bg-black/5 border dark:border-white/10 light:border-black/10 focus:border-accent/50"
 							placeholder="Tu nombre"
 							required
 						/>
 					</div>
 
-					<div>
-						<label htmlFor="email" className="text-sm text-neutral-light mb-2 block">
+					<div className="contact-field">
+						<label htmlFor="email" className="text-sm text-theme-secondary mb-2 block">
 							Email
 						</label>
 						<input
@@ -100,22 +75,14 @@ export function SectionContact() {
 							name="email"
 							value={formData.email}
 							onChange={handleChange}
-							className="w-full px-4 py-3 text-base text-neutral-lightest placeholder-neutral-dark focus:outline-none transition-all rounded-xl"
-							style={{
-								backdropFilter: 'blur(10px) saturate(150%)',
-								WebkitBackdropFilter: 'blur(10px) saturate(150%)',
-								background: 'rgba(255, 255, 255, 0.05)',
-								border: '1px solid rgba(255, 255, 255, 0.1)',
-							}}
-							onFocus={(e) => e.target.style.border = '1px solid rgba(224, 122, 95, 0.5)'}
-							onBlur={(e) => e.target.style.border = '1px solid rgba(255, 255, 255, 0.1)'}
+							className="w-full px-4 py-3 text-base text-theme dark:placeholder-neutral-dark light:placeholder-neutral focus:outline-none transition-all rounded-xl backdrop-blur-10 backdrop-saturate-150 dark:bg-white/5 light:bg-black/5 border dark:border-white/10 light:border-black/10 focus:border-accent/50"
 							placeholder="tu@email.com"
 							required
 						/>
 					</div>
 
-					<div>
-						<label htmlFor="message" className="text-sm text-neutral-light mb-2 block">
+					<div className="contact-field">
+						<label htmlFor="message" className="text-sm text-theme-secondary mb-2 block">
 							Mensaje
 						</label>
 						<textarea
@@ -123,15 +90,7 @@ export function SectionContact() {
 							name="message"
 							value={formData.message}
 							onChange={handleChange}
-							className="w-full px-4 py-3 text-base text-neutral-lightest placeholder-neutral-dark focus:outline-none transition-all resize-none rounded-xl"
-							style={{
-								backdropFilter: 'blur(10px) saturate(150%)',
-								WebkitBackdropFilter: 'blur(10px) saturate(150%)',
-								background: 'rgba(255, 255, 255, 0.05)',
-								border: '1px solid rgba(255, 255, 255, 0.1)',
-							}}
-							onFocus={(e) => e.target.style.border = '1px solid rgba(224, 122, 95, 0.5)'}
-							onBlur={(e) => e.target.style.border = '1px solid rgba(255, 255, 255, 0.1)'}
+							className="w-full px-4 py-3 text-base text-theme dark:placeholder-neutral-dark light:placeholder-neutral focus:outline-none transition-all resize-none rounded-xl backdrop-blur-10 backdrop-saturate-150 dark:bg-white/5 light:bg-black/5 border dark:border-white/10 light:border-black/10 focus:border-accent/50"
 							placeholder="Cuéntame sobre tu proyecto..."
 							rows={6}
 							required
@@ -140,25 +99,18 @@ export function SectionContact() {
 
 					<button
 						type="submit"
-						className="relative overflow-hidden px-8 py-3 font-semibold text-white rounded-full transition-all group"
-						style={{
-							background: 'linear-gradient(135deg, #E07A5F 0%, #F4A59D 100%)',
-							boxShadow: '0 4px 15px rgba(224, 122, 95, 0.4)',
-						}}
+						className="contact-submit relative overflow-hidden px-8 py-3 font-semibold text-white rounded-full transition-all group bg-gradient-to-br from-accent to-accent-light shadow-accent-glow hover:shadow-accent-glow-lg"
 					>
 						<span className="relative z-10">Enviar Mensaje</span>
 						<div
-							className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-							style={{
-								background: 'linear-gradient(135deg, #F4A59D 0%, #E07A5F 100%)',
-							}}
+							className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-accent-light to-accent"
 						></div>
 					</button>
 				</form>
 
 				{/* Social links */}
-				<div className="pt-8 border-t border-neutral-dark/50">
-					<p className="text-sm text-neutral mb-4">
+				<div className="pt-8 border-t dark:border-neutral-dark/50 light:border-neutral-dark/30">
+					<p className="text-sm text-theme-muted mb-4">
 						O encuéntrame en
 					</p>
 					<div className="flex flex-wrap gap-6">
@@ -168,7 +120,7 @@ export function SectionContact() {
 								href={link.url}
 								target={link.id !== 'email' ? '_blank' : undefined}
 								rel={link.id !== 'email' ? 'noopener noreferrer' : undefined}
-								className="text-sm text-neutral-light hover:text-accent transition-colors"
+								className="text-sm text-theme-secondary hover:text-accent transition-colors"
 								aria-label={link.label}
 							>
 								{link.label}
@@ -178,7 +130,7 @@ export function SectionContact() {
 				</div>
 
 				{/* Footer */}
-				<div className="mt-20 text-xs text-neutral-dark font-mono">
+				<div className="mt-20 text-xs text-theme-muted font-mono">
 					© 2026 Kevin Díaz — Hecho con código y café desde Barranquilla
 				</div>
 			</div>

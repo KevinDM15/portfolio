@@ -6,26 +6,13 @@ export function ThemeToggle() {
 	return (
 		<button
 			onClick={toggleTheme}
-			className="fixed top-4 sm:top-6 md:top-8 right-4 sm:right-6 md:right-8 z-50 rounded-full p-3 sm:p-3.5 transition-all duration-300"
-			style={{
-				backdropFilter: 'blur(20px) saturate(180%)',
-				WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-				background: theme === 'dark'
-					? 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
-					: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%)',
-				border: theme === 'dark'
-					? '1px solid rgba(255,255,255,0.18)'
-					: '1px solid rgba(0,0,0,0.1)',
-				boxShadow: theme === 'dark'
-					? '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-					: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
-			}}
+			className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 rounded-full p-3.5 sm:p-4 backdrop-blur-20 backdrop-saturate-180 dark:bg-gradient-to-br dark:from-white/10 dark:to-white/5 light:bg-gradient-to-br light:from-white/80 light:to-white/60 border dark:border-white/18 light:border-black/10 dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] light:shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] hover:scale-110 active:scale-95 transition-all duration-300"
 			aria-label="Toggle theme"
 		>
 			{/* Sun icon (light mode) */}
 			{theme === 'dark' ? (
 				<svg
-					className="w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300"
+					className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 rotate-0 hover:rotate-180"
 					style={{ color: '#F2CC8F' }}
 					fill="none"
 					viewBox="0 0 24 24"
@@ -41,7 +28,7 @@ export function ThemeToggle() {
 				</svg>
 			) : (
 				<svg
-					className="w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300"
+					className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 rotate-0 hover:-rotate-12"
 					style={{ color: '#E07A5F' }}
 					fill="currentColor"
 					viewBox="0 0 24 24"

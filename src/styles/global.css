@@ -92,10 +92,21 @@ main {
 	background: var(--color-accent-light);
 }
 
-/* View Transitions - Smooth page transitions */
-@media (prefers-reduced-motion: no-preference) {
+/* View Transitions - Fast and smooth for all connections */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 0.15s;
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-group(root) {
+	animation-duration: 0.15s;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
 	::view-transition-old(root),
 	::view-transition-new(root) {
-		animation-duration: 0.2s;
+		animation: none;
 	}
 }

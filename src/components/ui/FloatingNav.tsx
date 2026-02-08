@@ -1,56 +1,59 @@
 import { useState, useEffect, useRef } from 'react';
-import { useThemeSync } from '../../hooks/useThemeSync';
 
 interface NavLink {
 	label: string;
-	href: string;
+	shortLabel: string;
+	id: string;
+	icon: string;
 }
 
 const navLinks: NavLink[] = [
-	{ label: 'Inicio', href: '/' },
-	{ label: 'Sobre mí', href: '/about' },
-	{ label: 'Experiencia', href: '/experience' },
-	{ label: 'Contacto', href: '/contact' },
+	{ label: 'Inicio', shortLabel: 'Inicio', id: 'hero', icon: 'i-mdi-home' },
+	{ label: 'Sobre mí', shortLabel: 'Sobre mí', id: 'about', icon: 'i-mdi-account' },
+	{ label: 'Experiencia', shortLabel: 'Exp', id: 'experience', icon: 'i-mdi-briefcase' },
+	{ label: 'Proyectos', shortLabel: 'Proy', id: 'projects', icon: 'i-mdi-rocket-launch' },
+	{ label: 'Contacto', shortLabel: 'Contacto', id: 'contact', icon: 'i-mdi-email' },
 ];
 
 export function FloatingNav() {
-	const [currentPath, setCurrentPath] = useState('');
+	const [activeSection, setActiveSection] = useState('hero');
 	const navRef = useRef<HTMLDivElement>(null);
 	const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
-	const { theme } = useThemeSync();
 
 	useEffect(() => {
-		// Set initial path
-		setCurrentPath(window.location.pathname);
-
-		// Update path on navigation (for View Transitions)
-		const updatePath = () => {
-			setCurrentPath(window.location.pathname);
+		// Intersection Observer to track active section
+		const observerOptions = {
+			root: null,
+			rootMargin: '-50% 0px -50% 0px',
+			threshold: 0,
 		};
 
-		// Listen to both popstate (browser back/forward) and astro page events
-		window.addEventListener('popstate', updatePath);
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					setActiveSection(entry.target.id);
+				}
+			});
+		}, observerOptions);
 
-		// Listen to Astro view transitions
-		document.addEventListener('astro:page-load', updatePath);
-		document.addEventListener('astro:after-swap', updatePath);
+		// Observe all sections
+		navLinks.forEach(({ id }) => {
+			const section = document.getElementById(id);
+			if (section) observer.observe(section);
+		});
 
-		return () => {
-			window.removeEventListener('popstate', updatePath);
-			document.removeEventListener('astro:page-load', updatePath);
-			document.removeEventListener('astro:after-swap', updatePath);
-		};
+		return () => observer.disconnect();
 	}, []);
 
-	// Update indicator position when path changes
+	// Update indicator position when active section changes
 	useEffect(() => {
 		if (!navRef.current) return;
 
 		const updateIndicator = () => {
-			const activeLink = navRef.current?.querySelector(`a[href="${currentPath}"]`) as HTMLElement;
-			if (activeLink) {
-				const left = activeLink.offsetLeft;
-				const width = activeLink.offsetWidth;
+			const activeButton = navRef.current?.querySelector(`button[data-section="${activeSection}"]`) as HTMLElement;
+			if (activeButton) {
+				const left = activeButton.offsetLeft;
+				const width = activeButton.offsetWidth;
 				setIndicatorStyle({ left, width });
 			}
 		};
@@ -58,51 +61,43 @@ export function FloatingNav() {
 		// Small delay to ensure DOM is ready
 		const timer = setTimeout(updateIndicator, 0);
 
-		return () => clearTimeout(timer);
-	}, [currentPath]);
+		// Also update on resize
+		window.addEventListener('resize', updateIndicator);
+
+		return () => {
+			clearTimeout(timer);
+			window.removeEventListener('resize', updateIndicator);
+		};
+	}, [activeSection]);
+
+	const scrollToSection = (id: string) => {
+		const section = document.getElementById(id);
+		if (section) {
+			section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	};
 
 	return (
-		<nav
-			className="fixed top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-50 w-[95%] sm:w-auto max-w-[600px]"
-			style={{
-				backdropFilter: 'blur(20px) saturate(180%)',
-				WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-			}}
-		>
+		<nav className="fixed top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[95%] sm:max-w-[600px] backdrop-blur-20 backdrop-saturate-180">
 			{/* Liquid glass container */}
 			<div className="relative">
 				{/* Glass background with gradient border */}
-				<div
-					className="absolute inset-0 rounded-full sm:rounded-full transition-all duration-300"
-					style={{
-						background: theme === 'dark'
-							? 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
-							: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%)',
-						border: theme === 'dark'
-							? '1px solid rgba(255,255,255,0.18)'
-							: '1px solid rgba(0,0,0,0.1)',
-						boxShadow: theme === 'dark'
-							? '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-							: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
-					}}
-				></div>
+				<div className="absolute inset-0 rounded-full transition-all duration-300 dark:bg-gradient-to-br dark:from-white/10 dark:to-white/5 light:bg-gradient-to-br light:from-white/80 light:to-white/60 border dark:border-white/18 light:border-black/10 dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] light:shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"></div>
 
 				{/* Inner glow effect */}
 				<div
-					className="absolute inset-0 rounded-full sm:rounded-full opacity-50 transition-opacity duration-300"
+					className="absolute inset-0 rounded-full opacity-50 transition-opacity duration-300"
 					style={{
 						background: 'radial-gradient(circle at 50% 0%, rgba(224, 122, 95, 0.2), transparent 70%)',
 					}}
 				></div>
 
 				{/* Content */}
-				<div ref={navRef} className="relative flex items-center justify-center sm:justify-start gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 sm:py-2">
+				<div ref={navRef} className="relative flex items-center justify-center gap-0.5 sm:gap-1.5 px-1.5 sm:px-3 py-1.5 sm:py-2">
 					{/* Animated sliding background indicator */}
 					<div
-						className="absolute rounded-full pointer-events-none"
+						className="absolute rounded-full pointer-events-none bg-gradient-to-br from-accent to-accent-light shadow-accent-glow"
 						style={{
-							background: 'linear-gradient(135deg, #E07A5F 0%, #F4A59D 100%)',
-							boxShadow: '0 4px 15px rgba(224, 122, 95, 0.4)',
 							left: `${indicatorStyle.left}px`,
 							width: `${indicatorStyle.width}px`,
 							height: 'calc(100% - 0.75rem)',
@@ -112,23 +107,25 @@ export function FloatingNav() {
 					></div>
 
 					{navLinks.map((link) => {
-						const isActive = currentPath === link.href;
+						const isActive = activeSection === link.id;
 						return (
-							<a
-								key={link.href}
-								href={link.href}
-								className="relative px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 text-xs sm:text-sm font-extrabold rounded-full whitespace-nowrap transition-colors duration-300"
+							<button
+								key={link.id}
+								data-section={link.id}
+								onClick={() => scrollToSection(link.id)}
+								className="relative px-2.5 py-2 sm:px-4 sm:py-2.5 md:px-5 text-sm sm:text-sm font-extrabold rounded-full transition-colors duration-300 flex items-center justify-center min-w-[44px] sm:min-w-0"
 								style={{
-									color: isActive
-										? '#F8F9FA'
-										: theme === 'dark'
-											? '#C1C3C5'
-											: '#666370',
+									color: isActive ? '#F8F9FA' : 'var(--color-text-muted)',
 									fontFamily: 'var(--font-nav)',
 								}}
+								aria-label={link.label}
+								title={link.label}
 							>
-								<span className="relative z-10">{link.label}</span>
-							</a>
+								{/* Icon only for mobile */}
+								<span className={`relative z-10 sm:hidden ${link.icon} text-lg`}></span>
+								{/* Full label for tablets and up */}
+								<span className="relative z-10 hidden sm:inline whitespace-nowrap">{link.label}</span>
+							</button>
 						);
 					})}
 				</div>
