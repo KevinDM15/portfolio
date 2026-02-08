@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { FloatingNav } from '../components/ui/FloatingNav';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'Kevin Díaz - Full-Stack Developer',
+	description = 'Desarrollador full-stack en Barranquilla, Colombia. Portfolio minimalista y profesional.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+
+		<ClientRouter />
+		<script>
+			// Optimize View Transitions for slow connections (ngrok, etc)
+			document.addEventListener('astro:before-preparation', (event) => {
+				// Add a timeout to prevent hanging on slow networks
+				const timeout = setTimeout(() => {
+					console.warn('View transition timeout - forcing navigation');
+				}, 1000); // 1 second max wait
+
+				document.addEventListener('astro:after-preparation', () => {
+					clearTimeout(timeout);
+				}, { once: true });
+			});
+
+			// Prefetch pages on hover for faster transitions
+			document.addEventListener('astro:page-load', () => {
+				const links = document.querySelectorAll('a[href^="/"]');
+				links.forEach(link => {
+					link.addEventListener('mouseenter', () => {
+						const href = link.getAttribute('href');
+						if (href) {
+							const prefetchLink = document.createElement('link');
+							prefetchLink.rel = 'prefetch';
+							prefetchLink.href = href;
+							document.head.appendChild(prefetchLink);
+						}
+					}, { once: true });
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<FloatingNav client:only="react" />
+		<ThemeToggle client:only="react" />
+
+		<main>
+			<slot />
+		</main>
+	</body>
+</html>

@@ -1,18 +1,112 @@
-/* Global styles */
+/* Global styles - Professional Minimalist */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-	font-family: 'Inter', system-ui, -apple-system, sans-serif;
-	color-scheme: light dark;
+	/* Professional Sans Serif */
+	--font-display: 'Inter', system-ui, sans-serif;
+	/* Bold display font for navigation */
+	--font-nav: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+	/* Monospace for code */
+	--font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+	/* Warm Professional Color Palette */
+	--color-accent: #E07A5F; /* Terracotta */
+	--color-accent-light: #F4A59D;
+	--color-accent-dark: #C4624A;
+	--color-secondary: #F2CC8F; /* Warm beige */
+	--color-secondary-light: #F5D9A8;
+
+	/* Default: Dark theme */
+	--color-bg: #0F1419;
+	--color-bg-lighter: #1A1F26;
+	--color-bg-alt: #252B33;
+	--color-text-primary: #F8F9FA;
+	--color-text-secondary: #E8E9EA;
+	--color-text-muted: #C1C3C5;
+
+	color-scheme: dark;
+	font-family: var(--font-display);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Light theme */
+[data-theme='light'] {
+	--color-bg: #F8F9FA;
+	--color-bg-lighter: #FFFFFF;
+	--color-bg-alt: #E8E9EA;
+	--color-text-primary: #1A1F26;
+	--color-text-secondary: #252B33;
+	--color-text-muted: #666370;
+
+	color-scheme: light;
 }
 
 html {
-	scroll-behavior: smooth;
+	scroll-behavior: auto; /* Lenis handles smooth scrolling */
+	background: var(--color-bg);
+	transition: background-color 0.3s ease;
 }
 
 body {
 	margin: 0;
+	padding: 0;
+	background: var(--color-bg);
+	color: var(--color-text-primary);
+	overflow-x: hidden;
+	line-height: 1.6;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 main {
 	min-height: 100vh;
+}
+
+/* Selection styling */
+::selection {
+	background-color: var(--color-accent);
+	color: var(--color-dark-bg);
+}
+
+::-moz-selection {
+	background-color: var(--color-accent);
+	color: var(--color-dark-bg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--color-bg-lighter);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-accent);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-accent-light);
+}
+
+/* View Transitions - Fast and smooth for all connections */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 0.15s;
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-group(root) {
+	animation-duration: 0.15s;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none;
+	}
 }
