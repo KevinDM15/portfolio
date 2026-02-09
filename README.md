@@ -1,46 +1,104 @@
-# Astro Starter Kit: Basics
+# Kevin Díaz - Portfolio
 
-```sh
-pnpm create astro@latest -- --template basics
+Personal portfolio showcasing my work as a Full-Stack Developer from Barranquilla, Colombia.
+
+## 🚀 Built With
+
+- **[Astro](https://astro.build)** - Static Site Generator with Islands Architecture
+- **[React 19](https://react.dev)** - UI Components (Terminal, Navigation)
+- **[UnoCSS](https://unocss.dev)** - Utility-first CSS with Dark Mode
+- **[GSAP](https://greensock.com/gsap/)** - Smooth Animations
+- **[TypeScript](https://www.typescriptlang.org)** - Type Safety
+
+## 📋 Features
+
+- ⚡ Lightning-fast SSG performance
+- 🌓 Dark/Light mode with smooth transitions
+- 📱 Fully responsive mobile design
+- 🎨 Custom glassmorphism UI components
+- 📝 Content managed via Markdown (Astro Content Collections)
+- ♿ Accessible navigation with keyboard support
+- 🚀 Automated Vercel deployments via GitHub Actions
+
+## 🛠️ Project Structure
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+portfolio-kevin/
+├── src/
+│   ├── components/
+│   │   ├── sections/      # Main page sections
+│   │   ├── ui/            # Reusable UI components
+│   │   └── Terminal/      # Interactive terminal
+│   ├── content/           # Markdown content
+│   │   ├── about/
+│   │   ├── experience/
+│   │   └── projects/
+│   ├── layouts/
+│   ├── pages/
+│   ├── styles/
+│   └── types/
+├── .github/
+│   └── workflows/         # CI/CD pipelines
+└── public/
 ```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+| Command | Action |
+|---------|--------|
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Start dev server at `localhost:4321` |
+| `pnpm build` | Build production site to `./dist/` |
+| `pnpm preview` | Preview build locally |
 
-## 👀 Want to learn more?
+## 🎨 Theme System
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The portfolio uses a hybrid CSS variables + UnoCSS dark mode system:
+
+- Theme switching via `[data-theme]` attribute
+- CSS variables defined in `src/styles/global.css`
+- UnoCSS utilities with `dark:` and `light:` variants
+- Zero JavaScript re-renders on theme changes
+
+## 📝 Content Management
+
+Content is managed using Astro Content Collections with Zod validation:
+
+```bash
+# Add new experience
+src/content/experience/04-new-job.md
+
+# Add new project
+src/content/projects/05-new-project.md
+```
+
+Content is type-safe and validated at build time.
+
+## 🚀 Deployment
+
+This portfolio is automatically deployed to Vercel on every push to `main`:
+
+- Production: Automatic deployment from `main` branch
+- Preview: Automatic preview URLs for pull requests
+- Powered by GitHub Actions workflow
+
+## 📦 Requirements
+
+- Node.js >= 22.0.0
+- pnpm >= 8.0.0
+
+## 📄 License
+
+This project is personal portfolio code. Feel free to use it as inspiration, but please don't copy it directly.
+
+## 📬 Contact
+
+- **GitHub**: [@KevinDM15](https://github.com/KevinDM15)
+- **Location**: Barranquilla, Colombia
+- **Portfolio**: [Your deployed URL]
+
+---
+
+**Built with passion in Barranquilla 🌊**
