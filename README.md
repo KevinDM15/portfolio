@@ -97,7 +97,7 @@ This project is personal portfolio code. Feel free to use it as inspiration, but
 
 - **GitHub**: [@KevinDM15](https://github.com/KevinDM15)
 - **Location**: Barranquilla, Colombia
-- **Portfolio**: [Your deployed URL]
+- **Portfolio**: [Portfolio](https://portfolio-kevin-dev.vercel.app/)
 
 ---
 
