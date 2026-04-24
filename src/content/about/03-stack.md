@@ -1,8 +1,8 @@
 ---
 type: "detail"
-title: "Stack Principal"
+title: "Stack"
 highlight: "neutral"
 order: 3
 ---
 
-React, TypeScript, Node.js, PostgreSQL, Astro, GSAP, Three.js
+React • Next.js • NestJS • TypeScript • Go • PostgreSQL • AWS

@@ -5,4 +5,4 @@ highlight: "neutral"
 order: 4
 ---
 
-Performance-first, clean architecture, exceptional UI/UX
+Clean Architecture • SOLID • Performance • Escalabilidad
