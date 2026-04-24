@@ -58,71 +58,61 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 			ref={sectionRef}
 			className="h-screen flex items-center relative dark:bg-[#141419] light:bg-neutral-lighter overflow-hidden"
 		>
-
-			<div ref={containerRef} className="max-w-7xl w-full mx-auto px-8 relative z-10">
-				{/* Timeline with single experience display */}
-				<div className="relative">
-					{/* Timeline vertical line - left side on mobile, center on desktop */}
-					<div className="absolute left-0 md:left-12 top-0 bottom-0 w-0.5">
-						{/* Background line */}
+			<div ref={containerRef} className="max-w-5xl w-full mx-auto px-6 sm:px-10 md:px-16 relative z-10">
+				<div className="flex gap-6 sm:gap-10 md:gap-14">
+					{/* Timeline - columna fija */}
+					<div className="relative flex-none w-0.5">
 						<div className="absolute inset-0 bg-gradient-to-b from-accent via-secondary to-accent opacity-20"></div>
-						{/* Animated fill line */}
 						<div
 							className="absolute left-0 top-0 w-full bg-gradient-to-b from-accent via-secondary to-accent transition-all duration-500"
 							style={{ height: `${(currentIndex + 1) / experiences.length * 100}%` }}
 						></div>
-					</div>
-
-					{/* Progress indicator */}
-					<div className="absolute left-0 md:left-12 top-4 -translate-x-1/2 z-20">
-						<div className="bg-accent text-white font-black text-sm px-2.5 py-1 rounded-full shadow-lg">
-							{currentIndex + 1}/{experiences.length}
+						{/* Progress badge */}
+						<div className="absolute -top-1 left-1/2 -translate-x-1/2 z-20">
+							<div className="bg-accent text-white font-black text-xs px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap">
+								{currentIndex + 1}/{experiences.length}
+							</div>
+						</div>
+						{/* Dot */}
+						<div className="absolute top-8 left-1/2 -translate-x-1/2">
+							<div className="relative">
+								<div className="absolute inset-0 rounded-full bg-accent animate-ping opacity-75"></div>
+								<div className="relative w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-accent border-2 sm:border-4 dark:border-[#141419] light:border-neutral-lighter"></div>
+							</div>
 						</div>
 					</div>
 
-					{/* Single experience content with fade transition */}
+					{/* Content - columna flexible */}
 					{currentExp && (
 						<div
 							key={currentExp.id}
-							className={`experience-item pl-12 md:pl-24 transition-all duration-500 ${
+							className={`min-w-0 flex-1 transition-all duration-500 ${
 								isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
 							}`}
 						>
-							{/* Timeline dot */}
-							<div className="absolute left-0 md:left-12 top-0 -translate-x-1/2">
-								<div className="relative">
-									<div className="absolute inset-0 rounded-full bg-accent animate-ping opacity-75"></div>
-									<div className="relative w-4 h-4 rounded-full bg-accent border-4 dark:border-[#141419] light:border-neutral-lighter"></div>
-								</div>
-							</div>
-
-							{/* Giant Title - Position */}
-							<h3 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-theme mb-4 leading-tight">
+							<h3 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-theme mb-3 sm:mb-4 leading-tight">
 								{currentExp.data.position}
 							</h3>
 
-							{/* Company & Period */}
-							<div className="flex flex-wrap items-center gap-4 mb-8">
-								<p className="text-2xl md:text-3xl text-accent font-bold">
+							<div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 sm:mb-8">
+								<p className="text-lg sm:text-2xl md:text-3xl text-accent font-bold">
 									{currentExp.data.company}
 								</p>
-								<span className="text-theme-muted text-lg">•</span>
-								<div className="px-4 py-1.5 rounded-full text-sm font-bold font-mono uppercase tracking-wider bg-accent/20 text-accent">
+								<span className="text-theme-muted hidden sm:inline">•</span>
+								<div className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold font-mono uppercase tracking-wider bg-accent/20 text-accent">
 									{currentExp.data.period}
 								</div>
 							</div>
 
-							{/* Description */}
-							<p className="text-lg md:text-xl text-theme-secondary leading-relaxed mb-8 max-w-3xl">
+							<p className="text-sm sm:text-base md:text-lg text-theme-secondary leading-relaxed mb-4 sm:mb-8">
 								{currentExp.body}
 							</p>
 
-							{/* Technologies */}
-							<div className="flex flex-wrap gap-2 max-w-3xl">
+							<div className="flex flex-wrap gap-1.5 sm:gap-2">
 								{currentExp.data.technologies.map((tech) => (
 									<span
 										key={tech}
-										className="text-sm text-theme dark:bg-neutral-dark/30 light:bg-neutral-dark/10 px-4 py-2 rounded-full font-mono border dark:border-white/10 light:border-black/10"
+										className="text-xs sm:text-sm text-theme dark:bg-neutral-dark/30 light:bg-neutral-dark/10 px-2.5 py-1 sm:px-4 sm:py-2 rounded-full font-mono border dark:border-white/10 light:border-black/10"
 									>
 										{tech}
 									</span>
@@ -132,17 +122,6 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 					)}
 				</div>
 			</div>
-
-			{/* CSS Animations */}
-			<style>{`
-				@keyframes slide-right {
-					0%, 100% { transform: translateX(-100%); }
-					50% { transform: translateX(100%); }
-				}
-				.animate-slide-right {
-					animation: slide-right 4s ease-in-out infinite;
-				}
-			`}</style>
 		</section>
 	);
 }
