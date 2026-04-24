@@ -1,8 +1,8 @@
 ---
 type: "detail"
-title: "Espíritu Costeño"
+title: "Disponibilidad"
 highlight: "secondary"
 order: 5
 ---
 
-Alegría en el código, innovación en cada línea, soluciones que fluyen como el Caribe
+Abierto a nuevos proyectos y colaboraciones

@@ -5,4 +5,4 @@ highlight: "accent"
 order: 2
 ---
 
-Disponible para proyectos freelance y colaboraciones
+The Rocket Code — APIs con NestJS y arquitectura hexagonal

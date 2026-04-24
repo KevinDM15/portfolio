@@ -91,61 +91,77 @@ export function SectionAbout({ aboutContent = [] }: AboutSectionProps) {
 		<section
 			id="about"
 			ref={sectionRef}
-			className="section-base dark:bg-[#1A1419] light:bg-white"
+			className="section-base dark:bg-[#1A1419] light:bg-white relative overflow-hidden"
 		>
-			{/* Ambient light effect */}
-			<div
-				className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10 blur-3xl pointer-events-none"
-				style={{
-					background: 'radial-gradient(circle, rgba(224, 122, 95, 0.3) 0%, transparent 70%)',
-				}}
-			></div>
 
 			<div className="max-w-6xl w-full mx-auto relative z-10">
-				<div className="grid md:grid-cols-2 gap-16">
-					{/* Left - Intro */}
-					{intro && (
-						<div className="about-content">
-							<h2 className="about-title text-4xl md:text-5xl font-bold text-theme mb-6 leading-tight">
+				{/* Number + Title layout - Riccardo style */}
+				{intro && (
+					<div className="about-content mb-20 flex items-start gap-6">
+						<div className="about-number text-8xl md:text-9xl font-black text-accent/20 leading-none">
+							02
+						</div>
+						<div className="flex-1 pt-4">
+							<h2 className="about-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-theme mb-4 leading-tight">
 								{intro.data.title}
 							</h2>
 							<div
-								className="prose prose-lg prose-p:text-theme-secondary prose-p:leading-relaxed prose-p:mb-6 last:prose-p:mb-0"
+								className="text-lg md:text-xl text-theme-secondary leading-relaxed max-w-2xl"
 								dangerouslySetInnerHTML={{ __html: intro.body }}
 							/>
 						</div>
-					)}
+					</div>
+				)}
 
-					{/* Right - Details with liquid glass cards */}
-					<div className="space-y-6">
-						{details.map((detail) => (
+				{/* Numbered cards with hover states */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
+					{details.map((detail, index) => {
+						return (
 							<div
 								key={detail.id}
-								className={`about-detail ${getCardClass(detail.data.highlight)} p-6`}
+								className={`about-detail group relative ${getCardClass(detail.data.highlight)} p-6 transition-all duration-500 hover:scale-[1.02] cursor-pointer overflow-hidden`}
 							>
-								{detail.data.title && (
-									<p className={`text-xs font-bold ${getTitleColor(detail.data.highlight)} uppercase tracking-widest mb-3`}>
-										{detail.data.title}
-									</p>
-								)}
-								<div
-									className="text-base text-theme-secondary"
-									dangerouslySetInnerHTML={{ __html: detail.body }}
-								/>
+								{/* Large number background */}
+								<div className="absolute -top-4 -right-4 text-8xl font-black opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+									0{index + 1}
+								</div>
+
+								<div className="relative z-10">
+									{detail.data.title && (
+										<div className="flex items-center gap-3 mb-3">
+											<span className="text-2xl font-black text-accent">
+												0{index + 1}
+											</span>
+											<p className={`text-xs font-bold ${getTitleColor(detail.data.highlight)} uppercase tracking-widest`}>
+												{detail.data.title}
+											</p>
+										</div>
+									)}
+									<div
+										className="text-base text-theme-secondary leading-relaxed"
+										dangerouslySetInnerHTML={{ __html: detail.body }}
+									/>
+								</div>
+
+								{/* Animated border on hover */}
+								<div className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-500 ${
+									detail.data.highlight === 'accent' ? 'bg-accent' :
+									detail.data.highlight === 'secondary' ? 'bg-secondary' :
+									'bg-theme-muted'
+								}`}></div>
 							</div>
-						))}
-					</div>
+						);
+					})}
 				</div>
 
-				{/* Luna del Río reference with liquid glass */}
-				<div className="about-footer mt-20">
-					<div className="inline-block px-6 py-3 glass-card">
-						<p className="text-sm text-theme-muted font-mono">
-							Inspirado por la Luna del Río — 65 metros de altura, infinitas posibilidades de código
-						</p>
-					</div>
+				{/* Minimalist footer */}
+				<div className="about-footer mt-24 text-center">
+					<p className="text-xs text-theme-muted font-mono opacity-50 hover:opacity-100 transition-opacity">
+						Inspirado por la Luna del Río — 65 metros de altura, infinitas posibilidades de código
+					</p>
 				</div>
 			</div>
+
 		</section>
 	);
 }

@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const socialLinks = [
-	{ id: 'github', url: 'https://github.com', label: 'GitHub' },
-	{ id: 'linkedin', url: 'https://linkedin.com', label: 'LinkedIn' },
-	{ id: 'twitter', url: 'https://twitter.com', label: 'Twitter' },
-	{ id: 'email', url: 'mailto:kevin@example.com', label: 'Email' },
+	{ id: 'github', url: 'https://github.com/KevinDM15', label: 'GitHub' },
+	{ id: 'linkedin', url: 'https://www.linkedin.com/in/kevindm14/	', label: 'LinkedIn' },
+	{ id: 'email', url: 'mailto:kevindiazm.14@gmail.com', label: 'Email' },
+	{ id: 'phone', url: 'tel:+573002329174', label: '(57) 3002329174' },
 ];
 
 export function SectionContact() {
@@ -118,8 +116,8 @@ export function SectionContact() {
 							<a
 								key={link.id}
 								href={link.url}
-								target={link.id !== 'email' ? '_blank' : undefined}
-								rel={link.id !== 'email' ? 'noopener noreferrer' : undefined}
+								target={link.id !== 'email' && link.id !== 'phone' ? '_blank' : undefined}
+								rel={link.id !== 'email' && link.id !== 'phone' ? 'noopener noreferrer' : undefined}
 								className="text-sm text-theme-secondary hover:text-accent transition-colors"
 								aria-label={link.label}
 							>

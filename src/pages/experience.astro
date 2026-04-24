@@ -1,8 +1,13 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import { SectionExperience } from '../components/sections/Experience';
+import { getCollection } from 'astro:content';
+
+// Load experience data
+const experienceEntries = await getCollection('experience');
+const experiences = experienceEntries.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <PageLayout title="Experiencia - Kevin Díaz">
-	<SectionExperience client:load />
+	<SectionExperience experiences={experiences} client:load />
 </PageLayout>
