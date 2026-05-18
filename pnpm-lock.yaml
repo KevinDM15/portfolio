@@ -26,6 +26,9 @@ importers:
       astro:
         specifier: ^6.3.3
         version: 6.3.3(jiti@2.6.1)(rollup@4.57.1)
+      groq-sdk:
+        specifier: ^1.2.0
+        version: 1.2.0
       gsap:
         specifier: ^3.14.2
         version: 3.14.2
@@ -1256,6 +1259,10 @@ packages:
 
   glsl-noise@0.0.0:
     resolution: {integrity: sha512-b/ZCF6amfAUb7dJM/MxRs7AetQEahYzJ8PtgfrmEdtw6uyGOr+ZSGtgjFm6mfsBkxJ4d2W7kg+Nlqzqvn3Bc0w==}
+
+  groq-sdk@1.2.0:
+    resolution: {integrity: sha512-pMhSYXWcjiqvbOeKdv2zjci1BYjGdp04a40hnmQmJpKJyB6oa+gRndAqE128gwR0NLgYO+Wt1fIF46KNHcplsw==}
+    hasBin: true
 
   gsap@3.14.2:
     resolution: {integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==}
@@ -3409,6 +3416,8 @@ snapshots:
   globals@11.12.0: {}
 
   glsl-noise@0.0.0: {}
+
+  groq-sdk@1.2.0: {}
 
   gsap@3.14.2: {}
 
