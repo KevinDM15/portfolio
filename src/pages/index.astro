@@ -8,6 +8,7 @@ import { Projects } from '../components/sections/Projects';
 import { SectionContact } from '../components/sections/Contact';
 import { FloatingNav } from '../components/ui/FloatingNav';
 import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { ChatBot } from '../components/islands/ChatBot';
 
 const title = 'Kevin Díaz - Full-Stack Developer';
 const description = 'Desarrollador full-stack en Barranquilla, Colombia. Portfolio minimalista y profesional.';
@@ -37,6 +38,7 @@ const aboutContent = aboutEntries.sort((a, b) => a.data.order - b.data.order);
 	<body>
 		<FloatingNav client:only="react" />
 		<ThemeToggle client:only="react" />
+		<ChatBot client:load />
 
 		<main>
 			<SectionHero client:load />
