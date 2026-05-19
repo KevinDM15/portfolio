@@ -36,7 +36,7 @@ export function SectionContact() {
 		<section
 			id="contact"
 			ref={sectionRef}
-			className="section-base dark:bg-dark light:bg-[#E8E8E8]"
+			className="section-base dark:bg-[#1C1713] light:bg-[#EDE8E2]"
 		>
 			<div className="max-w-4xl w-full mx-auto">
 				<h2 className="contact-title text-4xl md:text-5xl font-bold text-theme mb-4">
