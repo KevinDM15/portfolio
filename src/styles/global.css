@@ -1,29 +1,29 @@
 /* Global styles - Professional Minimalist */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-	/* Professional Sans Serif */
-	--font-display: 'Inter', system-ui, sans-serif;
-	/* Bold display font for navigation */
-	--font-nav: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-	/* Monospace for code */
+	/* Geometric modern — great at all sizes */
+	--font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+	/* Nav */
+	--font-nav: 'Plus Jakarta Sans', system-ui, sans-serif;
+	/* Monospace */
 	--font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
-	/* Warm Professional Color Palette */
-	--color-accent: #E07A5F; /* Terracotta */
-	--color-accent-light: #F4A59D;
-	--color-accent-dark: #C4624A;
-	--color-secondary: #F2CC8F; /* Warm beige */
-	--color-secondary-light: #F5D9A8;
+	/* Burnt orange — more vivid and personal than terracotta */
+	--color-accent: #D4622A;
+	--color-accent-light: #E8845A;
+	--color-accent-dark: #B84E1C;
+	--color-secondary: #E8B86D; /* Amber warm */
+	--color-secondary-light: #F0CB92;
 
-	/* Default: Dark theme */
-	--color-bg: #0F1419;
-	--color-bg-lighter: #1A1F26;
-	--color-bg-alt: #252B33;
-	--color-text-primary: #F8F9FA;
-	--color-text-secondary: #E8E9EA;
-	--color-text-muted: #C1C3C5;
+	/* Dark theme — warm dark chocolate, not cold blue-black */
+	--color-bg: #120F0C;
+	--color-bg-lighter: #1C1713;
+	--color-bg-alt: #26201A;
+	--color-text-primary: #F2EDE8;
+	--color-text-secondary: #D4CBC2;
+	--color-text-muted: #8A7E75;
 
 	color-scheme: dark;
 	font-family: var(--font-display);
@@ -33,12 +33,12 @@
 
 /* Light theme */
 [data-theme='light'] {
-	--color-bg: #F8F9FA;
+	--color-bg: #FAF7F4;
 	--color-bg-lighter: #FFFFFF;
-	--color-bg-alt: #E8E9EA;
-	--color-text-primary: #1A1F26;
-	--color-text-secondary: #252B33;
-	--color-text-muted: #666370;
+	--color-bg-alt: #EDE8E2;
+	--color-text-primary: #1A1410;
+	--color-text-secondary: #3D332A;
+	--color-text-muted: #7A6E65;
 
 	color-scheme: light;
 }
@@ -55,7 +55,8 @@ body {
 	background: var(--color-bg);
 	color: var(--color-text-primary);
 	overflow-x: hidden;
-	line-height: 1.6;
+	line-height: 1.7;
+	letter-spacing: 0.01em;
 	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
