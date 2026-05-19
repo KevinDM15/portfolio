@@ -3,84 +3,89 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { AboutSectionProps } from '../../types/content';
 
+const SKILLS = [
+	{ label: 'React', weight: 'font-black' },
+	{ label: 'Next.js', weight: 'font-bold' },
+	{ label: 'NestJS', weight: 'font-black' },
+	{ label: 'TypeScript', weight: 'font-bold' },
+	{ label: 'PostgreSQL', weight: 'font-light' },
+	{ label: 'AWS', weight: 'font-black' },
+	{ label: 'Go', weight: 'font-light' },
+	{ label: 'Docker', weight: 'font-bold' },
+	{ label: 'Redux', weight: 'font-light' },
+	{ label: 'MaterialUI', weight: 'font-bold' },
+];
+
+const STATS = [
+	{ value: '6+', label: 'años de\nexperiencia' },
+	{ value: '3', label: 'empresas\ntecnológicas' },
+	{ value: '∞', label: 'líneas de\ncódigo' },
+];
+
 export function SectionAbout({ aboutContent = [] }: AboutSectionProps) {
 	const sectionRef = useRef<HTMLElement>(null);
 
-	// Separate intro from details
-	const intro = aboutContent.find((item) => item.data.type === 'intro');
-	const details = aboutContent.filter((item) => item.data.type === 'detail');
-
-	// Helper to get card class based on highlight
-	const getCardClass = (highlight?: string) => {
-		switch (highlight) {
-			case 'accent':
-				return 'glass-card-accent';
-			case 'secondary':
-				return 'glass-card-secondary';
-			case 'neutral':
-			default:
-				return 'glass-card-neutral';
-		}
-	};
-
-	// Helper to get text color based on highlight
-	const getTitleColor = (highlight?: string) => {
-		switch (highlight) {
-			case 'accent':
-				return 'text-accent';
-			case 'secondary':
-				return 'text-secondary';
-			case 'neutral':
-			default:
-				return 'text-theme-muted';
-		}
-	};
+	const intro = aboutContent.find(item => item.data.type === 'intro');
 
 	useEffect(() => {
+		gsap.registerPlugin(ScrollTrigger);
+
 		const ctx = gsap.context(() => {
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: '#about',
-					start: 'top 70%',
-					once: true, // Solo ejecuta una vez
-				},
-			});
-
-			// Title types in like a terminal
-			tl.fromTo('.about-title',
-				{ opacity: 0, x: -30 },
-				{ opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' }
-			);
-
-			// Content reveals with clip-path (like terminal text appearing)
-			tl.fromTo('.about-content',
-				{ opacity: 0, clipPath: 'inset(0 100% 0 0)' },
-				{ opacity: 1, clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' },
-				'-=0.3'
-			);
-
-			// Cards flip in with 3D rotation
-			tl.fromTo('.about-detail',
+			// Label slides in
+			gsap.fromTo('.about-label',
+				{ opacity: 0, x: -20 },
 				{
-					opacity: 0,
-					rotationY: -60,
-					transformOrigin: 'left center',
-				},
-				{
-					opacity: 1,
-					rotationY: 0,
-					duration: 0.5,
-					stagger: 0.1,
-					ease: 'back.out(1.3)',
-				},
-				'-=0.5'
+					opacity: 1, x: 0, duration: 0.6, ease: 'power3.out',
+					scrollTrigger: { trigger: '#about', start: 'top 75%', once: true },
+				}
 			);
 
-			// Luna del Río reference bounces in
-			tl.fromTo('.about-footer',
-				{ opacity: 0, scale: 0.9, y: 20 },
-				{ opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'power2.out' },
-				'-=0.2'
+			// Big words stagger up
+			gsap.fromTo('.about-word',
+				{ opacity: 0, y: 60, skewY: 4 },
+				{
+					opacity: 1, y: 0, skewY: 0,
+					duration: 0.9, stagger: 0.12, ease: 'power4.out',
+					scrollTrigger: { trigger: '#about', start: 'top 70%', once: true },
+				}
+			);
+
+			// Divider expands
+			gsap.fromTo('.about-divider',
+				{ scaleX: 0, transformOrigin: 'left center' },
+				{
+					scaleX: 1, duration: 0.8, ease: 'power3.inOut', delay: 0.3,
+					scrollTrigger: { trigger: '#about', start: 'top 65%', once: true },
+				}
+			);
+
+			// Right column fades up
+			gsap.fromTo('.about-right',
+				{ opacity: 0, y: 30 },
+				{
+					opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.4,
+					scrollTrigger: { trigger: '#about', start: 'top 65%', once: true },
+				}
+			);
+
+			// Stats count up
+			gsap.fromTo('.about-stat',
+				{ opacity: 0, y: 20 },
+				{
+					opacity: 1, y: 0,
+					duration: 0.5, stagger: 0.1, ease: 'power2.out', delay: 0.6,
+					scrollTrigger: { trigger: '#about', start: 'top 60%', once: true },
+				}
+			);
+
+			// Skills stagger
+			gsap.fromTo('.skill-item',
+				{ opacity: 0, y: 10 },
+				{
+					opacity: 1, y: 0,
+					duration: 0.4, stagger: 0.04, ease: 'power2.out', delay: 0.5,
+					scrollTrigger: { trigger: '.about-skills', start: 'top 80%', once: true },
+				}
 			);
 		}, sectionRef);
 
@@ -91,77 +96,137 @@ export function SectionAbout({ aboutContent = [] }: AboutSectionProps) {
 		<section
 			id="about"
 			ref={sectionRef}
-			className="section-base dark:bg-[#1A1419] light:bg-white relative overflow-hidden"
+			className="relative dark:bg-[#120F0C] light:bg-[#FAF7F4] py-28 sm:py-36 px-6 sm:px-10 md:px-16 overflow-hidden"
 		>
+			{/* Grain texture overlay */}
+			<div
+				className="absolute inset-0 opacity-[0.03] pointer-events-none"
+				style={{
+					backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+					backgroundRepeat: 'repeat',
+					backgroundSize: '128px',
+				}}
+			/>
+
+			{/* Decorative accent line top */}
+			<div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
 			<div className="max-w-6xl w-full mx-auto relative z-10">
-				{/* Number + Title layout - Riccardo style */}
-				{intro && (
-					<div className="about-content mb-20 flex items-start gap-6">
-						<div className="about-number text-8xl md:text-9xl font-black text-accent/20 leading-none">
-							02
-						</div>
-						<div className="flex-1 pt-4">
-							<h2 className="about-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-theme mb-4 leading-tight">
-								{intro.data.title}
-							</h2>
-							<div
-								className="text-lg md:text-xl text-theme-secondary leading-relaxed max-w-2xl"
-								dangerouslySetInnerHTML={{ __html: intro.body }}
-							/>
-						</div>
-					</div>
-				)}
 
-				{/* Numbered cards with hover states */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
-					{details.map((detail, index) => {
-						return (
-							<div
-								key={detail.id}
-								className={`about-detail group relative ${getCardClass(detail.data.highlight)} p-6 transition-all duration-500 hover:scale-[1.02] cursor-pointer overflow-hidden`}
-							>
-								{/* Large number background */}
-								<div className="absolute -top-4 -right-4 text-8xl font-black opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-									0{index + 1}
-								</div>
-
-								<div className="relative z-10">
-									{detail.data.title && (
-										<div className="flex items-center gap-3 mb-3">
-											<span className="text-2xl font-black text-accent">
-												0{index + 1}
-											</span>
-											<p className={`text-xs font-bold ${getTitleColor(detail.data.highlight)} uppercase tracking-widest`}>
-												{detail.data.title}
-											</p>
-										</div>
-									)}
-									<div
-										className="text-base text-theme-secondary leading-relaxed"
-										dangerouslySetInnerHTML={{ __html: detail.body }}
-									/>
-								</div>
-
-								{/* Animated border on hover */}
-								<div className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-500 ${
-									detail.data.highlight === 'accent' ? 'bg-accent' :
-									detail.data.highlight === 'secondary' ? 'bg-secondary' :
-									'bg-theme-muted'
-								}`}></div>
-							</div>
-						);
-					})}
+				{/* Section label */}
+				<div className="about-label flex items-center gap-3 mb-12">
+					<span className="text-[10px] font-mono uppercase tracking-[0.4em] text-accent">02 — Sobre mí</span>
+					<div className="h-px w-12 bg-accent/40" />
 				</div>
 
-				{/* Minimalist footer */}
-				<div className="about-footer mt-24 text-center">
-					<p className="text-xs text-theme-muted font-mono opacity-50 hover:opacity-100 transition-opacity">
-						Inspirado por la Luna del Río — 65 metros de altura, infinitas posibilidades de código
-					</p>
+				{/* Main editorial layout */}
+				<div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
+
+					{/* LEFT — Big typography */}
+					<div className="flex-none lg:w-[42%]">
+						<div className="overflow-hidden">
+							<h2
+								className="about-word block font-black leading-[0.88] tracking-tighter text-theme"
+								style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)' }}
+							>
+								Full-
+							</h2>
+						</div>
+						<div className="overflow-hidden">
+							<h2
+								className="about-word block font-black leading-[0.88] tracking-tighter text-transparent bg-clip-text"
+								style={{
+									fontSize: 'clamp(3.5rem, 8vw, 7rem)',
+									backgroundImage: 'linear-gradient(135deg, #E07A5F 0%, #F2CC8F 100%)',
+								}}
+							>
+								Stack
+							</h2>
+						</div>
+						<div className="overflow-hidden">
+							<h2
+								className="about-word block font-black leading-[0.88] tracking-tighter text-theme"
+								style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)' }}
+							>
+								Dev.
+							</h2>
+						</div>
+
+						{/* Divider */}
+						<div className="about-divider h-px bg-gradient-to-r from-accent/60 to-transparent mt-8 mb-8" />
+
+						{/* Stats row */}
+						<div className="flex gap-8">
+							{STATS.map(stat => (
+								<div key={stat.value} className="about-stat">
+									<div
+										className="font-black text-accent leading-none mb-1"
+										style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
+									>
+										{stat.value}
+									</div>
+									<div className="text-[10px] font-mono uppercase tracking-wider text-theme-muted whitespace-pre-line leading-relaxed">
+										{stat.label}
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+
+					{/* RIGHT — Content */}
+					<div className="about-right flex-1 min-w-0 pt-0 lg:pt-4">
+
+						{/* Bio */}
+						<p
+							className="text-theme leading-relaxed mb-10"
+							style={{ fontSize: 'clamp(1rem, 1.4vw, 1.2rem)' }}
+						>
+							{intro?.body ?? 'Desarrollador Full-Stack con más de 6 años construyendo productos digitales que escalan. Me obsesiona la arquitectura limpia, el código legible y las interfaces que sienten naturales.'}
+						</p>
+
+						{/* Current work */}
+						<div className="mb-10 pl-4 border-l-2 border-accent/40">
+							<p className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent mb-2">Actualmente</p>
+							<p className="text-sm text-theme-secondary leading-relaxed">
+								The Rocket Code — construyendo APIs con NestJS y arquitectura hexagonal. Liderando decisiones técnicas en un equipo de producto.
+							</p>
+						</div>
+
+						{/* Skills — typographic, no badges */}
+						<div className="about-skills">
+							<p className="text-[10px] font-mono uppercase tracking-[0.3em] text-theme-muted mb-5">Stack técnico</p>
+							<div className="flex flex-wrap gap-x-4 gap-y-2">
+								{SKILLS.map((skill, i) => (
+									<span
+										key={skill.label}
+										className={`skill-item ${skill.weight} text-theme-secondary hover:text-accent transition-colors duration-200 cursor-default`}
+										style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)' }}
+									>
+										{skill.label}
+										{i < SKILLS.length - 1 && (
+											<span className="ml-4 text-theme-muted/30 font-light select-none">·</span>
+										)}
+									</span>
+								))}
+							</div>
+						</div>
+
+						{/* Disponibilidad */}
+						<div className="mt-12 inline-flex items-center gap-3">
+							<span className="relative flex h-2 w-2">
+								<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+								<span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+							</span>
+							<span className="text-xs font-mono text-theme-muted">
+								Abierto a nuevos proyectos y colaboraciones
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 
+			{/* Decorative bottom line */}
+			<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
 		</section>
 	);
 }

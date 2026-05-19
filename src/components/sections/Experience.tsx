@@ -3,125 +3,269 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { ExperienceSectionProps } from '../../types/content';
 
+const TECH_ICONS: Record<string, string> = {
+	'React':        'i-simple-icons-react',
+	'Next.js':      'i-simple-icons-nextdotjs',
+	'NestJS':       'i-simple-icons-nestjs',
+	'TypeScript':   'i-simple-icons-typescript',
+	'PostgreSQL':   'i-simple-icons-postgresql',
+	'AWS':          'i-simple-icons-amazonaws',
+	'MaterialUI':   'i-simple-icons-mui',
+	'Redux':        'i-simple-icons-redux',
+	'Node.js':      'i-simple-icons-nodedotjs',
+	'Docker':       'i-simple-icons-docker',
+	'Go':           'i-simple-icons-go',
+	'Ruby':         'i-simple-icons-ruby',
+	'Rails':        'i-simple-icons-rubyonrails',
+	'GraphQL':      'i-simple-icons-graphql',
+	'Git':          'i-simple-icons-git',
+	'Tailwind':     'i-simple-icons-tailwindcss',
+};
+
 export function SectionExperience({ experiences = [] }: ExperienceSectionProps) {
 	const sectionRef = useRef<HTMLElement>(null);
-	const containerRef = useRef<HTMLDivElement>(null);
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const [isTransitioning, setIsTransitioning] = useState(false);
+	const expandRef = useRef<HTMLDivElement>(null);
+	const [activeIndex, setActiveIndex] = useState(0);
+	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+	const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+	const isDragging = useRef(false);
+	const dragStart = useRef({ x: 0 });
+	const prevIndex = useRef(0);
 
 	useEffect(() => {
-		if (!sectionRef.current || !containerRef.current) return;
-
 		gsap.registerPlugin(ScrollTrigger);
-
-		let lastIndex = 0;
-
 		const ctx = gsap.context(() => {
-			// Pin the section while scrolling through experiences
-			ScrollTrigger.create({
-				trigger: sectionRef.current,
-				start: 'top top',
-				end: `+=${experiences.length * 100}%`,
-				pin: true,
-				pinSpacing: true,
-				scrub: 0.5,
-				onUpdate: (self) => {
-					const progress = self.progress;
-
-					// Calculate which experience should be showing
-					const newIndex = Math.min(
-						Math.floor(progress * experiences.length),
-						experiences.length - 1
-					);
-
-					if (newIndex !== lastIndex) {
-						lastIndex = newIndex;
-						setIsTransitioning(true);
-						setTimeout(() => {
-							setCurrentIndex(newIndex);
-							setTimeout(() => setIsTransitioning(false), 50);
-						}, 300);
-					}
-				},
-			});
+			gsap.fromTo('.exp-header',
+				{ opacity: 0, y: -10 },
+				{ opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+					scrollTrigger: { trigger: '#experience', start: 'top 80%', once: true } }
+			);
+			gsap.fromTo('.exp-timeline',
+				{ opacity: 0, y: 20 },
+				{ opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.15,
+					scrollTrigger: { trigger: '#experience', start: 'top 75%', once: true } }
+			);
 		}, sectionRef);
-
 		return () => ctx.revert();
-	}, [experiences]);
+	}, []);
 
-	// Current experience to display
-	const currentExp = experiences[currentIndex];
+	useEffect(() => {
+		if (!expandRef.current || prevIndex.current === activeIndex) return;
+		prevIndex.current = activeIndex;
+		gsap.fromTo(expandRef.current,
+			{ opacity: 0, y: 10 },
+			{ opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' }
+		);
+	}, [activeIndex]);
+
+	const onMouseDown = (e: React.MouseEvent) => {
+		isDragging.current = false;
+		dragStart.current = { x: e.pageX };
+
+		const onMove = (ev: MouseEvent) => {
+			if (Math.abs(ev.pageX - dragStart.current.x) > 4) isDragging.current = true;
+		};
+		const onUp = () => {
+			window.removeEventListener('mousemove', onMove);
+			window.removeEventListener('mouseup', onUp);
+			setTimeout(() => { isDragging.current = false; }, 50);
+		};
+		window.addEventListener('mousemove', onMove);
+		window.addEventListener('mouseup', onUp);
+	};
+
+	const handleNodeClick = (i: number) => {
+		if (!isDragging.current) setActiveIndex(i);
+	};
+
+	const handleMouseMove = (e: React.MouseEvent, i: number) => {
+		setHoveredIndex(i);
+		setTooltipPos({ x: e.clientX, y: e.clientY });
+	};
+
+	const active = experiences[activeIndex];
+	const hovered = hoveredIndex !== null ? experiences[hoveredIndex] : null;
 
 	return (
 		<section
 			id="experience"
 			ref={sectionRef}
-			className="h-screen flex items-center relative dark:bg-[#141419] light:bg-neutral-lighter overflow-hidden"
+			className="relative dark:bg-[#1C1713] light:bg-[#EDE8E2] pt-28 sm:pt-36 pb-32 overflow-hidden"
 		>
-			<div ref={containerRef} className="max-w-5xl w-full mx-auto px-6 sm:px-10 md:px-16 relative z-10">
-				<div className="flex gap-6 sm:gap-10 md:gap-14">
-					{/* Timeline - columna fija */}
-					<div className="relative flex-none w-0.5">
-						<div className="absolute inset-0 bg-gradient-to-b from-accent via-secondary to-accent opacity-20"></div>
-						<div
-							className="absolute left-0 top-0 w-full bg-gradient-to-b from-accent via-secondary to-accent transition-all duration-500"
-							style={{ height: `${(currentIndex + 1) / experiences.length * 100}%` }}
-						></div>
-						{/* Progress badge */}
-						<div className="absolute -top-1 left-1/2 -translate-x-1/2 z-20">
-							<div className="bg-accent text-white font-black text-xs px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap">
-								{currentIndex + 1}/{experiences.length}
+			<div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+
+			{/* Header */}
+			<div className="exp-header max-w-5xl mx-auto px-6 sm:px-10 md:px-16 mb-16">
+				<div className="flex items-center gap-3 mb-5">
+					<span className="text-[10px] font-mono uppercase tracking-[0.4em] text-accent">03 — Trayectoria</span>
+					<div className="h-px w-12 bg-accent/40" />
+				</div>
+				<h2
+					className="font-black text-theme leading-[0.9] tracking-tight"
+					style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)' }}
+				>
+					Donde estuve<br />
+					<span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-secondary">trabajando.</span>
+				</h2>
+			</div>
+
+			{/* Timeline */}
+			<div className="exp-timeline max-w-5xl mx-auto px-6 sm:px-10 md:px-16">
+				{/* Track */}
+				<div className="relative" onMouseDown={onMouseDown}>
+					{/* Base line */}
+					<div className="absolute top-5 left-0 right-0 h-px dark:bg-white/8 light:bg-black/10" />
+
+					{/* Nodes row — centered */}
+					<div className="flex justify-center">
+						{experiences.map((exp, i) => {
+							const isActive = activeIndex === i;
+
+							return (
+								<div
+									key={exp.id}
+									className="relative flex-none"
+									style={{ width: 'clamp(160px, 20vw, 240px)' }}
+								>
+									{/* Progress fill between nodes */}
+									{i < experiences.length - 1 && (
+										<div className="absolute top-5 left-1/2 w-full h-px overflow-hidden">
+											<div
+												className="h-full transition-all duration-500"
+												style={{
+													background: i < activeIndex ? '#D4622A' : 'transparent',
+													width: i < activeIndex ? '100%' : '0%',
+												}}
+											/>
+										</div>
+									)}
+
+									<div
+										className="flex flex-col items-center pb-6 px-4 cursor-pointer select-none"
+										onClick={() => handleNodeClick(i)}
+										onMouseMove={(e) => handleMouseMove(e, i)}
+										onMouseLeave={() => setHoveredIndex(null)}
+									>
+										{/* Node */}
+										<div className="relative mb-4 z-10 flex items-center justify-center" style={{ width: 40, height: 40 }}>
+											{isActive && (
+												<div className="absolute inset-0 rounded-full bg-accent/10 animate-pulse" />
+											)}
+											<div
+												className="rounded-full transition-all duration-300"
+												style={{
+													width: isActive ? 18 : 10,
+													height: isActive ? 18 : 10,
+													background: isActive ? '#D4622A' : hoveredIndex === i ? 'rgba(212,98,42,0.5)' : 'rgba(212,98,42,0.25)',
+													boxShadow: isActive ? '0 0 0 4px rgba(212,98,42,0.15)' : 'none',
+												}}
+											/>
+										</div>
+
+										<p
+											className="text-sm font-bold text-center mb-1 transition-all duration-300"
+											style={{
+												color: isActive ? '#D4622A' : 'var(--color-text-muted)',
+											}}
+										>
+											{exp.data.company}
+										</p>
+										<p
+											className="text-[9px] font-mono uppercase tracking-widest text-center transition-opacity duration-300"
+											style={{ color: 'var(--color-text-muted)', opacity: isActive ? 0.65 : 0.3 }}
+										>
+											{exp.data.period}
+										</p>
+									</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+
+				{/* Expanded info — inline below the active node */}
+				{active && (
+					<div ref={expandRef} className="mt-8">
+						<div className="h-px w-full mb-8" style={{ background: 'rgba(212,98,42,0.12)' }} />
+
+						<div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-12">
+							{/* Left — title + meta */}
+							<div className="flex-none sm:w-56">
+								<p
+									className="text-[10px] font-mono uppercase tracking-[0.35em] mb-2"
+									style={{ color: 'rgba(212,98,42,0.6)' }}
+								>
+									{String(activeIndex + 1).padStart(2, '0')} / {String(experiences.length).padStart(2, '0')}
+								</p>
+								<h3
+									className="font-black text-theme tracking-tight leading-[1.05] mb-2"
+									style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+								>
+									{active.data.position}
+								</h3>
+								<p className="text-accent font-semibold text-sm mb-1">{active.data.company}</p>
+								<p className="text-[10px] font-mono uppercase tracking-wider text-theme-muted opacity-60">
+									{active.data.period}
+								</p>
 							</div>
-						</div>
-						{/* Dot */}
-						<div className="absolute top-8 left-1/2 -translate-x-1/2">
-							<div className="relative">
-								<div className="absolute inset-0 rounded-full bg-accent animate-ping opacity-75"></div>
-								<div className="relative w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-accent border-2 sm:border-4 dark:border-[#141419] light:border-neutral-lighter"></div>
+
+							{/* Right — description + stack */}
+							<div className="flex-1 min-w-0">
+								<p className="text-sm sm:text-base text-theme-secondary leading-relaxed mb-6">
+									{active.body}
+								</p>
+								<div className="flex flex-wrap gap-2">
+									{active.data.technologies.map(tech => {
+										const icon = TECH_ICONS[tech];
+										return (
+											<div
+												key={tech}
+												className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg dark:bg-white/5 light:bg-black/5 border dark:border-white/8 light:border-black/8 hover:border-accent/30 group transition-all duration-200 cursor-default"
+											>
+												{icon && <span className={`${icon} text-xs opacity-50 group-hover:opacity-90 transition-opacity`} />}
+												<span className="text-[11px] font-mono text-theme-muted group-hover:text-accent transition-colors whitespace-nowrap">
+													{tech}
+												</span>
+											</div>
+										);
+									})}
+								</div>
 							</div>
 						</div>
 					</div>
-
-					{/* Content - columna flexible */}
-					{currentExp && (
-						<div
-							key={currentExp.id}
-							className={`min-w-0 flex-1 transition-all duration-500 ${
-								isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-							}`}
-						>
-							<h3 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-theme mb-3 sm:mb-4 leading-tight">
-								{currentExp.data.position}
-							</h3>
-
-							<div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 sm:mb-8">
-								<p className="text-lg sm:text-2xl md:text-3xl text-accent font-bold">
-									{currentExp.data.company}
-								</p>
-								<span className="text-theme-muted hidden sm:inline">•</span>
-								<div className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold font-mono uppercase tracking-wider bg-accent/20 text-accent">
-									{currentExp.data.period}
-								</div>
-							</div>
-
-							<p className="text-sm sm:text-base md:text-lg text-theme-secondary leading-relaxed mb-4 sm:mb-8">
-								{currentExp.body}
-							</p>
-
-							<div className="flex flex-wrap gap-1.5 sm:gap-2">
-								{currentExp.data.technologies.map((tech) => (
-									<span
-										key={tech}
-										className="text-xs sm:text-sm text-theme dark:bg-neutral-dark/30 light:bg-neutral-dark/10 px-2.5 py-1 sm:px-4 sm:py-2 rounded-full font-mono border dark:border-white/10 light:border-black/10"
-									>
-										{tech}
-									</span>
-								))}
-							</div>
-						</div>
-					)}
-				</div>
+				)}
 			</div>
+
+			{/* Tooltip — follows cursor for non-active nodes */}
+			{hovered && hoveredIndex !== activeIndex && (
+				<div
+					className="fixed z-50 pointer-events-none rounded-xl p-4 w-52"
+					style={{
+						left: tooltipPos.x + 16,
+						top: tooltipPos.y - 8,
+						background: 'var(--color-bg)',
+						border: '1px solid rgba(212,98,42,0.25)',
+						boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+						transform: 'translateY(-50%)',
+					}}
+				>
+					<p className="text-[10px] font-mono uppercase tracking-wider text-accent mb-1">{hovered.data.period}</p>
+					<p className="text-sm font-bold text-theme mb-0.5">{hovered.data.position}</p>
+					<p className="text-xs text-accent/80 font-semibold mb-2.5">{hovered.data.company}</p>
+					<div className="flex flex-wrap gap-1">
+						{hovered.data.technologies.slice(0, 5).map(tech => (
+							<span key={tech} className="text-[10px] font-mono text-theme-muted dark:bg-white/5 light:bg-black/5 px-1.5 py-0.5 rounded">
+								{tech}
+							</span>
+						))}
+						{hovered.data.technologies.length > 5 && (
+							<span className="text-[10px] font-mono text-accent/50">+{hovered.data.technologies.length - 5}</span>
+						)}
+					</div>
+				</div>
+			)}
+
+			<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
 		</section>
 	);
 }

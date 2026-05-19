@@ -15,7 +15,8 @@ export default defineConfig({
 	],
 	shortcuts: {
 		/* Typography */
-		'font-display': 'font-sans',
+		'font-display': "font-['Plus_Jakarta_Sans',system-ui,sans-serif]",
+		'font-body': "font-['Plus_Jakarta_Sans',system-ui,sans-serif]",
 		'font-code': 'font-mono',
 
 		/* Buttons */
@@ -66,32 +67,32 @@ export default defineConfig({
 			'theme-text-secondary': 'var(--color-text-secondary)',
 			'theme-text-muted': 'var(--color-text-muted)',
 
-			/* Professional Warm Palette (static colors) */
+			/* Burnt orange — vivid, personal */
 			accent: {
-				DEFAULT: '#E07A5F', // Warm terracotta
-				light: '#F4A59D',
-				dark: '#C4624A',
+				DEFAULT: '#D4622A',
+				light: '#E8845A',
+				dark: '#B84E1C',
 			},
 			secondary: {
-				DEFAULT: '#F2CC8F', // Warm beige
-				light: '#F5D9A8',
-				dark: '#E0B878',
+				DEFAULT: '#E8B86D', // Warm amber
+				light: '#F0CB92',
+				dark: '#D4A050',
 			},
-			/* Neutral grays with warmth */
+			/* Warm neutrals — no cold grays */
 			neutral: {
-				lightest: '#F8F9FA',
-				lighter: '#E8E9EA',
-				light: '#C1C3C5',
-				DEFAULT: '#81878B',
-				dark: '#4A5057',
-				darker: '#2D3339',
-				darkest: '#1A1D23',
+				lightest: '#FAF7F4',
+				lighter: '#EDE8E2',
+				light: '#C4B9B0',
+				DEFAULT: '#8A7E75',
+				dark: '#4A3F37',
+				darker: '#2A211A',
+				darkest: '#1A1410',
 			},
-			/* Dark backgrounds */
+			/* Warm dark backgrounds */
 			dark: {
-				DEFAULT: '#0F1419', // Softer than pure black
-				lighter: '#1A1F26',
-				alt: '#252B33',
+				DEFAULT: '#120F0C',
+				lighter: '#1C1713',
+				alt: '#26201A',
 			},
 		},
 		boxShadow: {

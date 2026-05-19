@@ -80,20 +80,20 @@ export function SectionHero() {
 		<section
 			id="hero"
 			ref={heroRef}
-			className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-8 md:px-16 pt-32 pb-24 bg-theme dark:bg-dark light:bg-neutral-lightest"
+			className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-8 md:px-16 pt-32 pb-24 dark:bg-[#120F0C] light:bg-[#FAF7F4]"
 		>
 			{/* Animated gradient orbs - Apple style */}
 			<div className="absolute inset-0 overflow-hidden pointer-events-none">
 				<div
 					className="orb-1 absolute top-1/4 -left-1/4 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[600px] md:h-[600px] rounded-full opacity-20 blur-3xl"
 					style={{
-						background: 'radial-gradient(circle, rgba(224, 122, 95, 0.4) 0%, transparent 70%)',
+						background: 'radial-gradient(circle, rgba(212, 98, 42, 0.35) 0%, transparent 70%)',
 					}}
 				></div>
 				<div
 					className="orb-2 absolute bottom-1/4 -right-1/4 w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[500px] md:h-[500px] rounded-full opacity-20 blur-3xl"
 					style={{
-						background: 'radial-gradient(circle, rgba(242, 204, 143, 0.3) 0%, transparent 70%)',
+						background: 'radial-gradient(circle, rgba(232, 184, 109, 0.25) 0%, transparent 70%)',
 					}}
 				></div>
 			</div>
@@ -102,11 +102,11 @@ export function SectionHero() {
 			<div className="w-full max-w-7xl mx-auto relative z-10">
 				{/* Giant Name Typography */}
 				<div className="text-center mb-6 sm:mb-8 md:mb-10">
-					<h1 className="hero-name font-display font-black leading-[0.85] sm:leading-[0.85] md:leading-[0.85] tracking-tighter">
-						<span className="block text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[12rem] xl:text-[14rem] text-theme">
+					<h1 className="hero-name font-display font-black leading-[0.85] tracking-[-0.04em]">
+						<span className="block text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[10rem] text-theme">
 							KEVIN
 						</span>
-						<span className="block text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[12rem] xl:text-[14rem] text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-accent-light">
+						<span className="block text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[10rem] text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-accent-light">
 							DÍAZ
 						</span>
 					</h1>
@@ -123,8 +123,8 @@ export function SectionHero() {
 						<div
 							className="badge-2 relative overflow-hidden rounded-xl sm:rounded-2xl px-4 py-2 sm:px-6 sm:py-3 backdrop-blur-20 backdrop-saturate-180 border border-accent/30"
 							style={{
-								background: 'linear-gradient(135deg, rgba(224, 122, 95, 0.2) 0%, rgba(242, 204, 143, 0.2) 100%)',
-								boxShadow: '0 4px 20px rgba(224, 122, 95, 0.2)',
+								background: 'linear-gradient(135deg, rgba(212, 98, 42, 0.18) 0%, rgba(232, 184, 109, 0.18) 100%)',
+								boxShadow: '0 4px 20px rgba(212, 98, 42, 0.18)',
 							}}
 						>
 							<p className="text-base sm:text-lg md:text-xl lg:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-light font-black tracking-tight">
