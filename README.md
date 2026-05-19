@@ -2,7 +2,7 @@
 
 Personal portfolio showcasing my work as a Full-Stack Developer from Barranquilla, Colombia.
 
-## 🚀 Built With
+## Built With
 
 - **[Astro](https://astro.build)** - Static Site Generator with Islands Architecture
 - **[React 19](https://react.dev)** - UI Components (Terminal, Navigation)
@@ -10,7 +10,7 @@ Personal portfolio showcasing my work as a Full-Stack Developer from Barranquill
 - **[GSAP](https://greensock.com/gsap/)** - Smooth Animations
 - **[TypeScript](https://www.typescriptlang.org)** - Type Safety
 
-## 📋 Features
+## Features
 
 - ⚡ Lightning-fast SSG performance
 - 🌓 Dark/Light mode with smooth transitions
@@ -20,7 +20,7 @@ Personal portfolio showcasing my work as a Full-Stack Developer from Barranquill
 - ♿ Accessible navigation with keyboard support
 - 🚀 Automated Vercel deployments via GitHub Actions
 
-## 🛠️ Project Structure
+## Project Structure
 
 ```
 portfolio-kevin/
@@ -42,7 +42,7 @@ portfolio-kevin/
 └── public/
 ```
 
-## 🧞 Commands
+## Commands
 
 All commands are run from the root of the project:
 
@@ -53,7 +53,7 @@ All commands are run from the root of the project:
 | `pnpm build` | Build production site to `./dist/` |
 | `pnpm preview` | Preview build locally |
 
-## 🎨 Theme System
+## Theme System
 
 The portfolio uses a hybrid CSS variables + UnoCSS dark mode system:
 
@@ -62,7 +62,7 @@ The portfolio uses a hybrid CSS variables + UnoCSS dark mode system:
 - UnoCSS utilities with `dark:` and `light:` variants
 - Zero JavaScript re-renders on theme changes
 
-## 📝 Content Management
+## Content Management
 
 Content is managed using Astro Content Collections with Zod validation:
 
@@ -76,7 +76,7 @@ src/content/projects/05-new-project.md
 
 Content is type-safe and validated at build time.
 
-## 🚀 Deployment
+## Deployment
 
 This portfolio is automatically deployed to Vercel on every push to `main`:
 
@@ -84,16 +84,16 @@ This portfolio is automatically deployed to Vercel on every push to `main`:
 - Preview: Automatic preview URLs for pull requests
 - Powered by GitHub Actions workflow
 
-## 📦 Requirements
+## Requirements
 
 - Node.js >= 22.0.0
 - pnpm >= 8.0.0
 
-## 📄 License
+## License
 
 This project is personal portfolio code. Feel free to use it as inspiration, but please don't copy it directly.
 
-## 📬 Contact
+## Contact
 
 - **GitHub**: [@KevinDM15](https://github.com/KevinDM15)
 - **Location**: Barranquilla, Colombia
