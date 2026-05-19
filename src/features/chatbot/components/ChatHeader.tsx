@@ -10,10 +10,18 @@ export function ChatHeader({ onClose }: ChatHeaderProps) {
 		>
 			<div className="relative flex-none">
 				<div
-					className="w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-sm"
-					style={{ background: 'linear-gradient(135deg, #E07A5F 0%, #F2CC8F 100%)' }}
+					className="w-9 h-9 flex-none overflow-hidden"
+					style={{
+						borderRadius: '10px',
+						border: '1.5px solid rgba(212,98,42,0.5)',
+						boxShadow: '0 0 0 2px rgba(232,184,109,0.15)',
+					}}
 				>
-					KD
+					<img
+						src="/profile_recreated.png"
+						alt="Kevin Díaz"
+						className="w-full h-full object-cover object-top"
+					/>
 				</div>
 				<span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 dark:border-[#141419] light:border-white" />
 			</div>

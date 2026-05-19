@@ -90,7 +90,7 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 		<section
 			id="experience"
 			ref={sectionRef}
-			className="relative dark:bg-[#1C1713] light:bg-[#EDE8E2] pt-28 sm:pt-36 pb-32 overflow-hidden"
+			className="relative dark:bg-[#120F0C] light:bg-[#FAF7F4] pt-28 sm:pt-36 pb-32 overflow-hidden"
 		>
 			<div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 

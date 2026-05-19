@@ -96,7 +96,7 @@ export function SectionAbout({ aboutContent = [] }: AboutSectionProps) {
 		<section
 			id="about"
 			ref={sectionRef}
-			className="relative dark:bg-[#120F0C] light:bg-[#FAF7F4] py-28 sm:py-36 px-6 sm:px-10 md:px-16 overflow-hidden"
+			className="relative dark:bg-[#1C1713] light:bg-[#EDE8E2] py-28 sm:py-36 px-6 sm:px-10 md:px-16 overflow-hidden"
 		>
 			{/* Grain texture overlay */}
 			<div

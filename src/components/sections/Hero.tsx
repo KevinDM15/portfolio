@@ -98,64 +98,127 @@ export function SectionHero() {
 				></div>
 			</div>
 
-			{/* Main Content - Centered */}
-			<div className="w-full max-w-7xl mx-auto relative z-10">
-				{/* Giant Name Typography */}
-				<div className="text-center mb-6 sm:mb-8 md:mb-10">
-					<h1 className="hero-name font-display font-black leading-[0.85] tracking-[-0.04em]">
-						<span className="block text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[10rem] text-theme">
+			{/* Main Content */}
+			<div className="w-full max-w-7xl mx-auto relative z-10 flex flex-col-reverse md:flex-row items-center justify-between gap-8 md:gap-10">
+
+				{/* Left — text */}
+				<div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
+					<h1 className="hero-name font-display font-black leading-[0.85] tracking-[-0.04em] mb-6 sm:mb-8">
+						<span className="block text-[4rem] sm:text-[6rem] md:text-[7rem] lg:text-[9rem] text-theme">
 							KEVIN
 						</span>
-						<span className="block text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[10rem] text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-accent-light">
+						<span className="block text-[4rem] sm:text-[6rem] md:text-[7rem] lg:text-[9rem] text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-accent-light">
 							DÍAZ
 						</span>
 					</h1>
-				</div>
 
-				{/* Role - AI First Developer */}
-				<div className="hero-role text-center mb-6 sm:mb-8">
-					<div className="inline-flex items-center gap-3 sm:gap-4 flex-wrap justify-center px-2">
-						<div className="badge-1 relative overflow-hidden rounded-xl sm:rounded-2xl px-4 py-2 sm:px-6 sm:py-3 backdrop-blur-20 backdrop-saturate-180 dark:bg-gradient-to-br dark:from-white/10 dark:to-white/5 light:bg-gradient-to-br light:from-white/80 light:to-white/60 border dark:border-white/18 light:border-black/10 transition-all duration-300">
-							<p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold tracking-tight text-theme">
-								Desarrollador de Software
-							</p>
+					{/* Role badges */}
+					<div className="hero-role mb-5 sm:mb-7">
+						<div className="inline-flex items-center gap-3 flex-wrap justify-center md:justify-start">
+							<div className="badge-1 relative overflow-hidden rounded-xl sm:rounded-2xl px-4 py-2 sm:px-6 sm:py-3 backdrop-blur-20 backdrop-saturate-180 dark:bg-gradient-to-br dark:from-white/10 dark:to-white/5 light:bg-gradient-to-br light:from-white/80 light:to-white/60 border dark:border-white/18 light:border-black/10 transition-all duration-300">
+								<p className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-theme">
+									Desarrollador de Software
+								</p>
+							</div>
+							<div
+								className="badge-2 relative overflow-hidden rounded-xl sm:rounded-2xl px-4 py-2 sm:px-6 sm:py-3 backdrop-blur-20 backdrop-saturate-180 border border-accent/30"
+								style={{
+									background: 'linear-gradient(135deg, rgba(212, 98, 42, 0.18) 0%, rgba(232, 184, 109, 0.18) 100%)',
+									boxShadow: '0 4px 20px rgba(212, 98, 42, 0.18)',
+								}}
+							>
+								<p className="text-base sm:text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-light font-black tracking-tight">
+									AI-First
+								</p>
+							</div>
 						</div>
-						<div
-							className="badge-2 relative overflow-hidden rounded-xl sm:rounded-2xl px-4 py-2 sm:px-6 sm:py-3 backdrop-blur-20 backdrop-saturate-180 border border-accent/30"
-							style={{
-								background: 'linear-gradient(135deg, rgba(212, 98, 42, 0.18) 0%, rgba(232, 184, 109, 0.18) 100%)',
-								boxShadow: '0 4px 20px rgba(212, 98, 42, 0.18)',
-							}}
+					</div>
+
+					<p className="hero-location text-sm sm:text-base font-mono text-theme-muted mb-6">
+						Barranquilla, Colombia
+					</p>
+
+					<div className="hero-location">
+						<a
+							href="/CV_KEVIN_ES.pdf"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-mono text-sm font-bold tracking-wide border border-accent/40 text-accent transition-all duration-300 hover:bg-accent/10 hover:border-accent hover:shadow-[0_0_20px_rgba(224,122,95,0.2)]"
 						>
-							<p className="text-base sm:text-lg md:text-xl lg:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-light font-black tracking-tight">
-								AI-First
-							</p>
-						</div>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+								<polyline points="14,2 14,8 20,8"/>
+								<line x1="12" y1="18" x2="12" y2="12"/>
+								<line x1="9" y1="15" x2="15" y2="15"/>
+							</svg>
+							Ver CV
+						</a>
 					</div>
 				</div>
 
-				{/* Location - Barranquilla */}
-				<p className="hero-location text-center text-sm sm:text-base md:text-lg font-mono px-4 text-theme-muted">
-					Barranquilla, Colombia
-				</p>
+				{/* Right — profile image with premium geometric shape */}
+				<div
+					className="hero-name flex-none relative"
+					style={{ width: 'clamp(240px, 30vw, 380px)', flexShrink: 0 }}
+				>
+					{/* Amber layer — back */}
+					<div style={{
+						position: 'absolute',
+						inset: 0,
+						transform: 'translate(16px, 16px) skewX(-4deg)',
+						background: 'rgba(232,184,109,0.15)',
+						borderRadius: '12px',
+					}} />
+					{/* Orange layer — mid */}
+					<div style={{
+						position: 'absolute',
+						inset: 0,
+						transform: 'translate(8px, 8px) skewX(-4deg)',
+						background: 'rgba(212,98,42,0.3)',
+						borderRadius: '12px',
+					}} />
 
-				{/* CV Link */}
-				<div className="hero-location text-center mt-6 sm:mt-8">
-					<a
-						href="/CV_KEVIN_ES.pdf"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-mono text-sm font-bold tracking-wide border border-accent/40 text-accent transition-all duration-300 hover:bg-accent/10 hover:border-accent hover:shadow-[0_0_20px_rgba(224,122,95,0.2)]"
-					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-							<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-							<polyline points="14,2 14,8 20,8"/>
-							<line x1="12" y1="18" x2="12" y2="12"/>
-							<line x1="9" y1="15" x2="15" y2="15"/>
-						</svg>
-						Ver CV
-					</a>
+					{/* Image — skewed, on top */}
+					<div style={{
+						position: 'relative',
+						transform: 'skewX(-4deg)',
+						borderRadius: '12px',
+						overflow: 'hidden',
+						aspectRatio: '3 / 4',
+					}}>
+						<img
+							src="/profile_recreated.png"
+							alt="Kevin Díaz"
+							style={{
+								width: '100%',
+								height: '100%',
+								objectFit: 'cover',
+								objectPosition: 'top center',
+								display: 'block',
+								transform: 'skewX(4deg) scale(1.05)',
+							}}
+						/>
+					</div>
+
+					{/* Accent line */}
+					<div style={{
+						position: 'absolute',
+						bottom: -14,
+						left: 0,
+						width: '50%',
+						height: '2px',
+						background: 'linear-gradient(90deg, #D4622A, transparent)',
+					}} />
+					<div style={{
+						position: 'absolute',
+						bottom: -18,
+						left: 0,
+						width: '2px',
+						height: '20px',
+						background: '#D4622A',
+					}} />
 				</div>
+
 			</div>
 
 			{/* Floating animation keyframes */}

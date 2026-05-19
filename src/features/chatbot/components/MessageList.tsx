@@ -24,10 +24,17 @@ function TypingIndicator() {
 function BotAvatar() {
 	return (
 		<div
-			className="w-6 h-6 rounded-full flex items-center justify-center text-white font-black text-[9px] flex-none mb-0.5"
-			style={{ background: 'linear-gradient(135deg, #E07A5F 0%, #F2CC8F 100%)' }}
+			className="w-6 h-6 flex-none mb-0.5 overflow-hidden"
+			style={{
+				borderRadius: '7px',
+				border: '1px solid rgba(212,98,42,0.4)',
+			}}
 		>
-			KD
+			<img
+				src="/profile_recreated.png"
+				alt="Kevin"
+				className="w-full h-full object-cover object-top"
+			/>
 		</div>
 	);
 }
