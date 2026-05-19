@@ -54,7 +54,7 @@ Stack: React, Node.js.
 
 export const POST: APIRoute = async ({ request }) => {
 	try {
-	const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
+	const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 	const body = await request.json();
 	const { messages } = body;
