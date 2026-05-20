@@ -78,7 +78,7 @@ export function FloatingNav() {
 	};
 
 	return (
-		<nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[95%] sm:max-w-[600px] backdrop-blur-20 backdrop-saturate-180">
+		<nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[95%] sm:max-w-[600px] rounded-full backdrop-blur-20 backdrop-saturate-180 overflow-hidden">
 			{/* Liquid glass container */}
 			<div className="relative">
 				{/* Glass background */}
@@ -106,7 +106,7 @@ export function FloatingNav() {
 								key={link.id}
 								data-section={link.id}
 								onClick={() => scrollToSection(link.id)}
-								className="relative px-2.5 py-2 sm:px-4 sm:py-2.5 md:px-5 text-sm sm:text-sm font-extrabold rounded-full transition-colors duration-300 flex items-center justify-center min-w-[44px] sm:min-w-0"
+								className="relative px-2.5 py-2 sm:px-4 sm:py-2.5 md:px-5 text-sm sm:text-sm font-extrabold rounded-full transition-colors duration-300 flex items-center justify-center min-w-[44px] sm:min-w-0 outline-none focus:outline-none hover:bg-white/8"
 								style={{
 									color: isActive ? '#F8F9FA' : 'var(--color-text-muted)',
 									fontFamily: 'var(--font-nav)',
