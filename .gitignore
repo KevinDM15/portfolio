@@ -26,3 +26,8 @@ pnpm-debug.log*
 # vercel
 .vercel
 .env*.local
+
+# playwright
+.playwright-mcp/
+*.png
+*.txt

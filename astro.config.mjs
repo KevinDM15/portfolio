@@ -7,6 +7,11 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
 	adapter: vercel(),
+	env: {
+		schema: {
+			GROQ_API_KEY: { context: 'server', access: 'secret', type: 'string' },
+		},
+	},
 	integrations: [
 		react(),
 		unocss({

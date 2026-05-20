@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import Groq from 'groq-sdk';
+import { GROQ_API_KEY } from 'astro:env/server';
 
 export const prerender = false;
 
@@ -46,15 +47,16 @@ Stack: React, Node.js.
 
 ## Instrucciones de comportamiento
 - Responde siempre en el idioma en que te hablen (español o inglés)
-- Sé conciso pero sustancioso — no des respuestas vacías
-- Para preguntas sobre cómo trabaja Kevin, su personalidad o qué lo hace valioso como profesional, responde con confianza y con ejemplos concretos basados en su experiencia
-- Si no tenés información sobre algo específico, decilo honestamente y redirigí al contacto
+- Sé muy conciso — máximo 3-4 líneas por respuesta. Nunca listas largas ni párrafos extensos
+- Si te preguntan por habilidades o experiencia, menciona 2-3 puntos clave, no todos
+- Para preguntas sobre cómo trabaja Kevin, responde con 1-2 rasgos concretos con un ejemplo breve
+- Si no tienes información sobre algo específico, dilo en una línea y redirige al contacto
 - No respondas preguntas que no tengan relación con Kevin o su perfil profesional
-- Nunca hables en primera persona como si fueras Kevin — sos su asistente, no él`;
+- Nunca hables en primera persona como si fueras Kevin — eres su asistente, no él`;
 
 export const POST: APIRoute = async ({ request }) => {
 	try {
-	const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+	const groq = new Groq({ apiKey: GROQ_API_KEY });
 
 	const body = await request.json();
 	const { messages } = body;
@@ -63,19 +65,51 @@ export const POST: APIRoute = async ({ request }) => {
 		model: 'llama-3.1-8b-instant',
 		messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
 		stream: true,
-		max_tokens: 512,
+		max_tokens: 280,
 	});
 
 	const encoder = new TextEncoder();
 	const readable = new ReadableStream({
 		async start(controller) {
+			let fullResponse = '';
+
 			for await (const chunk of stream) {
 				const text = chunk.choices[0]?.delta?.content ?? '';
 				if (text) {
+					fullResponse += text;
 					controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
 				}
 			}
+
 			controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+			controller.enqueue(encoder.encode(': keep-alive\n\n'));
+
+			try {
+				const lastUserMessage = [...messages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
+				const suggestionsResponse = await groq.chat.completions.create({
+					model: 'llama-3.1-8b-instant',
+					messages: [
+						{
+							role: 'system',
+							content: 'Genera exactamente 3 preguntas cortas de seguimiento (máximo 6 palabras cada una) que un visitante haría después de leer esta respuesta sobre Kevin Díaz. Devuelve SOLO un JSON array de strings, sin explicaciones. Ejemplo: ["¿Qué tecnologías usa?", "¿Tiene experiencia en startups?", "¿Cómo contactarlo?"]',
+						},
+						{
+							role: 'user',
+							content: `Pregunta del usuario: "${lastUserMessage}"\n\nRespuesta dada: "${fullResponse}"`,
+						},
+					],
+					stream: false,
+					max_tokens: 128,
+				});
+
+				const raw = suggestionsResponse.choices[0]?.message?.content ?? '[]';
+				const match = raw.match(/\[.*\]/s);
+				const suggestions: string[] = match ? JSON.parse(match[0]) : [];
+				controller.enqueue(encoder.encode(`data: ${JSON.stringify({ suggestions })}\n\n`));
+			} catch {
+				// suggestions are non-critical — skip silently
+			}
+
 			controller.close();
 		},
 	});

@@ -25,7 +25,7 @@ export function ChatInput({ value, onChange, onSubmit, disabled, inputRef }: Cha
 				type="text"
 				value={value}
 				onChange={e => onChange(e.target.value)}
-				placeholder="Escribí tu pregunta..."
+				placeholder="Escribe tu pregunta..."
 				disabled={disabled}
 				className="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl text-sm dark:bg-white/6 light:bg-black/5 text-theme placeholder-theme-muted border dark:border-white/8 light:border-black/8 focus:outline-none focus:border-accent/50 disabled:opacity-40 transition-colors"
 			/>
