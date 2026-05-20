@@ -257,7 +257,7 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 
 				{/* Expanded info — inline below the active node */}
 				{active && (
-					<div ref={expandRef} className="mt-8" style={{ height: '280px', overflow: 'hidden' }}>
+					<div ref={expandRef} className="mt-8 sm:overflow-hidden" style={{ minHeight: 0 }}>
 						<div className="h-px w-full mb-8" style={{ background: 'rgba(212,98,42,0.12)' }} />
 
 						<div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-12">
