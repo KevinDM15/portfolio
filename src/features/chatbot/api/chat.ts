@@ -2,7 +2,8 @@ import type { Message } from '../types';
 
 export async function streamChatResponse(
 	messages: Message[],
-	onChunk: (text: string) => void
+	onChunk: (text: string) => void,
+	onSuggestions?: (suggestions: string[]) => void
 ): Promise<void> {
 	const res = await fetch('/api/chat', {
 		method: 'POST',
@@ -14,22 +15,30 @@ export async function streamChatResponse(
 
 	const reader = res.body!.getReader();
 	const decoder = new TextDecoder();
-	let streamDone = false;
+	let buffer = '';
 
-	while (!streamDone) {
-		const { done, value } = await reader.read();
-		if (done) break;
-
-		const lines = decoder.decode(value).split('\n');
-
+	const processLines = (lines: string[]) => {
 		for (const line of lines) {
 			if (!line.startsWith('data: ')) continue;
 			const data = line.slice(6);
-			if (data === '[DONE]') { streamDone = true; break; }
+			if (data === '[DONE]') continue;
 			try {
 				const parsed = JSON.parse(data);
 				if (parsed.text) onChunk(parsed.text);
+				if (parsed.suggestions) onSuggestions?.(parsed.suggestions);
 			} catch {}
 		}
+	};
+
+	while (true) {
+		const { done, value } = await reader.read();
+
+		buffer += value ? decoder.decode(value, { stream: !done }) : '';
+
+		const lines = buffer.split('\n');
+		buffer = done ? '' : (lines.pop() ?? '');
+		processLines(lines);
+
+		if (done) break;
 	}
 }
