@@ -31,6 +31,8 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 	const isDragging = useRef(false);
 	const dragStart = useRef({ x: 0 });
 	const prevIndex = useRef(0);
+	const userInteracted = useRef(false);
+	const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
 	useEffect(() => {
 		gsap.registerPlugin(ScrollTrigger);
@@ -52,11 +54,27 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 	useEffect(() => {
 		if (!expandRef.current || prevIndex.current === activeIndex) return;
 		prevIndex.current = activeIndex;
-		gsap.fromTo(expandRef.current,
-			{ opacity: 0, y: 10 },
-			{ opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' }
+		const el = expandRef.current;
+		gsap.killTweensOf(el);
+		gsap.fromTo(el,
+			{ opacity: 0 },
+			{ opacity: 1, duration: 0.8, ease: 'power1.inOut' }
 		);
 	}, [activeIndex]);
+
+	const startAutoPlay = () => {
+		if (autoTimer.current) clearInterval(autoTimer.current);
+		autoTimer.current = setInterval(() => {
+			if (!userInteracted.current) {
+				setActiveIndex(prev => (prev + 1) % experiences.length);
+			}
+		}, 10000);
+	};
+
+	useEffect(() => {
+		startAutoPlay();
+		return () => { if (autoTimer.current) clearInterval(autoTimer.current); };
+	}, [experiences.length]);
 
 	const onMouseDown = (e: React.MouseEvent) => {
 		isDragging.current = false;
@@ -75,7 +93,15 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 	};
 
 	const handleNodeClick = (i: number) => {
-		if (!isDragging.current) setActiveIndex(i);
+		if (!isDragging.current) {
+			userInteracted.current = true;
+			setActiveIndex(i);
+			if (autoTimer.current) clearInterval(autoTimer.current);
+			setTimeout(() => {
+				userInteracted.current = false;
+				startAutoPlay();
+			}, 15000);
+		}
 	};
 
 	const handleMouseMove = (e: React.MouseEvent, i: number) => {
@@ -111,32 +137,78 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 
 			{/* Timeline */}
 			<div className="exp-timeline max-w-5xl mx-auto px-6 sm:px-10 md:px-16">
-				{/* Track */}
-				<div className="relative" onMouseDown={onMouseDown}>
-					{/* Base line */}
-					<div className="absolute top-5 left-0 right-0 h-px dark:bg-white/8 light:bg-black/10" />
 
-					{/* Nodes row — centered */}
-					<div className="flex justify-center">
+				{/* Mobile — vertical list */}
+				<div className="flex flex-col gap-3 sm:hidden mb-6">
+					{experiences.map((exp, i) => {
+						const isActive = activeIndex === i;
+						return (
+							<button
+								key={exp.id}
+								onClick={() => handleNodeClick(i)}
+								className="flex items-center gap-4 px-4 py-3 rounded-2xl border text-left transition-all duration-300"
+								style={{
+									borderColor: isActive ? 'rgba(212,98,42,0.5)' : 'rgba(255,255,255,0.06)',
+									background: isActive ? 'rgba(212,98,42,0.08)' : 'transparent',
+								}}
+							>
+								<div
+									className="flex-none rounded-full transition-all duration-300"
+									style={{
+										width: isActive ? 14 : 8,
+										height: isActive ? 14 : 8,
+										background: isActive ? '#D4622A' : 'rgba(212,98,42,0.3)',
+										boxShadow: isActive ? '0 0 0 3px rgba(212,98,42,0.15)' : 'none',
+									}}
+								/>
+								<div className="flex-1 min-w-0">
+									<p className="text-sm font-bold truncate" style={{ color: isActive ? '#D4622A' : 'var(--color-text-muted)' }}>
+										{exp.data.company}
+									</p>
+									<p className="text-[10px] font-mono uppercase tracking-wider opacity-50 text-theme-muted">
+										{exp.data.period}
+									</p>
+								</div>
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ opacity: isActive ? 1 : 0.3, color: '#D4622A', flexShrink: 0 }}>
+									<path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+								</svg>
+							</button>
+						);
+					})}
+				</div>
+
+				{/* Desktop — horizontal timeline */}
+				<div className="relative hidden sm:block" onMouseDown={onMouseDown}>
+					{/* Nodes row — spread full width */}
+					<div className="flex justify-between">
 						{experiences.map((exp, i) => {
 							const isActive = activeIndex === i;
 
 							return (
 								<div
 									key={exp.id}
-									className="relative flex-none"
-									style={{ width: 'clamp(160px, 20vw, 240px)' }}
+									className="relative flex-1"
 								>
-									{/* Progress fill between nodes */}
+									{/* Connector line: from center of this node to center of next */}
 									{i < experiences.length - 1 && (
-										<div className="absolute top-5 left-1/2 w-full h-px overflow-hidden">
-											<div
-												className="h-full transition-all duration-500"
-												style={{
-													background: i < activeIndex ? '#D4622A' : 'transparent',
-													width: i < activeIndex ? '100%' : '0%',
-												}}
-											/>
+										<div className="absolute top-5 left-1/2 h-px" style={{ right: '-50%' }}>
+											{/* Base track */}
+											<div className="absolute inset-0 dark:bg-white/8 light:bg-black/10" />
+											{/* Completed segments */}
+											{i < activeIndex && (
+												<div className="absolute inset-0 bg-accent" />
+											)}
+											{/* Active segment — progress loader */}
+											{i === activeIndex && (
+												<div
+													key={`progress-${activeIndex}`}
+													className="absolute inset-y-0 left-0 bg-accent"
+													style={{
+														width: '0%',
+														animation: 'timeline-progress 10s linear forwards',
+													}}
+												/>
+											)}
 										</div>
 									)}
 
@@ -185,7 +257,7 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 
 				{/* Expanded info — inline below the active node */}
 				{active && (
-					<div ref={expandRef} className="mt-8">
+					<div ref={expandRef} className="mt-8" style={{ height: '280px', overflow: 'hidden' }}>
 						<div className="h-px w-full mb-8" style={{ background: 'rgba(212,98,42,0.12)' }} />
 
 						<div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-12">
@@ -266,6 +338,13 @@ export function SectionExperience({ experiences = [] }: ExperienceSectionProps) 
 			)}
 
 			<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+
+			<style>{`
+				@keyframes timeline-progress {
+					from { width: 0%; }
+					to   { width: 100%; }
+				}
+			`}</style>
 		</section>
 	);
 }
