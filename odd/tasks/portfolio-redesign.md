@@ -8,7 +8,7 @@ Source of truth: `Kevin Diaz Portfolio Rebuild.zip` (index.html + support.js run
 - S3: Markup, copy, inline styles, SVGs, fonts (Barlow Condensed, Instrument Serif, DM Mono, Reenie Beanie, local woff2) and assets are taken from the zip without visual changes.
 - S4: All behaviors of the zip are kept: dot-portrait canvas repelled by cursor, line reveal, hand-drawn notes, marquee (pauses on hover), ring spin, hexagon pulses, clock + hands, scroll-scrubbed statement, project stage (hover/focus/click), experience bars, magnetic buttons, glass glow, copy-email + confetti + toast, theme toggle with View Transition, responsive layout by container width, prefers-reduced-motion.
 - S5: pnpm only; conventional commits; no AI attribution in commits.
-- Assumption A1: ChatBot island is left out of the new home page (the zip has no chatbot); its files stay untouched.
+- Assumption A1 (superseded by L5): ChatBot restyled with the design tokens and mounted on the home page.
 - Assumption A2: Old sections/components stay in the repo (other pages import them); only `src/pages/index.astro` changes.
 
 ## Tasks
@@ -23,3 +23,4 @@ Source of truth: `Kevin Diaz Portfolio Rebuild.zip` (index.html + support.js run
 - L2: "commitea lo que ya tengo y abre otra rama para hacer esto desde main"
 - L3: "usa Cobalto, todo debe ser igual al zip que te pase"
 - L4: Verified: `pnpm build` ok; desktop 1440 hero matches zip render (nav width identical once DM Mono loads); full page renders all sections; dark toggle sets Cobalto dark tokens; 390px layout switches to mobile; 0 console errors. Not verified: copy/confetti click, project stage hover, reduced-motion.
+- L5: "sí, vuelve a montar el ChatBot adaptado a este diseño" — A1 superseded: ChatBot restyled with design tokens (plain CSS `src/features/chatbot/chatbot.css`, no Uno/gsap), mounted in `Portfolio.astro` inside `[data-kd]` (outside the container-type wrap so `position:fixed` works). Verified light, dark and 390px sheet; 0 console errors. Not verified: live replies (needs the Groq key for /api/chat).

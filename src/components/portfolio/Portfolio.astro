@@ -1,5 +1,6 @@
 ---
 import './portfolio.css';
+import { ChatBot } from '../islands/ChatBot';
 ---
 
 <div data-kd style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#2A3BFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
@@ -343,6 +344,7 @@ import './portfolio.css';
 </main>
 </div>
 <div data-k="toast" role="status" aria-live="polite" style="position:fixed; left:50%; bottom:24px; z-index:70; padding:11px 20px; border-radius:999px; background:var(--fg); color:var(--bg); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; pointer-events:none; transition:opacity .3s, transform .4s cubic-bezier(.7,0,.2,1); opacity:0; transform:translate(-50%, 24px)">Correo copiado</div>
+<ChatBot client:load />
 </div>
 
 <script>

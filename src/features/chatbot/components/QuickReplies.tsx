@@ -53,12 +53,13 @@ interface QuickRepliesProps {
 
 export function QuickReplies({ onSelect }: QuickRepliesProps) {
 	return (
-		<div className="px-4 pb-3 grid grid-cols-2 gap-1.5 flex-none">
+		<div className="kc-quick">
 			{QUICK_REPLIES.map(q => (
 				<button
+					type="button"
 					key={q.label}
 					onClick={() => onSelect(q.text)}
-					className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-[11px] font-semibold text-left border dark:border-white/10 light:border-black/10 dark:text-white/70 light:text-black/60 dark:hover:bg-white/6 light:hover:bg-black/5 dark:hover:border-accent/30 light:hover:border-accent/30 hover:text-accent transition-all duration-200"
+					className="kc-chip"
 				>
 					{q.icon}
 					{q.label}
