@@ -30,11 +30,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 #experiencia article:nth-of-type(3n+3){--accent:var(--c3)}
 [data-k="marq"]>span:nth-child(3n+2) i{background:var(--c2)!important}
 [data-k="marq"]>span:nth-child(3n+3) i{background:var(--c3)!important}
-[data-bar="1"]{background:var(--c1)!important}
-[data-bar="2"]{background:var(--c2)!important}
-[data-bar="3"]{background:var(--c3)!important}
-[data-bar="4"]{background:var(--c1)!important}
-[data-bar="5"]{background:var(--c2)!important}
 
 /* theme toggle icon: moon in light mode (switch to dark), sun in dark mode */
 [data-kd][data-t="light"] [data-icon="sun"]{display:none}
