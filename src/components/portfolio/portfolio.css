@@ -39,3 +39,4 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .kd-nav a:hover,.kd-nav a.on{color:var(--fg)}
 .kd-nav a.on::after{content:"*";margin-left:2px;color:var(--accent)}
 .kd-clock{display:flex;align-items:center;gap:.6ch;padding:0 14px;border-left:1px solid var(--line);color:var(--muted);font-variant-numeric:tabular-nums}
+section[id]{scroll-margin-top:48px}
