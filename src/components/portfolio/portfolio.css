@@ -35,3 +35,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 [data-bar="3"]{background:var(--c3)!important}
 [data-bar="4"]{background:var(--c1)!important}
 [data-bar="5"]{background:var(--c2)!important}
+
+/* theme toggle icon: moon in light mode (switch to dark), sun in dark mode */
+[data-kd][data-t="light"] [data-icon="sun"]{display:none}
+[data-kd][data-t="dark"] [data-icon="moon"]{display:none}

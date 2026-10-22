@@ -10,6 +10,21 @@ const PALETTE = {
 	light: { bg: '#EFEEE9', surface: '#E4E3DC', fg: '#0F0F11', muted: '#5D5D66', accent: '#D4470E', c2: '#B97A00', c3: '#2F9E68', on2: '#FFFFFF', on3: '#FFFFFF' },
 };
 const DEFAULT_THEME: ThemeName = 'light';
+const THEME_KEY = 'kd-theme';
+
+const savedTheme = (): ThemeName | null => {
+	try {
+		const v = localStorage.getItem(THEME_KEY);
+		return v === 'dark' || v === 'light' ? v : null;
+	} catch {
+		return null;
+	}
+};
+const saveTheme = (t: ThemeName) => {
+	try {
+		localStorage.setItem(THEME_KEY, t);
+	} catch {}
+};
 
 const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)).join(',');
 const themeVars = (t: ThemeName) => {
@@ -200,6 +215,8 @@ export function initPortfolio() {
 		const vars = themeVars(t);
 		Object.entries(vars).forEach(([k, v]) => root!.style.setProperty(k, v));
 		dark = t === 'dark';
+		root!.dataset.t = t;
+		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c2'], vars['--c3']];
@@ -220,6 +237,7 @@ export function initPortfolio() {
 
 	function toggleTheme() {
 		const next: ThemeName = dark ? 'light' : 'dark';
+		saveTheme(next);
 		const vt = (document as any).startViewTransition as ((cb: () => void) => { ready: Promise<void> }) | undefined;
 		if (!vt || reduce || !themeEl) return applyTheme(next);
 		const r = themeEl.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
@@ -457,7 +475,7 @@ export function initPortfolio() {
 	}).observe(wrap);
 	st.w = Math.round(wrap.clientWidth) || 1280;
 	applyLayout();
-	applyTheme(DEFAULT_THEME);
+	applyTheme(savedTheme() ?? DEFAULT_THEME);
 	applyProjects();
 	tick();
 	setInterval(tick, 20000);

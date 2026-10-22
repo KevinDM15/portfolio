@@ -6,7 +6,23 @@ import { ChatBot } from '../islands/ChatBot';
 const showProjects = false;
 ---
 
-<div data-kd style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#D4470E; --c1:#D4470E; --c2:#B97A00; --c3:#2F9E68; --c2-on:#FFFFFF; --c3-on:#FFFFFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
+<div data-kd data-t="light" style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#D4470E; --c1:#D4470E; --c2:#B97A00; --c3:#2F9E68; --c2-on:#FFFFFF; --c3-on:#FFFFFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
+<script is:inline>
+	// Paint a saved dark theme before first render; mirrors the dark palette in portfolio.ts
+	(function () {
+		try {
+			if (localStorage.getItem('kd-theme') !== 'dark') return;
+			var r = document.currentScript.parentElement, v = {"--bg": "#0F0F11", "--surface": "#18181B", "--fg": "#EFEEE9", "--muted": "#9C9CA4", "--line": "rgba(239,238,233,.11)", "--line-strong": "rgba(239,238,233,.28)", "--accent": "#F2602B", "--c1": "#F2602B", "--c2": "#F2B134", "--c3": "#5DD39E", "--c2-on": "#0F0F11", "--c3-on": "#0F0F11", "--grain": ".07"};
+			for (var k in v) r.style.setProperty(k, v[k]);
+			r.setAttribute('data-t', 'dark');
+			document.documentElement.style.backgroundColor = v['--bg'];
+			document.documentElement.style.colorScheme = 'dark';
+			document.body.style.backgroundColor = v['--bg'];
+			var m = document.querySelector('meta[name="theme-color"]');
+			if (m) m.content = v['--bg'];
+		} catch (e) {}
+	})();
+</script>
 <div data-k="wrap" style="container-type:inline-size; position:relative; overflow-x:clip; --g:clamp(16px,4cqw,56px)">
 
 <div data-k="cols" aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; z-index:0">
@@ -26,8 +42,8 @@ const showProjects = false;
 
 <div style="display:flex; align-items:center; gap:12px">
   <span data-if="clock" style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-variant-numeric:tabular-nums">BAQ <span data-time>--:--</span></span>
-  <button data-k="theme" type="button" aria-label="Cambiar tema" style="width:40px; height:40px; border-radius:50%; display:grid; place-items:center; color:var(--fg); border:1px solid color-mix(in srgb, var(--fg) 18%, transparent); background:color-mix(in srgb, var(--fg) 8%, transparent); box-shadow:inset 0 1px 0 rgba(255,255,255,.32); transition:background .3s, transform .4s cubic-bezier(.34,1.5,.5,1)" class="hv1">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="width:16px; height:16px"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg>
+  <button data-k="theme" type="button" aria-label="Cambiar a modo oscuro" style="width:40px; height:40px; border-radius:50%; display:grid; place-items:center; color:var(--fg); border:1px solid color-mix(in srgb, var(--fg) 18%, transparent); background:color-mix(in srgb, var(--fg) 8%, transparent); box-shadow:inset 0 1px 0 rgba(255,255,255,.32); transition:background .3s, transform .4s cubic-bezier(.34,1.5,.5,1)" class="hv1">
+    <svg data-icon="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="width:16px; height:16px"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg><svg data-icon="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" style="width:16px; height:16px"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"></path></svg>
   </button>
 </div>
 </div>
@@ -47,7 +63,7 @@ const showProjects = false;
 </div>
 
 <div style="position:relative; z-index:1; display:flex; justify-content:space-between; gap:8px 16px; flex-wrap:wrap; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">
-  <span>Edición 2026</span><span>10.96° N / 74.80° W</span><span>Barranquilla, Colombia</span>
+  <span>Edición 2026</span><span>Gran Malecón · 11.03° N / 74.80° W</span><span>Barranquilla, Colombia</span>
 </div>
 
 <div style="position:relative; order:2; margin-top:clamp(72px,6cqw,88px)">
@@ -321,7 +337,7 @@ const showProjects = false;
         </svg>
         <b style="display:block; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; font-size:clamp(64px,8cqw,128px); line-height:.85; letter-spacing:-.03em; font-variant-numeric:tabular-nums"><span data-time>--:--</span></b>
       </div>
-      <p style="margin:14px 0 0; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">UTC−5 · 10.96° N, 74.80° W</p></div>
+      <p style="margin:14px 0 0; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">UTC−5 · 11.03° N, 74.80° W<br>Gran Malecón del Río</p></div>
   </div>
 </div>
 </section>
@@ -365,7 +381,7 @@ const showProjects = false;
   <div style="display:flex; justify-content:space-between; gap:8px 24px; flex-wrap:wrap; padding:22px 0 28px; border-top:1px solid var(--line-strong); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); flex-direction:var(--L-sfBarDir); align-items:var(--L-sfBarAlign)">
     <span>© 2026 Kevin Díaz · Todos los derechos reservados</span>
     <span style="font-family:'Reenie Beanie',cursive; color:var(--accent); font-size:26px; line-height:1; text-transform:none; letter-spacing:0; transform:rotate(-3deg); margin:-6px 0">hecho con código y café</span>
-    <span>10.96° N / 74.80° W</span>
+    <span>Gran Malecón · 11.03° N / 74.80° W</span>
     <a href="#top" style="text-decoration:none; transition:color .3s" class="hv4">Volver arriba ↑</a>
   </div>
 
