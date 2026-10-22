@@ -30,21 +30,7 @@ const showProjects = false;
 </div>
 <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; z-index:60; opacity:var(--grain); mix-blend-mode:overlay; background-image:url(svg/textura-grano.svg)"></div>
 
-<header data-k="bar" style="position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--bg) 90%, transparent); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); border-bottom:1px solid var(--line-strong)">
-  <div style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:0 var(--g); height:54px; display:flex; align-items:center; justify-content:space-between; gap:16px">
-    <a href="#top" aria-label="Inicio" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--fg); white-space:nowrap"><b style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; font-size:24px; line-height:1; letter-spacing:.01em">KD</b><span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">// Kevin Díaz</span></a>
-    <nav data-if="nav" class="kd-nav" aria-label="Secciones" style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase">
-      <a href="#proyectos" data-nav="proyectos">Proyectos</a><span aria-hidden="true" style="color:color-mix(in srgb, var(--muted) 55%, transparent)">//</span><a href="#experiencia" data-nav="experiencia">Experiencia</a><span aria-hidden="true" style="color:color-mix(in srgb, var(--muted) 55%, transparent)">//</span><a href="#contacto" data-nav="contacto">Contacto</a>
-    </nav>
-    <div style="display:flex; align-items:center; gap:16px">
-      <span data-if="clock" style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-variant-numeric:tabular-nums">BAQ <span data-time>--:--</span></span>
-      <button data-k="theme" type="button" aria-label="Cambiar a modo oscuro" style="width:34px; height:34px; border-radius:50%; display:grid; place-items:center; color:var(--fg); border:1px solid var(--line-strong); transition:background .3s, transform .4s cubic-bezier(.34,1.5,.5,1)" class="hv1">
-    <svg data-icon="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="width:16px; height:16px"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg><svg data-icon="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" style="width:16px; height:16px"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"></path></svg>
-  </button>
-    </div>
-  </div>
-  <i data-k="progress" aria-hidden="true" style="position:absolute; left:0; bottom:-1px; height:2px; width:100%; background:var(--c1); transform:scaleX(0); transform-origin:left; transition:background .4s"></i>
-</header>
+
 
 <main id="top" style="position:relative; z-index:1">
 
@@ -354,7 +340,7 @@ const showProjects = false;
 </div>
 </section>
 
-<footer data-screen-label="06 Pie" style="--ink:var(--bg); --paper:var(--fg); position:relative; z-index:1; overflow:hidden; background:var(--paper); color:var(--ink); border-radius:clamp(22px,3.2cqw,44px) clamp(22px,3.2cqw,44px) 0 0">
+<footer data-screen-label="06 Pie" style="padding-bottom:36px; --ink:var(--bg); --paper:var(--fg); position:relative; z-index:1; overflow:hidden; background:var(--paper); color:var(--ink); border-radius:clamp(22px,3.2cqw,44px) clamp(22px,3.2cqw,44px) 0 0">
 <div data-k="sf" style="--fg:var(--ink); --bg:var(--paper); --muted:color-mix(in srgb, var(--ink) 64%, var(--paper)); --line:color-mix(in srgb, var(--ink) 14%, transparent); --line-strong:color-mix(in srgb, var(--ink) 32%, transparent); box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(48px,7cqw,100px) var(--g) 0; color:var(--fg)">
   <div style="position:relative; display:flex; justify-content:space-between; gap:24px; padding-bottom:clamp(32px,5cqw,64px); border-bottom:1px solid var(--line-strong); flex-direction:var(--L-sfTopDir); align-items:var(--L-sfTopAlign)">
     <div>
@@ -401,7 +387,18 @@ const showProjects = false;
 </footer>
 </main>
 </div>
-<div data-k="toast" role="status" aria-live="polite" style="position:fixed; left:50%; bottom:24px; z-index:70; padding:11px 20px; border-radius:999px; background:var(--fg); color:var(--bg); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; pointer-events:none; transition:opacity .3s, transform .4s cubic-bezier(.7,0,.2,1); opacity:0; transform:translate(-50%, 24px)">Correo copiado</div>
+<header data-k="bar" style="position:fixed; left:0; right:0; bottom:0; z-index:50; height:36px; display:flex; align-items:stretch; background:color-mix(in srgb, var(--bg) 92%, transparent); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px); border-top:1px solid var(--line-strong); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase">
+  <i data-k="progress" aria-hidden="true" style="position:absolute; left:0; top:-1px; height:2px; width:100%; background:var(--c1); transform:scaleX(0); transform-origin:left; transition:background .4s"></i>
+  <a href="#top" data-k="mode" aria-label="Ir al inicio" style="display:grid; place-items:center; min-width:112px; padding:0 16px; text-decoration:none; font-weight:500; white-space:nowrap; background:var(--c1); color:#fff; transition:background .4s, color .4s">Kevin Díaz</a>
+  <nav data-if="nav" class="kd-nav" aria-label="Secciones"><a href="#top" data-nav="inicio">inicio</a><a href="#sobre" data-nav="sobre">sobre mí</a><a href="#proyectos" data-nav="proyectos">proyectos</a><a href="#experiencia" data-nav="experiencia">experiencia</a><a href="#contacto" data-nav="contacto">contacto</a></nav>
+  <span style="flex:1"></span>
+  <span data-k="pct" style="display:flex; align-items:center; padding:0 14px; color:var(--muted); font-variant-numeric:tabular-nums">Top</span>
+  <span data-if="clock" class="kd-clock">BAQ <span data-time>--:--</span></span>
+  <button data-k="theme" type="button" aria-label="Cambiar a modo oscuro" style="width:44px; display:grid; place-items:center; color:var(--fg); border-left:1px solid var(--line-strong); transition:background .3s" class="hv1">
+    <svg data-icon="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="width:16px; height:16px"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg><svg data-icon="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" style="width:16px; height:16px"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"></path></svg>
+  </button>
+</header>
+<div data-k="toast" role="status" aria-live="polite" style="position:fixed; left:50%; bottom:56px; z-index:70; padding:11px 20px; border-radius:999px; background:var(--fg); color:var(--bg); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; pointer-events:none; transition:opacity .3s, transform .4s cubic-bezier(.7,0,.2,1); opacity:0; transform:translate(-50%, 24px)">Correo copiado</div>
 <ChatBot client:load />
 </div>
 

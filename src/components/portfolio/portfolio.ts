@@ -67,6 +67,8 @@ export function initPortfolio() {
 	const rowsEl = $<HTMLElement>('[data-k="rows"]');
 	const secEl = $<SVGElement>('[data-k="sec"]');
 	const progEl = $<HTMLElement>('[data-k="progress"]');
+	const modeEl = $<HTMLElement>('[data-k="mode"]');
+	const pctEl = $<HTMLElement>('[data-k="pct"]');
 	const colsEl = $<HTMLElement>('[data-k="cols"]');
 	const toastEl = $<HTMLElement>('[data-k="toast"]');
 	const hhEl = $<SVGElement>('[data-k="hh"]');
@@ -387,28 +389,35 @@ export function initPortfolio() {
 					break;
 				}
 			}
-		let nav = '';
-		['proyectos', 'experiencia', 'contacto'].forEach((id) => {
-			const s = wrap!.querySelector('#' + id);
-			if (!s) return;
-			const r = s.getBoundingClientRect();
-			if (r.top < vh / 2 && r.bottom > vh / 2) nav = id;
+		// status bar: current section, scroll percentage and a progress line tinted with the section accent
+		const sections: Record<string, { accent: string; on: string }> = {
+			inicio: { accent: '--c1', on: '#fff' },
+			sobre: { accent: '--c3', on: 'var(--c3-on)' },
+			proyectos: { accent: '--c2', on: 'var(--c2-on)' },
+			experiencia: { accent: '--c1', on: '#fff' },
+			contacto: { accent: '--c1', on: '#fff' },
+		};
+		let cur = 'inicio';
+		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
+			const el = wrap!.querySelector('#' + id);
+			if (!el) return;
+			const r = el.getBoundingClientRect();
+			if (r.top < vh / 2 && r.bottom > vh / 2) cur = id;
 		});
-		if (nav !== st.nav) { st.nav = nav; applyNav(); }
-		if (progEl) {
-			// scroll progress line, tinted with the accent of the section in view
-			const max = document.documentElement.scrollHeight - vh;
-			progEl.style.transform = `scaleX(${(max > 0 ? Math.max(0, Math.min(1, y / max)) : 0).toFixed(4)})`;
-			const accentOf: Record<string, string> = { sobre: '--c3', proyectos: '--c2' };
-			let sec = '--c1';
-			['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
-				const el = wrap!.querySelector('#' + id);
-				if (!el) return;
-				const r = el.getBoundingClientRect();
-				if (r.top < vh / 2 && r.bottom > vh / 2) sec = accentOf[id] ?? '--c1';
-			});
-			progEl.style.background = `var(${sec})`;
+		if (cur !== st.nav) {
+			st.nav = cur;
+			applyNav();
+			const sec = sections[cur];
+			if (modeEl) {
+				modeEl.style.background = `var(${sec.accent})`;
+				modeEl.style.color = sec.on;
+			}
+			if (progEl) progEl.style.background = `var(${sections[cur].accent})`;
 		}
+		const max = document.documentElement.scrollHeight - vh;
+		const p = max > 0 ? Math.max(0, Math.min(1, y / max)) : 0;
+		if (progEl) progEl.style.transform = `scaleX(${p.toFixed(4)})`;
+		if (pctEl) pctEl.textContent = p < 0.01 ? 'Top' : p > 0.99 ? 'Bot' : Math.round(p * 100) + '%';
 	}
 
 	/* ---------- toast, confetti, copy ---------- */
