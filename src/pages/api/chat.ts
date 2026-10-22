@@ -4,6 +4,8 @@ import { GROQ_API_KEY } from 'astro:env/server';
 
 export const prerender = false;
 
+const MODEL = 'openai/gpt-oss-20b';
+
 const SYSTEM_PROMPT = `Eres el asistente personal de Kevin Díaz, desarrollador Full-Stack con más de 6 años de experiencia. Tu rol es representar a Kevin de forma auténtica, cercana y profesional. Responde como si fueras su portavoz — con conocimiento real de quién es y cómo trabaja. No inventes información fuera de lo que está aquí.
 
 ## Quién es Kevin
@@ -27,7 +29,7 @@ Stack: Next.js, React, NestJS, PostgreSQL, AWS, MaterialUI, Redux, TypeScript.
 
 ### Wawandco (Ago 2020 – Abr 2023) — Desarrollador Full-Stack
 Participó en todas las fases del ciclo de desarrollo siguiendo metodología Scrum. Mejoró código nativo en Go aplicando SOLID, Clean Code y MVC. Redujo deuda técnica añadiendo valor al equipo. Implementó tecnologías frontend como Next.js, ReactJS y StimulusJS, construyendo componentes reutilizables con TailwindCSS y Styled Components.
-Stack: React, Next.js, Go, Ruby on Rails, TailwindCSS, Styled Components.
+Stack: React, Next.js, Go, TailwindCSS, Styled Components.
 
 ### Koombea (Ago 2018 – Dic 2018) — Desarrollador Frontend
 Inicio de su carrera profesional en una de las agencias de desarrollo más reconocidas de Colombia. Primeros pasos en desarrollo frontend con React y Node.js en proyectos de escala real.
@@ -36,7 +38,7 @@ Stack: React, Node.js.
 ## Habilidades técnicas
 - Frontend: React, Next.js, TypeScript, TailwindCSS, UnoCSS, MaterialUI, Redux
 - Backend: NestJS, Node.js, PostgreSQL, AWS, arquitectura hexagonal
-- Otros lenguajes: Go, Ruby on Rails
+- Otros lenguajes: Go
 - Herramientas: Git, Docker, Vercel
 - IA aplicada: integración de LLMs, prompting avanzado, herramientas AI-First en el flujo de desarrollo diario
 
@@ -62,10 +64,11 @@ export const POST: APIRoute = async ({ request }) => {
 	const { messages } = body;
 
 	const stream = await groq.chat.completions.create({
-		model: 'llama-3.1-8b-instant',
+		model: MODEL,
 		messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
 		stream: true,
 		max_tokens: 280,
+		reasoning_effort: 'low',
 	});
 
 	const encoder = new TextEncoder();
@@ -87,7 +90,7 @@ export const POST: APIRoute = async ({ request }) => {
 			try {
 				const lastUserMessage = [...messages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
 				const suggestionsResponse = await groq.chat.completions.create({
-					model: 'llama-3.1-8b-instant',
+					model: MODEL,
 					messages: [
 						{
 							role: 'system',
@@ -99,7 +102,7 @@ export const POST: APIRoute = async ({ request }) => {
 						},
 					],
 					stream: false,
-					max_tokens: 128,
+					max_tokens: 400,
 				});
 
 				const raw = suggestionsResponse.choices[0]?.message?.content ?? '[]';

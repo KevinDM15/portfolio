@@ -1,0 +1,23 @@
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Barlow Condensed';src:url('/fonts/barlow-condensed-latin-800-normal.woff2') format('woff2');font-weight:800;font-display:swap}
+@font-face{font-family:'DM Mono';src:url('/fonts/dm-mono-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'DM Mono';src:url('/fonts/dm-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Instrument Serif';src:url('/fonts/instrument-serif-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Instrument Serif';src:url('/fonts/instrument-serif-latin-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Reenie Beanie';src:url('/fonts/reenie-beanie-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+html{scroll-behavior:smooth}
+body{margin:0;background:#EFEEE9;overflow-x:clip}
+a{color:inherit}
+a:hover{color:#2A3BFF}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid #2A3BFF;outline-offset:3px}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+[data-nav]{color:var(--muted);background:transparent}
+[data-nav].on{color:var(--fg);background:color-mix(in srgb, var(--fg) 14%, transparent)}
+.hv0:hover{color:var(--fg) !important;background:color-mix(in srgb, var(--fg) 14%, transparent) !important}
+.hv1:hover{background:color-mix(in srgb, var(--fg) 20%, transparent) !important;transform:scale(1.08) rotate(20deg) !important}
+.hv2:hover{transform:translateY(-3px) !important;border-color:var(--line-strong) !important;color:var(--fg) !important}
+.hv3:hover{opacity:1 !important}
+.hv4:hover{color:var(--accent) !important}
+.hv5:hover{padding-left:14px !important;color:var(--accent) !important}
+.hv6:hover{padding-left:12px !important;color:var(--accent) !important}

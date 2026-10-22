@@ -10,33 +10,11 @@ interface MessageListProps {
 
 function TypingIndicator() {
 	return (
-		<span className="flex gap-1 items-center h-4 px-1">
-			{[0, 150, 300].map(delay => (
-				<span
-					key={delay}
-					className="w-1.5 h-1.5 rounded-full bg-current opacity-60 animate-bounce"
-					style={{ animationDelay: `${delay}ms` }}
-				/>
-			))}
+		<span className="kc-dots" aria-label="Escribiendo">
+			<i />
+			<i />
+			<i />
 		</span>
-	);
-}
-
-function BotAvatar() {
-	return (
-		<div
-			className="w-6 h-6 flex-none mb-0.5 overflow-hidden"
-			style={{
-				borderRadius: '7px',
-				border: '1px solid rgba(212,98,42,0.4)',
-			}}
-		>
-			<img
-				src="/profile_recreated.png"
-				alt="Kevin"
-				className="w-full h-full object-cover object-top"
-			/>
-		</div>
 	);
 }
 
@@ -49,13 +27,13 @@ export function MessageList({ messages, isLoading, isTyping }: MessageListProps)
 	}, [messages]);
 
 	return (
-		<div ref={containerRef} className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-4" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(212,98,42,0.3) transparent' }}>
+		<div ref={containerRef} className="kc-msgs">
 			{messages.length === 0 && (
-				<div className="flex flex-col items-center text-center pt-4 pb-2">
-					<p className="text-sm font-semibold text-theme mb-1">Hola</p>
-					<p className="text-xs text-theme-muted leading-relaxed max-w-[200px]">
-						Soy el asistente de Kevin. Pregúntame sobre su experiencia, stack o cómo contactarlo.
-					</p>
+				<div className="kc-empty">
+					<b>
+						Hola<em>.</em>
+					</b>
+					<p>Soy el asistente de Kevin. Pregúntame sobre su experiencia, stack o cómo contactarlo.</p>
 				</div>
 			)}
 
@@ -64,33 +42,19 @@ export function MessageList({ messages, isLoading, isTyping }: MessageListProps)
 				const showTyping = (isTyping || (isLoading && !msg.content)) && isLast && msg.role === 'assistant';
 
 				return (
-					<div
-						key={i}
-						className={`flex items-end gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-					>
-						{msg.role === 'assistant' && <BotAvatar />}
+					<div key={i} className="kc-row" data-role={msg.role}>
+						{msg.role === 'assistant' && (
+							<div className="kc-mini">
+								<img src="/img/retrato.jpg" alt="Kevin" />
+							</div>
+						)}
 
-						<div
-							className={`max-w-[78%] px-3.5 py-2.5 text-sm leading-relaxed ${
-								msg.role === 'user'
-									? 'text-white rounded-2xl rounded-br-sm'
-									: 'text-theme dark:bg-white/6 light:bg-black/5 rounded-2xl rounded-bl-sm'
-							}`}
-							style={msg.role === 'user' ? {
-								background: 'linear-gradient(135deg, #E07A5F 0%, #F2CC8F 100%)',
-							} : {}}
-						>
-							{showTyping ? (
-								<TypingIndicator />
-							) : (
-								<div className="w-full break-words" dangerouslySetInnerHTML={{ __html: formatMarkdown(msg.content) }} />
-							)}
+						<div className="kc-msg">
+							{showTyping ? <TypingIndicator /> : <div dangerouslySetInnerHTML={{ __html: formatMarkdown(msg.content) }} />}
 						</div>
 					</div>
 				);
 			})}
-
-			<div />
 		</div>
 	);
 }
