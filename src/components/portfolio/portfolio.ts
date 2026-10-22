@@ -1,3 +1,5 @@
+import { createPortrait3D } from './portrait3d';
+
 type ThemeName = 'dark' | 'light';
 type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number };
 
@@ -223,6 +225,7 @@ export function initPortfolio() {
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c3']];
+		p3?.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
 		const bg = PALETTE[t].bg;
 		document.documentElement.style.backgroundColor = bg;
@@ -263,9 +266,16 @@ export function initPortfolio() {
 	let steps = 1;
 	const mouse = { x: -999, y: -999 };
 	const img = new Image();
+	// WebGL portrait with depth and the scroll morph; the 2D canvas below stays as the fallback
+	const p3 = createPortrait3D({ canvas: cv, img, reduce });
 
 	function buildDots(scatter: boolean) {
 		if (!ready) return;
+		if (p3) {
+			p3.setTheme(dark);
+			if (p3.resize()) p3.build(scatter);
+			return;
+		}
 		const w = cv!.clientWidth, h = cv!.clientHeight;
 		if (!w) return;
 		W = w; H = h;
@@ -395,6 +405,11 @@ export function initPortfolio() {
 				}
 			}
 		// status bar: current section, scroll percentage and a progress line tinted with the section accent
+		if (p3 && orbEl) {
+			const r = orbEl.getBoundingClientRect();
+			// morph progress follows the page scroll, scaled to the portrait size so phones and desktops behave alike
+			p3.setMorph(y / (r.height * 0.55));
+		}
 		// the current section is the last one whose top has passed the middle of the screen
 		let cur = 'inicio';
 		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
@@ -528,8 +543,9 @@ export function initPortfolio() {
 		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);
 		mouse.x = (e.clientX - r.left) * k;
 		mouse.y = (e.clientY - r.top) * k;
+		p3?.setMouse(e.clientX - r.left, e.clientY - r.top);
 	});
-	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; });
+	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; p3?.clearMouse(); });
 
 	let last = 0;
 	const loop = () => {
@@ -538,7 +554,8 @@ export function initPortfolio() {
 		last = now;
 		const cr = cv.getBoundingClientRect();
 		const vis = cr.bottom > 0 && cr.top < innerHeight && cr.width > 0;
-		if (vis && ready && !reduce) draw();
+		if (p3) { if (vis && ready) p3.frame(steps); }
+		else if (vis && ready && !reduce) draw();
 		requestAnimationFrame(loop);
 	};
 	requestAnimationFrame(loop);
