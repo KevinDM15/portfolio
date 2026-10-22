@@ -363,6 +363,18 @@ export function initPortfolio() {
 
 	/* ---------- status bar section track ---------- */
 	const ORDER = ['inicio', 'sobre', 'proyectos', 'experiencia', 'contacto'];
+	const SECTIONS: Record<string, { accent: string; on: string }> = {
+		inicio: { accent: '--c1', on: '#fff' },
+		sobre: { accent: '--c3', on: 'var(--c3-on)' },
+		proyectos: { accent: '--c2', on: 'var(--c2-on)' },
+		experiencia: { accent: '--c1', on: '#fff' },
+		contacto: { accent: '--c1', on: '#fff' },
+	};
+	navLinks.forEach((a) => {
+		const sec = SECTIONS[a.dataset.nav || 'inicio'];
+		a.style.setProperty('--fillc', `var(${sec.accent})`);
+		a.style.setProperty('--fillon', sec.on);
+	});
 	function applyTrack(cur: string) {
 		const at = ORDER.indexOf(cur);
 		segEls.forEach((el) => {
@@ -405,24 +417,30 @@ export function initPortfolio() {
 				}
 			}
 		// status bar: current section, scroll percentage and a progress line tinted with the section accent
-		const sections: Record<string, { accent: string; on: string }> = {
-			inicio: { accent: '--c1', on: '#fff' },
-			sobre: { accent: '--c3', on: 'var(--c3-on)' },
-			proyectos: { accent: '--c2', on: 'var(--c2-on)' },
-			experiencia: { accent: '--c1', on: '#fff' },
-			contacto: { accent: '--c1', on: '#fff' },
-		};
+		// the current section is the last one whose top has passed the middle of the screen
 		let cur = 'inicio';
+		const rects: Record<string, DOMRect> = {};
 		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
 			const el = wrap!.querySelector('#' + id);
 			if (!el) return;
 			const r = el.getBoundingClientRect();
-			if (r.top < vh / 2 && r.bottom > vh / 2) cur = id;
+			rects[id] = r;
+			if (r.top < vh / 2) cur = id;
 		});
+		// how far through the current section we are (0 to 1); the active link fills with its color as it advances
+		let fill = 0;
+		if (cur === 'inicio') {
+			const edge = rects.sobre ? rects.sobre.top + y - vh / 2 : 0;
+			fill = edge > 0 ? y / edge : 0;
+		} else {
+			fill = (vh / 2 - rects[cur].top) / rects[cur].height;
+		}
+		fill = Math.max(0, Math.min(1, fill));
+		navLinks.forEach((a) => a.style.setProperty('--p', a.dataset.nav === cur ? fill.toFixed(4) : '0'));
 		if (cur !== st.nav) {
 			st.nav = cur;
 			applyNav();
-			const sec = sections[cur];
+			const sec = SECTIONS[cur];
 			if (modeEl) {
 				modeEl.style.background = `var(${sec.accent})`;
 				modeEl.style.color = sec.on;
