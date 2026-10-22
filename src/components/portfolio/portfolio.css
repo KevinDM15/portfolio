@@ -8,9 +8,9 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:#EFEEE9;overflow-x:clip}
 a{color:inherit}
-a:hover{color:#2A3BFF}
+a:hover{color:var(--accent,#D4470E)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
-:focus-visible{outline:2px solid #2A3BFF;outline-offset:3px}
+:focus-visible{outline:2px solid var(--accent,#D4470E);outline-offset:3px}
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 [data-nav]{color:var(--muted);background:transparent}
 [data-nav].on{color:var(--fg);background:color-mix(in srgb, var(--fg) 14%, transparent)}
@@ -21,3 +21,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .hv4:hover{color:var(--accent) !important}
 .hv5:hover{padding-left:14px !important;color:var(--accent) !important}
 .hv6:hover{padding-left:12px !important;color:var(--accent) !important}
+
+/* multi-color accents: each section owns an accent; details mix the three */
+[data-kd]{--on-accent:#fff}
+#sobre{--accent:var(--c3);--on-accent:var(--c3-on)}
+#proyectos{--accent:var(--c2);--on-accent:var(--c2-on)}
+#experiencia article:nth-of-type(3n+2){--accent:var(--c2)}
+#experiencia article:nth-of-type(3n+3){--accent:var(--c3)}
+[data-k="marq"]>span:nth-child(3n+2) i{background:var(--c2)!important}
+[data-k="marq"]>span:nth-child(3n+3) i{background:var(--c3)!important}
+[data-bar="1"]{background:var(--c1)!important}
+[data-bar="2"]{background:var(--c2)!important}
+[data-bar="3"]{background:var(--c3)!important}
+[data-bar="4"]{background:var(--c1)!important}
+[data-bar="5"]{background:var(--c2)!important}
