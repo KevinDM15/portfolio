@@ -148,19 +148,13 @@ export function initPortfolio() {
 			cCols: m ? 'minmax(0,1fr)' : '1.1fr 1.3fr .9fr',
 			sfTopDir: xs ? 'column' : 'row',
 			sfTopAlign: xs ? 'flex-start' : 'flex-end',
-			sfCols: xs ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1fr)',
 			sfBarDir: xs ? 'column' : 'row',
 			sfBarAlign: xs ? 'flex-start' : 'center',
 		};
 		const vars: Record<string, string> = {};
 		for (const [k, v] of Object.entries(L)) vars[`--L-${k}`] = v;
 		const cc = (i: number) => (m ? { bl: '0', bt: LINE, pl: '0px' } : { bl: i ? LINE : '0', bt: '0', pl: i ? '28px' : '0px' });
-		const sc = (i: number) =>
-			!l ? { bl: i ? LINE : '0', bt: '0', pl: i ? '26px' : '0px' }
-			: !xs ? { bl: i % 2 ? LINE : '0', bt: i > 1 ? LINE : '0', pl: i % 2 ? '18px' : '0px' }
-			: { bl: '0', bt: i ? LINE : '0', pl: '0px' };
 		[0, 1, 2].forEach((i) => Object.entries(cc(i)).forEach(([k, v]) => (vars[`--cc${i}-${k}`] = v)));
-		[0, 1].forEach((i) => Object.entries(sc(i)).forEach(([k, v]) => (vars[`--sc${i}-${k}`] = v)));
 		setVars(vars);
 
 		if (!n) setMenu(false);
