@@ -85,8 +85,6 @@ export function initPortfolio() {
 			'pn-b': n ? '-64px' : '-14%',
 			figCol: n ? 'auto' : l ? '2 / -1' : 'auto',
 			figMt: l ? '48px' : '0px',
-			flowLead: n ? 'minmax(0,1fr)' : 'minmax(0,1.2fr) minmax(0,1fr)',
-			flowRow: n ? 'minmax(0,1fr)' : '110px minmax(0,1fr) minmax(0,1.3fr)',
 			frInset: m ? '16% 3% 5% 3%' : '6% 4% 14% 10%',
 			cPr: m ? '0px' : '28px',
 			availFlex: n ? '1 1 100%' : '0 0 auto',

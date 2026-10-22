@@ -98,36 +98,36 @@ import { ChatBot } from '../islands/ChatBot';
 <section id="sobre" data-screen-label="02 Sobre mí" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(96px,16cqw,220px) var(--g)">
 <div style="display:grid; gap:12px clamp(24px,4cqw,64px); align-items:start; grid-template-columns:var(--L-leadCols)">
   <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-top:.6em">( Sobre mí )</span>
-  <p data-k="st" style="--p:100%; margin:0; max-width:20ch; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(34px,5.4cqw,88px); line-height:.98; letter-spacing:-.015em; color:transparent; background-image:linear-gradient(180deg, var(--fg) var(--p), color-mix(in srgb, var(--fg) 16%, transparent) calc(var(--p) + 6%)); -webkit-background-clip:text; background-clip:text">Llevo más de seis años construyendo productos digitales. Diseño <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; letter-spacing:-.03em">APIs</em> con arquitectura hexagonal, interfaces con componentes reutilizables y código que escala sin dolor.</p>
+  <div style="min-width:0"><p data-k="st" style="--p:100%; margin:0; max-width:20ch; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(34px,5.4cqw,88px); line-height:.98; letter-spacing:-.015em; color:transparent; background-image:linear-gradient(180deg, var(--fg) var(--p), color-mix(in srgb, var(--fg) 16%, transparent) calc(var(--p) + 6%)); -webkit-background-clip:text; background-clip:text">Llevo más de seis años construyendo productos digitales. Hoy los resuelvo con <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; letter-spacing:-.03em">agentes de IA</em>, y yo decido el rumbo.</p>
+<div style="display:grid; gap:16px; margin-top:clamp(28px,4cqw,56px)"><p style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Hoy casi nada lo resuelvo solo. Trabajo con agentes de IA como con un equipo: cada uno recibe una tarea pequeña, un alcance claro y un criterio para saber cuándo terminó.</p><p style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Todo empieza por entender el problema y escribir qué se espera, con criterios que se puedan comprobar. Esa especificación es la fuente de verdad: los agentes la leen y yo la defiendo.</p><p style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Después divido el trabajo en piezas independientes y las reparto. Nada se da por bueno hasta que se prueba, y una revisión aparte contrasta el resultado con lo que se pidió.</p><p style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Las decisiones de fondo son mías, y las entregas son pequeñas y fáciles de revisar, cada una con su porqué. Lo que se aprende queda guardado para la próxima vez. Lo oriento a código que otra persona pueda mantener sin sufrir.</p></div></div>
   <figure style="position:relative; margin:0; width:100%; max-width:520px; grid-column:var(--L-figCol); margin-top:var(--L-figMt)">
     
       <div data-note="1" aria-hidden="true" style="position:absolute; z-index:3; right:6px; top:-40px; display:flex; align-items:flex-end; gap:4px; font-family:'Reenie Beanie',cursive; color:var(--accent); font-size:clamp(24px,2.6cqw,34px); line-height:.9; transform:rotate(-4deg); pointer-events:none">
-        <span data-t="1">así ordeno el código</span>
+        <span data-t="1">así trabajo</span>
         <svg viewBox="0 0 60 40" style="width:44px; overflow:visible; fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; stroke-linejoin:round"><path data-ink="1" pathLength="1" d="M4 6C28 4 44 14 50 34M40 28L51 36L55 23" style="stroke-dasharray:1"></path></svg>
       </div>
     
     <div style="position:relative; aspect-ratio:1 / 1; background:var(--surface); border:1px solid var(--line-strong); overflow:hidden">
-      <span style="position:absolute; left:14px; top:12px; right:14px; display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)"><span>arquitectura.hex</span><span style="color:var(--accent)">puertos y adaptadores</span></span>
-      <svg viewBox="-40 -10 480 420" fill="none" stroke="currentColor" aria-label="Diagrama de arquitectura hexagonal" role="img" style="position:absolute; left:4%; top:9%; width:92%; height:88%; color:var(--fg)">
-        <polygon points="200,30 347.2,115 347.2,285 200,370 52.8,285 52.8,115" stroke-dasharray="4 6" stroke-opacity=".45"></polygon>
-        <polygon points="200,90 295.3,145 295.3,255 200,310 104.7,255 104.7,145" stroke-width="1.2"></polygon>
-        <polygon points="200,144 248.5,172 248.5,228 200,256 151.5,228 151.5,172" stroke="none" style="fill:var(--accent)"></polygon>
-        <path d="M200 144V30M248.5 200H347.2M200 256V370M151.5 200H52.8" stroke-opacity=".55"></path>
-        <g stroke="none" style="fill:var(--fg)"><rect x="193" y="23" width="14" height="14"></rect><rect x="340.2" y="193" width="14" height="14"></rect><rect x="193" y="363" width="14" height="14"></rect><rect x="45.8" y="193" width="14" height="14"></rect></g>
-        <g stroke="none" style="fill:var(--surface)"><rect x="196" y="86" width="8" height="8"></rect><rect x="291.3" y="196" width="8" height="8"></rect><rect x="196" y="306" width="8" height="8"></rect><rect x="100.7" y="196" width="8" height="8"></rect></g>
-        <g stroke="none" style="fill:var(--accent)"><circle data-pk="1" cx="200" cy="144" r="4" data-dx="0" data-dy="-114"></circle><circle data-pk="1" data-rev="1" cx="248.5" cy="200" r="4" data-dx="98.7" data-dy="0"></circle><circle data-pk="1" cx="200" cy="256" r="4" data-dx="0" data-dy="114"></circle><circle data-pk="1" data-rev="1" cx="151.5" cy="200" r="4" data-dx="-98.7" data-dy="0"></circle></g>
-        <g stroke="none" style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; fill:var(--muted)">
-          <text x="200" y="10" text-anchor="middle">REACT · UI</text>
-          <text x="362" y="204">POSTGRESQL</text>
-          <text x="200" y="400" text-anchor="middle">AWS</text>
-          <text x="38" y="204" text-anchor="end">REST API</text>
-          <text x="200" y="124" text-anchor="middle" style="font-size:10px">APLICACIÓN</text>
-          <text x="124" y="82" text-anchor="middle" transform="rotate(-30 124 82)" style="font-size:10px">ADAPTADORES</text>
-        </g>
-        <text x="200" y="207" text-anchor="middle" stroke="none" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; font-size:22px; letter-spacing:.02em; fill:#fff">DOMINIO</text>
-      </svg>
+      <span style="position:absolute; left:14px; top:12px; right:14px; display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)"><span>flujo.agentes</span><span style="color:var(--accent)">humano al mando</span></span>
+      <svg viewBox="-40 -10 480 420" fill="none" stroke="currentColor" aria-label="Diagrama del flujo de trabajo con agentes" role="img" style="position:absolute; left:4%; top:9%; width:92%; height:88%; color:var(--fg)">
+      <circle cx="200" cy="200" r="160" stroke-dasharray="4 6" stroke-opacity=".45"></circle>
+      <circle cx="200" cy="200" r="100" stroke-width="1.2"></circle>
+      <circle cx="200" cy="200" r="56" stroke="none" style="fill:var(--accent)"></circle>
+      <path d="M200 144V40M256 200H360M200 256V360M144 200H40" stroke-opacity=".55"></path>
+      <g stroke="none" style="fill:var(--fg)"><rect x="193" y="33" width="14" height="14"></rect><rect x="353" y="193" width="14" height="14"></rect><rect x="193" y="353" width="14" height="14"></rect><rect x="33" y="193" width="14" height="14"></rect></g>
+      <g stroke="none" style="fill:var(--surface)"><rect x="196" y="96" width="8" height="8"></rect><rect x="296" y="196" width="8" height="8"></rect><rect x="196" y="296" width="8" height="8"></rect><rect x="96" y="196" width="8" height="8"></rect></g>
+      <g stroke="none" style="fill:var(--accent)"><circle data-pk="1" cx="200" cy="144" r="4" data-dx="0" data-dy="-104"></circle><circle data-pk="1" data-rev="1" cx="256" cy="200" r="4" data-dx="104" data-dy="0"></circle><circle data-pk="1" cx="200" cy="256" r="4" data-dx="0" data-dy="104"></circle><circle data-pk="1" data-rev="1" cx="144" cy="200" r="4" data-dx="-104" data-dy="0"></circle></g>
+      <g stroke="none" style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; fill:var(--muted)">
+        <text x="200" y="20" text-anchor="middle">ENTENDER</text>
+        <text x="376" y="204">DELEGAR</text>
+        <text x="200" y="392" text-anchor="middle">VERIFICAR</text>
+        <text x="24" y="204" text-anchor="end">ENTREGAR</text>
+        <text x="200" y="124" text-anchor="middle" style="font-size:10px">AGENTES</text>
+      </g>
+      <text x="200" y="207" text-anchor="middle" stroke="none" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; font-size:22px; letter-spacing:.02em; fill:#fff">YO</text>
+    </svg>
     </div>
-    <figcaption style="margin-top:12px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">El dominio al centro; frameworks y bases de datos, afuera.</figcaption>
+    <figcaption style="margin-top:12px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">Yo al centro: decido y reviso; los agentes ejecutan.</figcaption>
   </figure>
 </div>
 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-top:clamp(48px,8cqw,110px); border-top:1px solid var(--line-strong)">
@@ -141,48 +141,6 @@ import { ChatBot } from '../islands/ChatBot';
   <div style="padding:20px 24px 24px 0; border-bottom:1px solid var(--line)"><b style="display:block; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; font-size:clamp(44px,6cqw,84px); line-height:1; letter-spacing:-.02em">Yo + IA</b><span style="display:block; margin-top:8px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">Personas deciden, agentes ejecutan</span>
     <div aria-hidden="true" style="margin-top:22px; display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:11px; letter-spacing:.04em"><span style="border:1px solid var(--line-strong); border-radius:999px; padding:3px 11px">Yo decido</span><span style="color:var(--accent)">→</span><span style="border:1px solid var(--line-strong); border-radius:999px; padding:3px 11px">Agentes ejecutan</span><span style="color:var(--accent)">→</span><span style="border:1px solid var(--line-strong); border-radius:999px; padding:3px 11px; background:var(--accent); border-color:var(--accent); color:#fff">Yo reviso</span></div></div>
 </div>
-</section>
-
-<section id="flujo" data-screen-label="03 Cómo trabajo" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(72px,10cqw,140px) var(--g)">
-  <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px 16px; padding-bottom:20px; border-bottom:1px solid var(--line-strong)">
-    <h2 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,7cqw,104px); line-height:.9; letter-spacing:-.02em">Cómo trabajo <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; color:var(--accent); letter-spacing:-.03em">con agentes</em></h2>
-    <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">Flujo de trabajo</span>
-  </div>
-  <div style="display:grid; gap:20px clamp(24px,4cqw,64px); align-items:end; margin-top:clamp(28px,4cqw,56px); grid-template-columns:var(--L-flowLead)">
-    <p style="margin:0; max-width:20ch; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(34px,5.4cqw,88px); line-height:.98; letter-spacing:-.015em">Los agentes ejecutan. <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; letter-spacing:-.03em; color:var(--accent)">Las decisiones</em> las tomo yo.</p>
-    <p style="margin:0; max-width:52ch; color:var(--muted); font-size:14px; text-wrap:pretty">Trabajo con agentes de IA como con un equipo: cada uno recibe una tarea pequeña, un alcance claro y un criterio para saber cuándo terminó. Yo marco el rumbo, reviso lo que entregan y respondo por el resultado.</p>
-  </div>
-  <ol style="list-style:none; margin:clamp(40px,6cqw,88px) 0 0; padding:0; border-top:1px solid var(--line-strong)">
-    <li style="display:grid; gap:8px 24px; align-items:baseline; padding:clamp(22px,3.4cqw,40px) 0; border-bottom:1px solid var(--line); grid-template-columns:var(--L-flowRow)">
-      <span aria-hidden="true" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(36px,5cqw,72px); line-height:.9; color:transparent; -webkit-text-stroke:1px var(--fg)">01</span>
-      <h3 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(30px,4.2cqw,60px); line-height:.92; letter-spacing:-.015em">Entender</h3>
-      <p style="margin:0; max-width:52ch; color:var(--muted); font-size:14px; text-wrap:pretty">Antes de escribir una línea aclaro el problema, el resultado que se espera y lo que queda fuera. Lo que no está claro se pregunta; no se supone.</p>
-    </li>
-    <li style="display:grid; gap:8px 24px; align-items:baseline; padding:clamp(22px,3.4cqw,40px) 0; border-bottom:1px solid var(--line); grid-template-columns:var(--L-flowRow)">
-      <span aria-hidden="true" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(36px,5cqw,72px); line-height:.9; color:transparent; -webkit-text-stroke:1px var(--fg)">02</span>
-      <h3 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(30px,4.2cqw,60px); line-height:.92; letter-spacing:-.015em">Especificar</h3>
-      <p style="margin:0; max-width:52ch; color:var(--muted); font-size:14px; text-wrap:pretty">El pedido se convierte en un documento de requisitos con criterios de aceptación, escritos con mis propias palabras. Es la fuente de verdad que todos leen.</p>
-    </li>
-    <li style="display:grid; gap:8px 24px; align-items:baseline; padding:clamp(22px,3.4cqw,40px) 0; border-bottom:1px solid var(--line); grid-template-columns:var(--L-flowRow)">
-      <span aria-hidden="true" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(36px,5cqw,72px); line-height:.9; color:transparent; -webkit-text-stroke:1px var(--fg)">03</span>
-      <h3 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(30px,4.2cqw,60px); line-height:.92; letter-spacing:-.015em">Delegar</h3>
-      <p style="margin:0; max-width:52ch; color:var(--muted); font-size:14px; text-wrap:pretty">Divido el trabajo en tareas pequeñas e independientes. Cada agente recibe contexto limpio, un alcance explícito y una sola cosa que resolver.</p>
-    </li>
-    <li style="display:grid; gap:8px 24px; align-items:baseline; padding:clamp(22px,3.4cqw,40px) 0; border-bottom:1px solid var(--line); grid-template-columns:var(--L-flowRow)">
-      <span aria-hidden="true" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(36px,5cqw,72px); line-height:.9; color:transparent; -webkit-text-stroke:1px var(--fg)">04</span>
-      <h3 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(30px,4.2cqw,60px); line-height:.92; letter-spacing:-.015em">Verificar</h3>
-      <p style="margin:0; max-width:52ch; color:var(--muted); font-size:14px; text-wrap:pretty">Nada se da por hecho. Las pruebas se escriben primero, se ejecutan, y una revisión independiente contrasta el resultado con lo especificado.</p>
-    </li>
-    <li style="display:grid; gap:8px 24px; align-items:baseline; padding:clamp(22px,3.4cqw,40px) 0; border-bottom:1px solid var(--line); grid-template-columns:var(--L-flowRow)">
-      <span aria-hidden="true" style="font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(36px,5cqw,72px); line-height:.9; color:transparent; -webkit-text-stroke:1px var(--fg)">05</span>
-      <h3 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(30px,4.2cqw,60px); line-height:.92; letter-spacing:-.015em">Entregar</h3>
-      <p style="margin:0; max-width:52ch; color:var(--muted); font-size:14px; text-wrap:pretty">Entregas pequeñas y revisables, con la decisión y su razón registradas. Lo que se aprende queda guardado para la próxima vez.</p>
-    </li>
-  </ol>
-  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-top:clamp(28px,4cqw,48px); font-size:11px; letter-spacing:.04em">
-    <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">( Hacia dónde lo oriento )</span><span style="border:1px solid var(--line-strong); border-radius:999px; padding:3px 11px">Cambios pequeños y revisables</span><span style="border:1px solid var(--line-strong); border-radius:999px; padding:3px 11px">Cada decisión con su porqué</span><span style="border:1px solid var(--line-strong); border-radius:999px; padding:3px 11px">Una persona siempre al mando</span>
-    <span style="font-family:'Reenie Beanie',cursive; color:var(--accent); font-size:28px; line-height:1; text-transform:none; letter-spacing:0; transform:rotate(-3deg)">sin magia, con método</span>
-  </div>
 </section>
 
 <section id="proyectos" data-screen-label="03 Proyectos" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(72px,10cqw,140px) var(--g)">
@@ -352,7 +310,6 @@ import { ChatBot } from '../islands/ChatBot';
       <ol style="list-style:none; margin:0; padding:0">
         <li><a href="#top" style="display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); text-decoration:none; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(22px,2.2cqw,32px); line-height:1; transition:padding-left .45s cubic-bezier(.34,1.5,.5,1), color .3s" class="hv6">Inicio</a></li>
         <li><a href="#sobre" style="display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); text-decoration:none; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(22px,2.2cqw,32px); line-height:1; transition:padding-left .45s cubic-bezier(.34,1.5,.5,1), color .3s" class="hv6">Sobre mí</a></li>
-<li><a href="#flujo" style="display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); text-decoration:none; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(22px,2.2cqw,32px); line-height:1; transition:padding-left .45s cubic-bezier(.34,1.5,.5,1), color .3s" class="hv6">Cómo trabajo</a></li>
         <li><a href="#proyectos" style="display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); text-decoration:none; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(22px,2.2cqw,32px); line-height:1; transition:padding-left .45s cubic-bezier(.34,1.5,.5,1), color .3s" class="hv6">Proyectos</a></li>
         <li><a href="#experiencia" style="display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); text-decoration:none; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(22px,2.2cqw,32px); line-height:1; transition:padding-left .45s cubic-bezier(.34,1.5,.5,1), color .3s" class="hv6">Experiencia</a></li>
         <li><a href="#contacto" style="display:flex; align-items:baseline; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); text-decoration:none; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(22px,2.2cqw,32px); line-height:1; transition:padding-left .45s cubic-bezier(.34,1.5,.5,1), color .3s" class="hv6">Contacto</a></li>
