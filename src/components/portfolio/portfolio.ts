@@ -69,7 +69,6 @@ export function initPortfolio() {
 	const progEl = $<HTMLElement>('[data-k="progress"]');
 	const modeEl = $<HTMLElement>('[data-k="mode"]');
 	const pctEl = $<HTMLElement>('[data-k="pct"]');
-	const msgEl = $<HTMLElement>('[data-k="msg"]');
 	const segEls = $$<HTMLElement>('[data-seg]');
 	const colsEl = $<HTMLElement>('[data-k="cols"]');
 	const toastEl = $<HTMLElement>('[data-k="toast"]');
@@ -167,7 +166,7 @@ export function initPortfolio() {
 		[0, 1].forEach((i) => Object.entries(sc(i)).forEach(([k, v]) => (vars[`--sc${i}-${k}`] = v)));
 		setVars(vars);
 
-		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l, msg: !l, track: !m };
+		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l, track: !m };
 		$$<HTMLElement>('[data-if]').forEach((el) => {
 			el.style.display = show[el.dataset.if as string] ? '' : 'none';
 		});
@@ -362,28 +361,8 @@ export function initPortfolio() {
 		});
 	}
 
-	/* ---------- status bar message ---------- */
-	const MESSAGES: Record<string, string> = {
-		inicio: 'desplázate para conocerme',
-		sobre: 'los agentes ejecutan, yo decido',
-		proyectos: 'el primero está en camino',
-		experiencia: 'desde 2018, en equipos que entregan',
-		contacto: 'escríbeme, te respondo',
-	};
+	/* ---------- status bar section track ---------- */
 	const ORDER = ['inicio', 'sobre', 'proyectos', 'experiencia', 'contacto'];
-	let typeTimer: number | undefined;
-	function typeMsg(text: string) {
-		if (!msgEl) return;
-		clearInterval(typeTimer);
-		if (reduce) { msgEl.textContent = text; return; }
-		let i = 0;
-		msgEl.textContent = '';
-		typeTimer = window.setInterval(() => {
-			i++;
-			msgEl.textContent = text.slice(0, i);
-			if (i >= text.length) clearInterval(typeTimer);
-		}, 24);
-	}
 	function applyTrack(cur: string) {
 		const at = ORDER.indexOf(cur);
 		segEls.forEach((el) => {
@@ -453,7 +432,6 @@ export function initPortfolio() {
 				progEl.style.boxShadow = `0 0 10px var(${sec.accent})`;
 			}
 			applyTrack(cur);
-			typeMsg(MESSAGES[cur]);
 		}
 		const max = document.documentElement.scrollHeight - vh;
 		const p = max > 0 ? Math.max(0, Math.min(1, y / max)) : 0;

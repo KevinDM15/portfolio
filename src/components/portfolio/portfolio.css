@@ -40,8 +40,6 @@ section[id]{scroll-margin-top:48px}
 .kd-nav a:hover{color:var(--fg);background-size:100% 1px}
 .kd-nav a.on{color:var(--fg)}
 .kd-nav a.on::after{content:"*";margin-left:2px;color:var(--accent)}
-.kd-msg{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:8px;padding:0 14px;overflow:hidden;white-space:nowrap;text-transform:none;letter-spacing:.02em;color:var(--muted)}
-.kd-caret{flex:none;width:7px;height:14px;background:var(--fg);opacity:.7;animation:kd-blink 1s steps(2) infinite}
 .kd-right{margin-left:auto;display:flex;align-items:stretch}
 .kd-track{display:flex;align-items:center;gap:3px;padding:0 12px}
 .kd-track i{display:block;width:12px;height:6px;border:1px solid var(--seg);opacity:.35;transition:width .35s cubic-bezier(.7,0,.2,1),opacity .3s,background .3s}
@@ -50,4 +48,4 @@ section[id]{scroll-margin-top:48px}
 .kd-clock{display:flex;align-items:center;gap:.6ch;padding:0 14px;border-left:1px solid var(--line);color:var(--muted);font-variant-numeric:tabular-nums}
 .kd-colon{animation:kd-blink 1s steps(2) infinite}
 @keyframes kd-blink{50%{opacity:0}}
-@media (prefers-reduced-motion:reduce){.kd-caret,.kd-colon{animation:none}}
+@media (prefers-reduced-motion:reduce){.kd-colon{animation:none}}
