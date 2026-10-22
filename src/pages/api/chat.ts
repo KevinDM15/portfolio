@@ -23,24 +23,36 @@ Kevin Díaz es un desarrollador Full-Stack con enfoque AI-First, basado en Barra
 
 ## Experiencia laboral
 
-### The Rocket Code (Oct 2023 – presente) — Desarrollador Full-Stack
-Trabaja optimizando aplicaciones del lado del cliente para mejor escalabilidad y velocidad. Desarrolla componentes bajo arquitectura limpia y buenas prácticas en el frontend. Crea nuevas APIs con NestJS, PostgreSQL y AWS usando arquitectura hexagonal. Construye componentes reutilizables con ReactJS, MaterialUI, Redux y Next.js.
-Stack: Next.js, React, NestJS, PostgreSQL, AWS, MaterialUI, Redux, TypeScript.
+### Freelance — Universidad de la Costa, CUC (Jun 2026 – presente) — Desarrollador Full-Stack
+Desarrolla aplicaciones web con Vite y React y diseña arquitecturas y planes técnicos para nuevas funcionalidades. Migra de forma progresiva módulos legacy (PHP, JavaScript y jQuery) a una arquitectura moderna con React en el frontend y Python serverless en el backend.
+
+### Freelance — El Sol Neighborhood Educational Center (Ene 2026 – presente) — Desarrollador Full-Stack
+Desarrolla aplicaciones web y móviles con Next.js, React y React Native, con interfaces multiplataforma que priorizan rendimiento, usabilidad y consistencia visual. Diseña arquitecturas y planes técnicos y trabaja en equipos ágiles con Scrum.
+
+### Freelance — The Rocket Code (Oct 2023 – Jul 2026) — Desarrollador Full-Stack
+Optimizó aplicaciones del lado del cliente para mejor escalabilidad y velocidad. Creó APIs con NestJS, PostgreSQL y AWS usando arquitectura hexagonal, integró LLMs mediante APIs para automatizar procesos y construyó componentes reutilizables con React, MaterialUI, Redux y Next.js.
 
 ### Wawandco (Ago 2020 – Abr 2023) — Desarrollador Full-Stack
-Participó en todas las fases del ciclo de desarrollo siguiendo metodología Scrum. Mejoró código nativo en Go aplicando SOLID, Clean Code y MVC. Redujo deuda técnica añadiendo valor al equipo. Implementó tecnologías frontend como Next.js, ReactJS y StimulusJS, construyendo componentes reutilizables con TailwindCSS y Styled Components.
-Stack: React, Next.js, Go, TailwindCSS, Styled Components.
+Mejoró código nativo en Go aplicando SOLID, Clean Code y MVC. Implementó servicios backend y funciones serverless en GCP (Cloud Functions, Firestore, Cloud Storage). Redujo deuda técnica y migró librerías a versiones actuales.
 
-### Koombea (Ago 2018 – Dic 2018) — Desarrollador Frontend
-Inicio de su carrera profesional en una de las agencias de desarrollo más reconocidas de Colombia. Primeros pasos en desarrollo frontend con React y Node.js en proyectos de escala real.
-Stack: React, Node.js.
+### Koombea (Ago 2018 – Dic 2018) — Desarrollador Full-Stack
+Desarrollo de aplicaciones web con JavaScript, HTML y CSS.
 
 ## Habilidades técnicas
-- Frontend: React, Next.js, TypeScript, TailwindCSS, UnoCSS, MaterialUI, Redux
-- Backend: NestJS, Node.js, PostgreSQL, AWS, arquitectura hexagonal
-- Otros lenguajes: Go
+- Frontend: Next.js, React, React Native, TypeScript, TailwindCSS, Shadcn, MaterialUI
+- Backend: NestJS, Go, REST APIs, PostgreSQL, AWS, GCP, arquitectura hexagonal
+- IA aplicada: integración de LLMs y APIs de IA (Anthropic, OpenAI), Specification-Driven Development (SDD), herramientas AI-First en el flujo de desarrollo diario
 - Herramientas: Git, Docker, Vercel
-- IA aplicada: integración de LLMs, prompting avanzado, herramientas AI-First en el flujo de desarrollo diario
+- Metodologías: Scrum
+
+## Formación
+- Técnico en Programación de Software, SENA (2017–2018)
+- Técnico en Mantenimiento de Sistemas Informáticos, UniBarranquilla (2019–2021)
+- Tecnólogo en Gestión de Sistemas Informáticos, UniBarranquilla (2022–actualidad)
+- Scrum Developer, Kleer (2023)
+
+## Idiomas
+- Español (nativo), inglés (básico)
 
 ## Contacto
 - Email: kevindiazm.14@gmail.com
