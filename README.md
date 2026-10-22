@@ -45,25 +45,6 @@ public/                # Fuentes, imágenes y CV
 docs/screenshots/      # Capturas de este README
 ```
 
-## Desarrollo
-
-Requiere Node.js 22 o superior y [pnpm](https://pnpm.io).
-
-```bash
-pnpm install
-cp .env.example .env   # agrega tu GROQ_API_KEY
-pnpm dev               # http://localhost:4321
-pnpm build             # genera el sitio de producción
-```
-
-La clave se crea en https://console.groq.com/keys. Sin ella el chat no responde.
-
-Los proyectos aparecen como "Próximamente". Para mostrarlos, cambia `showProjects` a `true` en `src/components/portfolio/Portfolio.astro`.
-
-## Despliegue
-
-Cada push a `main` se despliega en producción en Vercel, y cada pull request genera una vista previa. La variable `GROQ_API_KEY` debe estar configurada en el proyecto de Vercel.
-
 ## Contacto
 
 - GitHub: [@KevinDM15](https://github.com/KevinDM15)
