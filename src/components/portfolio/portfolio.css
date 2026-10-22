@@ -38,6 +38,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .kd-nav a{padding:4px 0;color:var(--muted);text-decoration:none;transition:color .3s}
 .kd-nav a:hover,.kd-nav a.on{color:var(--fg)}
 .kd-nav a.on{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:8px;text-decoration-color:var(--accent)}
-.kd-right{grid-column:3;justify-self:end;display:flex;align-items:center;gap:18px}
+.kd-right{margin-left:auto;display:flex;align-items:center;gap:18px}
 .kd-clock{color:var(--muted);font-variant-numeric:tabular-nums}
 section[id]{scroll-margin-top:60px}
