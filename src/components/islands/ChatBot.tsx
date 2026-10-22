@@ -7,38 +7,15 @@ import { QuickReplies } from '../../features/chatbot/components/QuickReplies';
 import { SuggestedReplies } from '../../features/chatbot/components/SuggestedReplies';
 import { ChatInput } from '../../features/chatbot/components/ChatInput';
 
-const BUBBLE_TEXT = '¡Hola! ¿Quieres saber algo sobre Kevin?';
-const BUBBLE_DELAY = 2500;
 const CLOSE_MS = 250;
 
 export function ChatBot() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 	const [input, setInput] = useState('');
-	const [showBubble, setShowBubble] = useState(false);
-	const [bubbleDismissed, setBubbleDismissed] = useState(false);
-	const [typedText, setTypedText] = useState('');
 	const { messages, isLoading, isTyping, suggestions, sendMessage } = useChatBot();
 	const inputRef = useRef<HTMLInputElement>(null);
 	const closeTimer = useRef<number>();
-
-	// Show bubble after delay, typewriter effect
-	useEffect(() => {
-		if (bubbleDismissed || isOpen) return;
-		const timer = setTimeout(() => setShowBubble(true), BUBBLE_DELAY);
-		return () => clearTimeout(timer);
-	}, [bubbleDismissed, isOpen]);
-
-	useEffect(() => {
-		if (!showBubble) { setTypedText(''); return; }
-		let i = 0;
-		const interval = setInterval(() => {
-			i++;
-			setTypedText(BUBBLE_TEXT.slice(0, i));
-			if (i >= BUBBLE_TEXT.length) clearInterval(interval);
-		}, 35);
-		return () => clearInterval(interval);
-	}, [showBubble]);
 
 	useEffect(() => {
 		if (isOpen && !isClosing) {
@@ -53,8 +30,6 @@ export function ChatBot() {
 		clearTimeout(closeTimer.current);
 		setIsClosing(false);
 		setIsOpen(true);
-		setShowBubble(false);
-		setBubbleDismissed(true);
 	};
 
 	const close = () => {
@@ -83,20 +58,6 @@ export function ChatBot() {
 						<ChatInput value={input} onChange={setInput} onSubmit={handleSend} disabled={isLoading} inputRef={inputRef} />
 					</div>
 				</>
-			)}
-
-			{showBubble && !isOpen && (
-				<div className="kc-bubble">
-					<button type="button" className="kc-x" onClick={() => { setShowBubble(false); setBubbleDismissed(true); }} aria-label="Cerrar">
-						<svg viewBox="0 0 10 10" fill="none">
-							<path d="M1 1l8 8M9 1L1 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-						</svg>
-					</button>
-					<div className="kc-bubble-text">
-						{typedText}
-						{typedText.length < BUBBLE_TEXT.length && <span className="kc-caret" />}
-					</div>
-				</div>
 			)}
 
 			<button

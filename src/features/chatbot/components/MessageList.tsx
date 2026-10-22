@@ -30,10 +30,7 @@ export function MessageList({ messages, isLoading, isTyping }: MessageListProps)
 		<div ref={containerRef} className="kc-msgs">
 			{messages.length === 0 && (
 				<div className="kc-empty">
-					<b>
-						Hola<em>.</em>
-					</b>
-					<p>Soy el asistente de Kevin. Pregúntame sobre su experiencia, stack o cómo contactarlo.</p>
+					<p>Pregunta por su experiencia, sus tecnologías o cómo contactarlo.</p>
 				</div>
 			)}
 

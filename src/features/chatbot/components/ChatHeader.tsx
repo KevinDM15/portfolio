@@ -10,11 +10,8 @@ export function ChatHeader({ onClose }: ChatHeaderProps) {
 			</div>
 
 			<div className="kc-title">
-				<b>Asistente de Kevin</b>
-				<span>
-					<i />
-					En línea
-				</span>
+				<b>Asistente</b>
+				<span>Información sobre Kevin Díaz</span>
 			</div>
 
 			<button type="button" onClick={onClose} className="kc-close" aria-label="Cerrar chat">
