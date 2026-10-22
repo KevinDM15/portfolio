@@ -1,5 +1,3 @@
-import { createPortrait3D } from './portrait3d';
-
 type ThemeName = 'dark' | 'light';
 type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number };
 
@@ -266,8 +264,26 @@ export function initPortfolio() {
 	let steps = 1;
 	const mouse = { x: -999, y: -999 };
 	const img = new Image();
-	// WebGL portrait with depth and the scroll morph; the 2D canvas below stays as the fallback
-	const p3 = createPortrait3D({ canvas: cv, img, reduce });
+	// WebGL portrait (depth + scroll morph) loaded after first paint into an overlay canvas;
+	// the 2D canvas paints immediately and stays as the fallback when WebGL is unavailable
+	let p3: ReturnType<(typeof import('./portrait3d'))['createPortrait3D']> | null = null;
+	function bootPortrait3D() {
+		import('./portrait3d').then((m) => {
+			const gl = document.createElement('canvas');
+			gl.setAttribute('aria-hidden', 'true');
+			gl.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; display:block';
+			cv.parentElement!.appendChild(gl);
+			const inst = m.createPortrait3D({ canvas: gl, img, reduce });
+			if (!inst) { gl.remove(); return; }
+			inst.setTheme(dark);
+			inst.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
+			if (!inst.resize()) { gl.remove(); inst.dispose(); return; }
+			inst.build(false);
+			p3 = inst;
+			cv.style.opacity = '0';
+			scrollFx();
+		}).catch(() => {});
+	}
 
 	function buildDots(scatter: boolean) {
 		if (!ready) return;
@@ -537,7 +553,12 @@ export function initPortfolio() {
 		else secEl.animate([{ transform: `rotate(${a0}deg)` }, { transform: `rotate(${a0 + 360}deg)` }], { duration: 60000, iterations: Infinity });
 	}
 
-	img.onload = () => { ready = true; buildDots(!reduce); };
+	img.onload = () => {
+		ready = true;
+		buildDots(!reduce);
+		const idle = (window as any).requestIdleCallback as undefined | ((cb: () => void, o?: { timeout: number }) => void);
+		if (idle) idle(bootPortrait3D, { timeout: 1500 }); else setTimeout(bootPortrait3D, 300);
+	};
 	img.src = '/img/retrato.jpg';
 	addEventListener('pointermove', (e) => {
 		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);

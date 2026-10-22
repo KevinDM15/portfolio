@@ -122,11 +122,11 @@ export function createPortrait3D({ canvas, img, reduce }: Options) {
 		const rOut = 160 * k, rIn = 100 * k, rDisc = 56 * k, sq = 7 * k;
 		const pts: { x: number; y: number; r: number; disc: number }[] = [];
 		const push = (x: number, y: number, r: number, disc = 0) => pts.push({ x, y, r, disc });
-		const nDisc = Math.round(count * 0.42), nOut = Math.round(count * 0.2), nIn = Math.round(count * 0.14), nSp = Math.round(count * 0.14);
+		const nDisc = Math.round(count * 0.34), nOut = Math.round(count * 0.22), nIn = Math.round(count * 0.16), nSp = Math.round(count * 0.14);
 		const nSq = count - nDisc - nOut - nIn - nSp;
 		for (let i = 0; i < nDisc; i++) {
 			const a = Math.random() * Math.PI * 2, rr = Math.sqrt(Math.random()) * rDisc;
-			push(Math.cos(a) * rr, Math.sin(a) * rr, 2.6 * k + 1, 1);
+			push(Math.cos(a) * rr, Math.sin(a) * rr, 2.1 * k + 1, 1);
 		}
 		for (let i = 0; i < nOut; i++) {
 			// 48 segments, half of them drawn = the dashed stroke
@@ -145,7 +145,7 @@ export function createPortrait3D({ canvas, img, reduce }: Options) {
 		for (let i = 0; i < nSq; i++) {
 			const axis = i % 4;
 			const [cx, cy] = [[0, 1], [1, 0], [0, -1], [-1, 0]][axis];
-			push(cx * rOut + (Math.random() - 0.5) * sq * 2, cy * rOut + (Math.random() - 0.5) * sq * 2, 2.4 * k + 1);
+			push(cx * rOut + (Math.random() - 0.5) * sq * 2, cy * rOut + (Math.random() - 0.5) * sq * 2, 1.5 * k + 1);
 		}
 		// shuffle so dots travel from everywhere to everywhere
 		for (let i = pts.length - 1; i > 0; i--) {
