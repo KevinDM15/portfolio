@@ -6,13 +6,13 @@ import { ChatBot } from '../islands/ChatBot';
 const showProjects = false;
 ---
 
-<div data-kd data-t="light" style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#D4470E; --c1:#D4470E; --c2:#B97A00; --c3:#2F9E68; --c2-on:#FFFFFF; --c3-on:#FFFFFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
+<div data-kd data-t="light" style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#D4470E; --c1:#D4470E; --c3:#2F9E68; --c3-on:#FFFFFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
 <script is:inline>
 	// Paint a saved dark theme before first render; mirrors the dark palette in portfolio.ts
 	(function () {
 		try {
 			if (localStorage.getItem('kd-theme') !== 'dark') return;
-			var r = document.currentScript.parentElement, v = {"--bg": "#0F0F11", "--surface": "#18181B", "--fg": "#EFEEE9", "--muted": "#9C9CA4", "--line": "rgba(239,238,233,.11)", "--line-strong": "rgba(239,238,233,.28)", "--accent": "#F2602B", "--c1": "#F2602B", "--c2": "#F2B134", "--c3": "#5DD39E", "--c2-on": "#0F0F11", "--c3-on": "#0F0F11", "--grain": ".07"};
+			var r = document.currentScript.parentElement, v = {"--bg": "#0F0F11", "--surface": "#18181B", "--fg": "#EFEEE9", "--muted": "#9C9CA4", "--line": "rgba(239,238,233,.11)", "--line-strong": "rgba(239,238,233,.28)", "--accent": "#F2602B", "--c1": "#F2602B", "--c3": "#5DD39E", "--c3-on": "#0F0F11", "--grain": ".07"};
 			for (var k in v) r.style.setProperty(k, v[k]);
 			r.setAttribute('data-t', 'dark');
 			document.documentElement.style.backgroundColor = v['--bg'];

@@ -6,8 +6,8 @@ const SKEW = 'skewY(-6deg) rotate(-1.5deg) ';
 const LINE = '1px solid var(--line)';
 
 const PALETTE = {
-	dark: { bg: '#0F0F11', surface: '#18181B', fg: '#EFEEE9', muted: '#9C9CA4', accent: '#F2602B', c2: '#F2B134', c3: '#5DD39E', on2: '#0F0F11', on3: '#0F0F11' },
-	light: { bg: '#EFEEE9', surface: '#E4E3DC', fg: '#0F0F11', muted: '#5D5D66', accent: '#D4470E', c2: '#B97A00', c3: '#2F9E68', on2: '#FFFFFF', on3: '#FFFFFF' },
+	dark: { bg: '#0F0F11', surface: '#18181B', fg: '#EFEEE9', muted: '#9C9CA4', accent: '#F2602B', c3: '#5DD39E', on3: '#0F0F11' },
+	light: { bg: '#EFEEE9', surface: '#E4E3DC', fg: '#0F0F11', muted: '#5D5D66', accent: '#D4470E', c3: '#2F9E68', on3: '#FFFFFF' },
 };
 const DEFAULT_THEME: ThemeName = 'light';
 const THEME_KEY = 'kd-theme';
@@ -39,9 +39,7 @@ const themeVars = (t: ThemeName) => {
 		'--line-strong': `rgba(${rgb(s.fg)},${dk ? 0.28 : 0.32})`,
 		'--accent': s.accent,
 		'--c1': s.accent,
-		'--c2': s.c2,
 		'--c3': s.c3,
-		'--c2-on': s.on2,
 		'--c3-on': s.on3,
 		'--grain': dk ? '.07' : '.12',
 	};
@@ -103,7 +101,7 @@ export function initPortfolio() {
 	let dark = DEFAULT_THEME === 'dark';
 	let inkC = '#0F0F11';
 	let hotC = '#D4470E';
-	let hotSet = ['#D4470E', '#B97A00', '#2F9E68'];
+	let hotSet = ['#D4470E', '#2F9E68'];
 	let ready = false;
 	let pinY: number | null = null;
 	let mAnim: Animation | undefined;
@@ -224,7 +222,7 @@ export function initPortfolio() {
 		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
-		hotSet = [vars['--c1'], vars['--c2'], vars['--c3']];
+		hotSet = [vars['--c1'], vars['--c3']];
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
 		const bg = PALETTE[t].bg;
 		document.documentElement.style.backgroundColor = bg;
@@ -298,7 +296,7 @@ export function initPortfolio() {
 					hx, hy,
 					x: scatter ? W / 2 + (Math.random() - 0.5) * W * 1.6 : hx,
 					y: scatter ? H / 2 + (Math.random() - 0.5) * H * 1.6 : hy,
-					vx: 0, vy: 0, r: l * s * (inv ? 0.56 : 0.58), h: 0, g: Math.floor(Math.random() * 3),
+					vx: 0, vy: 0, r: l * s * (inv ? 0.56 : 0.58), h: 0, g: Math.floor(Math.random() * 2),
 				});
 			}
 		P = dots;
@@ -362,7 +360,7 @@ export function initPortfolio() {
 	}
 
 	/* ---------- header progress line ---------- */
-	const ACCENT: Record<string, string> = { sobre: '--c3', proyectos: '--c2' };
+	const ACCENT: Record<string, string> = { sobre: '--c3' };
 
 	/* ---------- scroll ---------- */
 	function scrollFx() {
@@ -429,10 +427,10 @@ export function initPortfolio() {
 	function burst(x: number, y: number) {
 		if (reduce) return;
 		const cs = getComputedStyle(root!);
-		const cl = ['--c1', '--c2', '--c3'].map((v) => cs.getPropertyValue(v).trim() || '#D4470E').concat('#0F0F11', '#F2C9A7');
+		const cl = ['--c1', '--c3'].map((v) => cs.getPropertyValue(v).trim() || '#D4470E').concat('#0F0F11', '#F2C9A7');
 		for (let i = 0; i < 38; i++) {
 			const c = document.createElement('i'), w = 6 + Math.random() * 8;
-			c.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:${w}px;height:${w * 0.5}px;background:${cl[i % 5]};z-index:80;pointer-events:none;`;
+			c.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:${w}px;height:${w * 0.5}px;background:${cl[i % cl.length]};z-index:80;pointer-events:none;`;
 			document.body.appendChild(c);
 			const dx = (Math.random() - 0.5) * 560, up = 90 + Math.random() * 240, fall = 380 + Math.random() * 220, rot = Math.random() * 720;
 			c.animate(
