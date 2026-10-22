@@ -27,7 +27,7 @@ Stack: Next.js, React, NestJS, PostgreSQL, AWS, MaterialUI, Redux, TypeScript.
 
 ### Wawandco (Ago 2020 – Abr 2023) — Desarrollador Full-Stack
 Participó en todas las fases del ciclo de desarrollo siguiendo metodología Scrum. Mejoró código nativo en Go aplicando SOLID, Clean Code y MVC. Redujo deuda técnica añadiendo valor al equipo. Implementó tecnologías frontend como Next.js, ReactJS y StimulusJS, construyendo componentes reutilizables con TailwindCSS y Styled Components.
-Stack: React, Next.js, Go, Ruby on Rails, TailwindCSS, Styled Components.
+Stack: React, Next.js, Go, TailwindCSS, Styled Components.
 
 ### Koombea (Ago 2018 – Dic 2018) — Desarrollador Frontend
 Inicio de su carrera profesional en una de las agencias de desarrollo más reconocidas de Colombia. Primeros pasos en desarrollo frontend con React y Node.js en proyectos de escala real.
@@ -36,7 +36,7 @@ Stack: React, Node.js.
 ## Habilidades técnicas
 - Frontend: React, Next.js, TypeScript, TailwindCSS, UnoCSS, MaterialUI, Redux
 - Backend: NestJS, Node.js, PostgreSQL, AWS, arquitectura hexagonal
-- Otros lenguajes: Go, Ruby on Rails
+- Otros lenguajes: Go
 - Herramientas: Git, Docker, Vercel
 - IA aplicada: integración de LLMs, prompting avanzado, herramientas AI-First en el flujo de desarrollo diario
 
