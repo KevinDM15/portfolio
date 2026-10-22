@@ -30,4 +30,5 @@ pnpm-debug.log*
 # playwright
 .playwright-mcp/
 *.png
+!docs/screenshots/*.png
 *.txt

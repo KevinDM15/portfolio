@@ -12,25 +12,10 @@ Portafolio personal de Kevin Díaz, desarrollador full-stack en Barranquilla, Co
 
 ## Hecho con
 
-| Capa | Tecnología |
-|---|---|
-| Framework | [Astro](https://astro.build) 6, generación estática con islas |
-| Interfaz interactiva | [React](https://react.dev) 19 (chatbot) |
-| Lenguaje | [TypeScript](https://www.typescriptlang.org) |
-| Estilos | CSS propio con variables de tema; [UnoCSS](https://unocss.dev) en las páginas internas |
-| Animación | Web Animations API y canvas; [GSAP](https://gsap.com) en las secciones antiguas |
-| Tipografías | Barlow Condensed, Instrument Serif, DM Mono y Reenie Beanie |
-| Chatbot | [Groq](https://groq.com) con `openai/gpt-oss-20b`, expuesto en `/api/chat` |
-| Despliegue | [Vercel](https://vercel.com) con GitHub Actions |
-
-## Características
-
-- Tema claro y oscuro con transición circular; el color del navegador en móvil sigue al tema.
-- Retrato hecho de puntos que se apartan del cursor.
-- Paleta de terracota, mostaza y verde, con un acento propio por sección.
-- Diseño adaptable según el ancho del contenedor.
-- Respeta `prefers-reduced-motion`.
-- Chatbot con respuestas en streaming y sugerencias de seguimiento.
+- Astro y React
+- TypeScript
+- CSS propio y animaciones nativas del navegador
+- Un asistente de IA conversacional
 
 ## Estructura
 
@@ -39,30 +24,11 @@ src/
 ├── components/
 │   ├── portfolio/     # Página principal: Portfolio.astro, portfolio.ts, portfolio.css
 │   └── islands/       # ChatBot.tsx
-├── features/chatbot/  # Hook, API cliente y componentes del chat
-└── pages/             # index, páginas internas y api/chat.ts
+├── features/chatbot/  # Asistente conversacional
+└── pages/             # Páginas del sitio
 public/                # Fuentes, imágenes y CV
 docs/screenshots/      # Capturas de este README
 ```
-
-## Desarrollo
-
-Requiere Node.js 22 o superior y [pnpm](https://pnpm.io).
-
-```bash
-pnpm install
-cp .env.example .env   # agrega tu GROQ_API_KEY
-pnpm dev               # http://localhost:4321
-pnpm build             # genera el sitio de producción
-```
-
-La clave se crea en https://console.groq.com/keys. Sin ella el chat no responde.
-
-Los proyectos aparecen como "Próximamente". Para mostrarlos, cambia `showProjects` a `true` en `src/components/portfolio/Portfolio.astro`.
-
-## Despliegue
-
-Cada push a `main` se despliega en producción en Vercel, y cada pull request genera una vista previa. La variable `GROQ_API_KEY` debe estar configurada en el proyecto de Vercel.
 
 ## Contacto
 
