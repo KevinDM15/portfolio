@@ -236,6 +236,8 @@ export function initPortfolio() {
 			document.head.appendChild(meta);
 		}
 		meta.content = bg;
+		bgFx?.setTheme(dark);
+		bgFx?.setAccent(sectionAccent());
 		if (ready) buildDots(false);
 	}
 
@@ -267,6 +269,24 @@ export function initPortfolio() {
 	// WebGL portrait (depth + scroll morph) loaded after first paint into an overlay canvas;
 	// the 2D canvas paints immediately and stays as the fallback when WebGL is unavailable
 	let p3: ReturnType<(typeof import('./portrait3d'))['createPortrait3D']> | null = null;
+	// full-page light pass behind the content, same lazy chunk as the portrait
+	let bgFx: ReturnType<(typeof import('./background3d'))['createBackground3D']> | null = null;
+	const sectionAccent = () => (st.nav === 'sobre' ? hotSet[1] : hotSet[0]);
+	function bootBackground3D() {
+		import('./background3d').then((m) => {
+			const gl = document.createElement('canvas');
+			gl.setAttribute('aria-hidden', 'true');
+			gl.style.cssText = 'position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none';
+			root!.insertBefore(gl, wrap);
+			const inst = m.createBackground3D(gl, reduce);
+			if (!inst) { gl.remove(); return; }
+			inst.resize();
+			inst.setTheme(dark);
+			inst.setAccent(sectionAccent());
+			bgFx = inst;
+			addEventListener('resize', () => inst.resize());
+		}).catch(() => {});
+	}
 	function bootPortrait3D() {
 		import('./portrait3d').then((m) => {
 			const gl = document.createElement('canvas');
@@ -435,6 +455,7 @@ export function initPortfolio() {
 		if (cur !== st.nav) {
 			st.nav = cur;
 			applyNav();
+			bgFx?.setAccent(sectionAccent());
 			if (progEl) progEl.style.background = `var(${ACCENT[cur] ?? '--c1'})`;
 		}
 		const max = document.documentElement.scrollHeight - vh;
@@ -557,7 +578,8 @@ export function initPortfolio() {
 		ready = true;
 		buildDots(!reduce);
 		const idle = (window as any).requestIdleCallback as undefined | ((cb: () => void, o?: { timeout: number }) => void);
-		if (idle) idle(bootPortrait3D, { timeout: 1500 }); else setTimeout(bootPortrait3D, 300);
+		const boot = () => { bootPortrait3D(); bootBackground3D(); };
+		if (idle) idle(boot, { timeout: 1500 }); else setTimeout(boot, 300);
 	};
 	img.src = '/img/retrato.jpg';
 	addEventListener('pointermove', (e) => {
@@ -575,6 +597,7 @@ export function initPortfolio() {
 		last = now;
 		const cr = cv.getBoundingClientRect();
 		const vis = cr.bottom > 0 && cr.top < innerHeight && cr.width > 0;
+		bgFx?.frame(now);
 		if (p3) { if (vis && ready) p3.frame(steps); }
 		else if (vis && ready && !reduce) draw();
 		requestAnimationFrame(loop);
