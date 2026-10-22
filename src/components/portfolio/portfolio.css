@@ -19,14 +19,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .hv5:hover{padding-left:14px !important;color:var(--accent) !important}
 .hv6:hover{padding-left:12px !important;color:var(--accent) !important}
 
-/* multi-color accents: each section owns an accent; details mix the three */
+/* two accents: terracotta by default, green for the about section and every other detail */
 [data-kd]{--on-accent:#fff}
 #sobre{--accent:var(--c3);--on-accent:var(--c3-on)}
-#proyectos{--accent:var(--c2);--on-accent:var(--c2-on)}
-#experiencia article:nth-of-type(3n+2){--accent:var(--c2)}
-#experiencia article:nth-of-type(3n+3){--accent:var(--c3)}
-[data-k="marq"]>span:nth-child(3n+2) i{background:var(--c2)!important}
-[data-k="marq"]>span:nth-child(3n+3) i{background:var(--c3)!important}
+#experiencia article:nth-of-type(2n){--accent:var(--c3)}
+[data-k="marq"]>span:nth-child(2n) i{background:var(--c3)!important}
 
 /* theme toggle icon: moon in light mode (switch to dark), sun in dark mode */
 [data-kd][data-t="light"] [data-icon="sun"]{display:none}
