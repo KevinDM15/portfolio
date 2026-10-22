@@ -48,3 +48,8 @@ header[data-open] .kd-nav{display:flex}
 .kd-nav a:last-child{border-bottom:0}
 .kd-nav a.on{color:var(--accent);text-decoration:none}
 }
+
+/* while the particle scene runs, the dots draw the diagram and the timeline bars themselves */
+[data-kd][data-scene] [data-scene-box]{background:transparent!important}
+[data-kd][data-scene] [data-scene-box] svg :is(circle,polygon,path,rect,ellipse){opacity:0!important}
+[data-kd][data-scene] #experiencia [data-bar]{background:transparent!important}

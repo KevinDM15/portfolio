@@ -223,7 +223,7 @@ export function initPortfolio() {
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c3']];
-		p3?.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
+		sc?.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
 		const bg = PALETTE[t].bg;
 		document.documentElement.style.backgroundColor = bg;
@@ -236,8 +236,6 @@ export function initPortfolio() {
 			document.head.appendChild(meta);
 		}
 		meta.content = bg;
-		bgFx?.setTheme(dark);
-		bgFx?.setAccent(sectionAccent());
 		if (ready) buildDots(false);
 	}
 
@@ -266,50 +264,37 @@ export function initPortfolio() {
 	let steps = 1;
 	const mouse = { x: -999, y: -999 };
 	const img = new Image();
-	// WebGL portrait (depth + scroll morph) loaded after first paint into an overlay canvas;
-	// the 2D canvas paints immediately and stays as the fallback when WebGL is unavailable
-	let p3: ReturnType<(typeof import('./portrait3d'))['createPortrait3D']> | null = null;
-	// full-page light pass behind the content, same lazy chunk as the portrait
-	let bgFx: ReturnType<(typeof import('./background3d'))['createBackground3D']> | null = null;
-	const sectionAccent = () => (st.nav === 'sobre' ? hotSet[1] : hotSet[0]);
-	function bootBackground3D() {
-		import('./background3d').then((m) => {
+	// one page-wide particle scene (face -> diagram -> timeline -> contact ring), loaded after first paint
+	// into a fixed canvas behind the content; the 2D portrait paints first and stays as the fallback
+	let sc: ReturnType<(typeof import('./scene3d'))['createScene3D']> | null = null;
+	function bootScene3D() {
+		import('./scene3d').then((m) => {
+			const diagram = $<HTMLElement>('[data-scene-box]');
+			const button = $<HTMLElement>('button[data-copy][data-magnet]');
+			const bars = $$<HTMLElement>('#experiencia [data-bar]');
+			if (!orbEl || !diagram || !button || !bars.length) return;
 			const gl = document.createElement('canvas');
 			gl.setAttribute('aria-hidden', 'true');
 			gl.style.cssText = 'position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none';
 			root!.insertBefore(gl, wrap);
-			const inst = m.createBackground3D(gl, reduce);
-			if (!inst) { gl.remove(); return; }
-			inst.resize();
-			inst.setTheme(dark);
-			inst.setAccent(sectionAccent());
-			bgFx = inst;
-			addEventListener('resize', () => inst.resize());
-		}).catch(() => {});
-	}
-	function bootPortrait3D() {
-		import('./portrait3d').then((m) => {
-			const gl = document.createElement('canvas');
-			gl.setAttribute('aria-hidden', 'true');
-			gl.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; display:block';
-			cv.parentElement!.appendChild(gl);
-			const inst = m.createPortrait3D({ canvas: gl, img, reduce });
+			const inst = m.createScene3D(gl, img, { face: orbEl, diagram, bars, button }, reduce);
 			if (!inst) { gl.remove(); return; }
 			inst.setTheme(dark);
 			inst.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
-			if (!inst.resize()) { gl.remove(); inst.dispose(); return; }
-			inst.build(false);
-			p3 = inst;
+			inst.build();
+			sc = inst;
+			(window as any).__kdScene = inst;
+			root!.setAttribute('data-scene', '');
 			cv.style.opacity = '0';
-			scrollFx();
+			addEventListener('resize', () => inst.build());
 		}).catch(() => {});
 	}
 
 	function buildDots(scatter: boolean) {
 		if (!ready) return;
-		if (p3) {
-			p3.setTheme(dark);
-			if (p3.resize()) p3.build(scatter);
+		if (sc) {
+			sc.setTheme(dark);
+			sc.build();
 			return;
 		}
 		const w = cv!.clientWidth, h = cv!.clientHeight;
@@ -441,11 +426,7 @@ export function initPortfolio() {
 				}
 			}
 		// status bar: current section, scroll percentage and a progress line tinted with the section accent
-		if (p3 && orbEl) {
-			const r = orbEl.getBoundingClientRect();
-			// morph progress follows the page scroll, scaled to the portrait size so phones and desktops behave alike
-			p3.setMorph(y / (r.height * 0.55));
-		}
+
 		// the current section is the last one whose top has passed the middle of the screen
 		let cur = 'inicio';
 		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
@@ -455,7 +436,6 @@ export function initPortfolio() {
 		if (cur !== st.nav) {
 			st.nav = cur;
 			applyNav();
-			bgFx?.setAccent(sectionAccent());
 			if (progEl) progEl.style.background = `var(${ACCENT[cur] ?? '--c1'})`;
 		}
 		const max = document.documentElement.scrollHeight - vh;
@@ -498,8 +478,8 @@ export function initPortfolio() {
 
 	function copy(e: MouseEvent) {
 		const x = e.clientX, y = e.clientY;
-		const ok = () => { say('Correo copiado'); burst(x, y); };
-		const fail = () => { say('Copia: ' + EMAIL); burst(x, y); };
+		const ok = () => { say('Correo copiado'); burst(x, y); sc?.burst(x, y); };
+		const fail = () => { say('Copia: ' + EMAIL); burst(x, y); sc?.burst(x, y); };
 		try { navigator.clipboard.writeText(EMAIL).then(ok, fail); } catch { fail(); }
 	}
 
@@ -578,7 +558,7 @@ export function initPortfolio() {
 		ready = true;
 		buildDots(!reduce);
 		const idle = (window as any).requestIdleCallback as undefined | ((cb: () => void, o?: { timeout: number }) => void);
-		const boot = () => { bootPortrait3D(); bootBackground3D(); };
+		const boot = () => bootScene3D();
 		if (idle) idle(boot, { timeout: 1500 }); else setTimeout(boot, 300);
 	};
 	img.src = '/img/retrato.jpg';
@@ -586,9 +566,9 @@ export function initPortfolio() {
 		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);
 		mouse.x = (e.clientX - r.left) * k;
 		mouse.y = (e.clientY - r.top) * k;
-		p3?.setMouse(e.clientX - r.left, e.clientY - r.top);
+		sc?.setMouse(e.clientX, e.clientY);
 	});
-	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; p3?.clearMouse(); });
+	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; sc?.clearMouse(); });
 
 	let last = 0;
 	const loop = () => {
@@ -597,8 +577,7 @@ export function initPortfolio() {
 		last = now;
 		const cr = cv.getBoundingClientRect();
 		const vis = cr.bottom > 0 && cr.top < innerHeight && cr.width > 0;
-		bgFx?.frame(now);
-		if (p3) { if (vis && ready) p3.frame(steps); }
+		if (sc) { if (ready) sc.frame(steps, now); }
 		else if (vis && ready && !reduce) draw();
 		requestAnimationFrame(loop);
 	};
