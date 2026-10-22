@@ -67,9 +67,6 @@ export function initPortfolio() {
 	const rowsEl = $<HTMLElement>('[data-k="rows"]');
 	const secEl = $<SVGElement>('[data-k="sec"]');
 	const progEl = $<HTMLElement>('[data-k="progress"]');
-	const modeEl = $<HTMLElement>('[data-k="mode"]');
-	const pctEl = $<HTMLElement>('[data-k="pct"]');
-	const segEls = $$<HTMLElement>('[data-seg]');
 	const colsEl = $<HTMLElement>('[data-k="cols"]');
 	const toastEl = $<HTMLElement>('[data-k="toast"]');
 	const hhEl = $<SVGElement>('[data-k="hh"]');
@@ -166,7 +163,7 @@ export function initPortfolio() {
 		[0, 1].forEach((i) => Object.entries(sc(i)).forEach(([k, v]) => (vars[`--sc${i}-${k}`] = v)));
 		setVars(vars);
 
-		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l, track: !m };
+		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l };
 		$$<HTMLElement>('[data-if]').forEach((el) => {
 			el.style.display = show[el.dataset.if as string] ? '' : 'none';
 		});
@@ -207,8 +204,7 @@ export function initPortfolio() {
 	function tick() {
 		st.time = new Intl.DateTimeFormat('es-CO', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Bogota' }).format(new Date());
 		$$<HTMLElement>('[data-time]').forEach((e) => {
-			if (e.closest('.kd-clock')) e.innerHTML = st.time.replace(':', '<span class="kd-colon">:</span>');
-			else e.textContent = st.time;
+			e.textContent = st.time;
 		});
 		const [hh, mm] = (st.time.match(/\d+/g) || [0, 0]).map(Number);
 		hhEl?.style.setProperty('transform', `rotate(${(hh % 12) * 30 + mm * 0.5}deg)`);
@@ -361,28 +357,8 @@ export function initPortfolio() {
 		});
 	}
 
-	/* ---------- status bar section track ---------- */
-	const ORDER = ['inicio', 'sobre', 'proyectos', 'experiencia', 'contacto'];
-	const SECTIONS: Record<string, { accent: string; on: string }> = {
-		inicio: { accent: '--c1', on: '#fff' },
-		sobre: { accent: '--c3', on: 'var(--c3-on)' },
-		proyectos: { accent: '--c2', on: 'var(--c2-on)' },
-		experiencia: { accent: '--c1', on: '#fff' },
-		contacto: { accent: '--c1', on: '#fff' },
-	};
-	navLinks.forEach((a) => {
-		const sec = SECTIONS[a.dataset.nav || 'inicio'];
-		a.style.setProperty('--fillc', `var(${sec.accent})`);
-		a.style.setProperty('--fillon', sec.on);
-	});
-	function applyTrack(cur: string) {
-		const at = ORDER.indexOf(cur);
-		segEls.forEach((el) => {
-			const i = ORDER.indexOf(el.dataset.seg || '');
-			el.classList.toggle('now', i === at);
-			el.classList.toggle('done', i < at);
-		});
-	}
+	/* ---------- header progress line ---------- */
+	const ACCENT: Record<string, string> = { sobre: '--c3', proyectos: '--c2' };
 
 	/* ---------- scroll ---------- */
 	function scrollFx() {
@@ -419,42 +395,18 @@ export function initPortfolio() {
 		// status bar: current section, scroll percentage and a progress line tinted with the section accent
 		// the current section is the last one whose top has passed the middle of the screen
 		let cur = 'inicio';
-		const rects: Record<string, DOMRect> = {};
 		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
 			const el = wrap!.querySelector('#' + id);
-			if (!el) return;
-			const r = el.getBoundingClientRect();
-			rects[id] = r;
-			if (r.top < vh / 2) cur = id;
+			if (el && el.getBoundingClientRect().top < vh / 2) cur = id;
 		});
-		// how far through the current section we are (0 to 1); the active link fills with its color as it advances
-		let fill = 0;
-		if (cur === 'inicio') {
-			const edge = rects.sobre ? rects.sobre.top + y - vh / 2 : 0;
-			fill = edge > 0 ? y / edge : 0;
-		} else {
-			fill = (vh / 2 - rects[cur].top) / rects[cur].height;
-		}
-		fill = Math.max(0, Math.min(1, fill));
-		navLinks.forEach((a) => a.style.setProperty('--p', a.dataset.nav === cur ? fill.toFixed(4) : '0'));
 		if (cur !== st.nav) {
 			st.nav = cur;
 			applyNav();
-			const sec = SECTIONS[cur];
-			if (modeEl) {
-				modeEl.style.background = `var(${sec.accent})`;
-				modeEl.style.color = sec.on;
-			}
-			if (progEl) {
-				progEl.style.background = `var(${sec.accent})`;
-				progEl.style.boxShadow = `0 0 10px var(${sec.accent})`;
-			}
-			applyTrack(cur);
+			if (progEl) progEl.style.background = `var(${ACCENT[cur] ?? '--c1'})`;
 		}
 		const max = document.documentElement.scrollHeight - vh;
 		const p = max > 0 ? Math.max(0, Math.min(1, y / max)) : 0;
 		if (progEl) progEl.style.transform = `scaleX(${p.toFixed(4)})`;
-		if (pctEl) pctEl.textContent = p < 0.01 ? 'Top' : p > 0.99 ? 'Bot' : Math.round(p * 100) + '%';
 	}
 
 	/* ---------- toast, confetti, copy ---------- */

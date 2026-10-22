@@ -34,17 +34,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 
 
 /* header nav: plain mono links, the active section is underlined */
-section[id]{scroll-margin-top:48px}
-.kd-nav{display:flex;align-items:stretch}
-.kd-nav a{position:relative;display:flex;align-items:center;padding:0 26px 0 14px;text-decoration:none;color:var(--muted);white-space:nowrap;transition:color .3s}
+.kd-nav{display:flex;align-items:center;gap:30px}
+.kd-nav a{padding:4px 0;color:var(--muted);text-decoration:none;transition:color .3s}
 .kd-nav a:hover,.kd-nav a.on{color:var(--fg)}
-.kd-f{position:absolute;inset:0;display:flex;align-items:center;padding:0 26px 0 14px;background:var(--fillc,var(--accent));color:var(--fillon,#fff);clip-path:polygon(0 0,calc(100% * var(--p,0) - 14px) 0,calc(100% * var(--p,0)) 50%,calc(100% * var(--p,0) - 14px) 100%,0 100%);pointer-events:none}
-.kd-right{margin-left:auto;display:flex;align-items:stretch}
-.kd-track{display:flex;align-items:center;gap:3px;padding:0 12px}
-.kd-track i{display:block;width:12px;height:6px;border:1px solid var(--seg);opacity:.35;transition:width .35s cubic-bezier(.7,0,.2,1),opacity .3s,background .3s}
-.kd-track i.done{background:var(--seg);opacity:.65}
-.kd-track i.now{background:var(--seg);opacity:1;width:24px}
-.kd-clock{display:flex;align-items:center;gap:.6ch;padding:0 14px;border-left:1px solid var(--line);color:var(--muted);font-variant-numeric:tabular-nums}
-.kd-colon{animation:kd-blink 1s steps(2) infinite}
-@keyframes kd-blink{50%{opacity:0}}
-@media (prefers-reduced-motion:reduce){.kd-colon{animation:none}}
+.kd-nav a.on{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:8px;text-decoration-color:var(--accent)}
+.kd-right{grid-column:3;justify-self:end;display:flex;align-items:center;gap:18px}
+.kd-clock{color:var(--muted);font-variant-numeric:tabular-nums}
+section[id]{scroll-margin-top:60px}
