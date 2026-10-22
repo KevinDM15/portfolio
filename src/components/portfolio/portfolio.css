@@ -41,7 +41,6 @@ section[id]{scroll-margin-top:48px}
 .kd-nav a.on{color:var(--fg)}
 .kd-nav a.on::after{content:"*";margin-left:2px;color:var(--accent)}
 .kd-msg{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:8px;padding:0 14px;overflow:hidden;white-space:nowrap;text-transform:none;letter-spacing:.02em;color:var(--muted)}
-.kd-msg b{color:var(--accent);font-weight:500}
 .kd-caret{flex:none;width:7px;height:14px;background:var(--fg);opacity:.7;animation:kd-blink 1s steps(2) infinite}
 .kd-right{margin-left:auto;display:flex;align-items:stretch}
 .kd-track{display:flex;align-items:center;gap:3px;padding:0 12px}

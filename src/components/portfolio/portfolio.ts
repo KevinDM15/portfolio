@@ -364,7 +364,7 @@ export function initPortfolio() {
 
 	/* ---------- status bar message ---------- */
 	const MESSAGES: Record<string, string> = {
-		inicio: 'disponible para nuevos proyectos',
+		inicio: 'desplázate para conocerme',
 		sobre: 'los agentes ejecutan, yo decido',
 		proyectos: 'el primero está en camino',
 		experiencia: 'desde 2018, en equipos que entregan',
