@@ -51,6 +51,30 @@ export function initPortfolio() {
 	const hhEl = $<SVGElement>('[data-k="hh"]');
 	const mmEl = $<SVGElement>('[data-k="mm"]');
 	const rows = rowsEl ? Array.from(rowsEl.children) as HTMLElement[] : [];
+	const rvEls = $$<HTMLElement>('[data-rv]');
+	const parEls = $$<HTMLElement>('[data-par]');
+	const words: HTMLElement[] = [];
+	if (stEl && !reduce) {
+		const wrapWords = (node: Node) => {
+			Array.from(node.childNodes).forEach((c) => {
+				if (c.nodeType === Node.ELEMENT_NODE) return wrapWords(c);
+				if (c.nodeType !== Node.TEXT_NODE || !c.textContent?.trim()) return;
+				const frag = document.createDocumentFragment();
+				c.textContent.split(/(\s+)/).forEach((part) => {
+					if (!part) return;
+					if (/^\s+$/.test(part)) return frag.append(part);
+					const span = document.createElement('span');
+					span.textContent = part;
+					span.style.cssText = 'display:inline-block; will-change:opacity,transform';
+					words.push(span);
+					frag.append(span);
+				});
+				c.replaceWith(frag);
+			});
+		};
+		wrapWords(stEl);
+	}
+
 	const frames = $$<HTMLElement>('[data-frame]');
 	const navLinks = $$<HTMLElement>('[data-nav]');
 
@@ -300,10 +324,25 @@ export function initPortfolio() {
 		const vh = innerHeight, y = scrollY;
 		const small = y > 90;
 		if (small !== st.small) { st.small = small; applyLayout(); }
-		if (stEl) {
-			const r = stEl.getBoundingClientRect();
-			const p = Math.max(0, Math.min(1, (vh * 0.78 - r.top) / (r.height + vh * 0.33)));
-			stEl.style.setProperty('--p', (p * 100).toFixed(1) + '%');
+		const ease = (x: number) => 1 - Math.pow(1 - x, 3);
+		const prog = (top: number, from: number, span: number) => ease(Math.max(0, Math.min(1, (vh * from - top) / (vh * span))));
+		if (!reduce) {
+			// each word fades in as it rises into the reading zone, so text is fully readable by mid-screen
+			const tops = words.map((w) => w.getBoundingClientRect().top);
+			words.forEach((w, i) => {
+				const p = prog(tops[i], 0.95, 0.3);
+				w.style.opacity = String(0.12 + 0.88 * p);
+				w.style.transform = `translateY(${((1 - p) * 0.28).toFixed(3)}em)`;
+			});
+			rvEls.forEach((el) => {
+				const p = prog(el.getBoundingClientRect().top, 0.96, 0.18);
+				el.style.opacity = String(p);
+				el.style.transform = `translateY(${((1 - p) * 26).toFixed(1)}px)`;
+			});
+			parEls.forEach((el) => {
+				const r = el.getBoundingClientRect();
+				el.style.transform = `translateY(${((vh / 2 - (r.top + r.height / 2)) * 0.09).toFixed(1)}px)`;
+			});
 		}
 		if (pinY != null && Math.abs(scrollY - pinY) > 200) pinY = null;
 		if (pinY == null)
