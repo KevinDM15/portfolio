@@ -12,16 +12,10 @@ Portafolio personal de Kevin Díaz, desarrollador full-stack en Barranquilla, Co
 
 ## Hecho con
 
-| Capa | Tecnología |
-|---|---|
-| Framework | [Astro](https://astro.build) 6, generación estática con islas |
-| Interfaz interactiva | [React](https://react.dev) 19 (chatbot) |
-| Lenguaje | [TypeScript](https://www.typescriptlang.org) |
-| Estilos | CSS propio con variables de tema; [UnoCSS](https://unocss.dev) en las páginas internas |
-| Animación | Web Animations API y canvas; [GSAP](https://gsap.com) en las secciones antiguas |
-| Tipografías | Barlow Condensed, Instrument Serif, DM Mono y Reenie Beanie |
-| Chatbot | [Groq](https://groq.com) con `openai/gpt-oss-20b`, expuesto en `/api/chat` |
-| Despliegue | [Vercel](https://vercel.com) con GitHub Actions |
+- Astro y React
+- TypeScript
+- CSS propio y animaciones nativas del navegador
+- Un asistente de IA conversacional
 
 ## Estructura
 
@@ -30,8 +24,8 @@ src/
 ├── components/
 │   ├── portfolio/     # Página principal: Portfolio.astro, portfolio.ts, portfolio.css
 │   └── islands/       # ChatBot.tsx
-├── features/chatbot/  # Hook, API cliente y componentes del chat
-└── pages/             # index, páginas internas y api/chat.ts
+├── features/chatbot/  # Asistente conversacional
+└── pages/             # Páginas del sitio
 public/                # Fuentes, imágenes y CV
 docs/screenshots/      # Capturas de este README
 ```
