@@ -23,15 +23,6 @@ Portafolio personal de Kevin Díaz, desarrollador full-stack en Barranquilla, Co
 | Chatbot | [Groq](https://groq.com) con `openai/gpt-oss-20b`, expuesto en `/api/chat` |
 | Despliegue | [Vercel](https://vercel.com) con GitHub Actions |
 
-## Características
-
-- Tema claro y oscuro con transición circular; el color del navegador en móvil sigue al tema.
-- Retrato hecho de puntos que se apartan del cursor.
-- Paleta de terracota, mostaza y verde, con un acento propio por sección.
-- Diseño adaptable según el ancho del contenedor.
-- Respeta `prefers-reduced-motion`.
-- Chatbot con respuestas en streaming y sugerencias de seguimiento.
-
 ## Estructura
 
 ```
