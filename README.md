@@ -1,104 +1,75 @@
-# Kevin Díaz - Portfolio
+# Kevin Díaz · Portafolio
 
-Personal portfolio showcasing my work as a Full-Stack Developer from Barranquilla, Colombia.
+Portafolio personal de Kevin Díaz, desarrollador full-stack en Barranquilla, Colombia. Una sola página con retrato de puntos interactivo, tema claro y oscuro, y un asistente de IA que responde con los datos de mi hoja de vida.
 
-## Built With
+**Sitio:** https://portfolio-kevin-dev.vercel.app
 
-- **[Astro](https://astro.build)** - Static Site Generator with Islands Architecture
-- **[React 19](https://react.dev)** - UI Components (Terminal, Navigation)
-- **[UnoCSS](https://unocss.dev)** - Utility-first CSS with Dark Mode
-- **[GSAP](https://greensock.com/gsap/)** - Smooth Animations
-- **[TypeScript](https://www.typescriptlang.org)** - Type Safety
+| Claro | Oscuro |
+|---|---|
+| ![Hero en tema claro](docs/screenshots/hero-claro.png) | ![Hero en tema oscuro](docs/screenshots/hero-oscuro.png) |
 
-## Features
+![Sección Sobre mí](docs/screenshots/sobre-mi.png)
 
-- ⚡ Lightning-fast SSG performance
-- 🌓 Dark/Light mode with smooth transitions
-- 📱 Fully responsive mobile design
-- 🎨 Custom glassmorphism UI components
-- 📝 Content managed via Markdown (Astro Content Collections)
-- ♿ Accessible navigation with keyboard support
-- 🚀 Automated Vercel deployments via GitHub Actions
+## Hecho con
 
-## Project Structure
+| Capa | Tecnología |
+|---|---|
+| Framework | [Astro](https://astro.build) 6, generación estática con islas |
+| Interfaz interactiva | [React](https://react.dev) 19 (chatbot) |
+| Lenguaje | [TypeScript](https://www.typescriptlang.org) |
+| Estilos | CSS propio con variables de tema; [UnoCSS](https://unocss.dev) en las páginas internas |
+| Animación | Web Animations API y canvas; [GSAP](https://gsap.com) en las secciones antiguas |
+| Tipografías | Barlow Condensed, Instrument Serif, DM Mono y Reenie Beanie |
+| Chatbot | [Groq](https://groq.com) con `openai/gpt-oss-20b`, expuesto en `/api/chat` |
+| Despliegue | [Vercel](https://vercel.com) con GitHub Actions |
+
+## Características
+
+- Tema claro y oscuro con transición circular; el color del navegador en móvil sigue al tema.
+- Retrato hecho de puntos que se apartan del cursor.
+- Paleta de terracota, mostaza y verde, con un acento propio por sección.
+- Diseño adaptable según el ancho del contenedor.
+- Respeta `prefers-reduced-motion`.
+- Chatbot con respuestas en streaming y sugerencias de seguimiento.
+
+## Estructura
 
 ```
-portfolio-kevin/
-├── src/
-│   ├── components/
-│   │   ├── sections/      # Main page sections
-│   │   ├── ui/            # Reusable UI components
-│   │   └── Terminal/      # Interactive terminal
-│   ├── content/           # Markdown content
-│   │   ├── about/
-│   │   ├── experience/
-│   │   └── projects/
-│   ├── layouts/
-│   ├── pages/
-│   ├── styles/
-│   └── types/
-├── .github/
-│   └── workflows/         # CI/CD pipelines
-└── public/
+src/
+├── components/
+│   ├── portfolio/     # Página principal: Portfolio.astro, portfolio.ts, portfolio.css
+│   └── islands/       # ChatBot.tsx
+├── features/chatbot/  # Hook, API cliente y componentes del chat
+└── pages/             # index, páginas internas y api/chat.ts
+public/                # Fuentes, imágenes y CV
+docs/screenshots/      # Capturas de este README
 ```
 
-## Commands
+## Desarrollo
 
-All commands are run from the root of the project:
-
-| Command | Action |
-|---------|--------|
-| `pnpm install` | Install dependencies |
-| `pnpm dev` | Start dev server at `localhost:4321` |
-| `pnpm build` | Build production site to `./dist/` |
-| `pnpm preview` | Preview build locally |
-
-## Theme System
-
-The portfolio uses a hybrid CSS variables + UnoCSS dark mode system:
-
-- Theme switching via `[data-theme]` attribute
-- CSS variables defined in `src/styles/global.css`
-- UnoCSS utilities with `dark:` and `light:` variants
-- Zero JavaScript re-renders on theme changes
-
-## Content Management
-
-Content is managed using Astro Content Collections with Zod validation:
+Requiere Node.js 22 o superior y [pnpm](https://pnpm.io).
 
 ```bash
-# Add new experience
-src/content/experience/04-new-job.md
-
-# Add new project
-src/content/projects/05-new-project.md
+pnpm install
+cp .env.example .env   # agrega tu GROQ_API_KEY
+pnpm dev               # http://localhost:4321
+pnpm build             # genera el sitio de producción
 ```
 
-Content is type-safe and validated at build time.
+La clave se crea en https://console.groq.com/keys. Sin ella el chat no responde.
 
-## Deployment
+Los proyectos aparecen como "Próximamente". Para mostrarlos, cambia `showProjects` a `true` en `src/components/portfolio/Portfolio.astro`.
 
-This portfolio is automatically deployed to Vercel on every push to `main`:
+## Despliegue
 
-- Production: Automatic deployment from `main` branch
-- Preview: Automatic preview URLs for pull requests
-- Powered by GitHub Actions workflow
+Cada push a `main` se despliega en producción en Vercel, y cada pull request genera una vista previa. La variable `GROQ_API_KEY` debe estar configurada en el proyecto de Vercel.
 
-## Requirements
+## Contacto
 
-- Node.js >= 22.0.0
-- pnpm >= 8.0.0
+- GitHub: [@KevinDM15](https://github.com/KevinDM15)
+- LinkedIn: [kevindm14](https://www.linkedin.com/in/kevindm14/)
+- Correo: kevindiazm.14@gmail.com
 
-## License
+## Licencia
 
-This project is personal portfolio code. Feel free to use it as inspiration, but please don't copy it directly.
-
-## Contact
-
-- **GitHub**: [@KevinDM15](https://github.com/KevinDM15)
-- **Location**: Barranquilla, Colombia
-- **Portfolio**: [Portfolio](https://portfolio-kevin-dev.vercel.app/)
-
----
-
-**Built with passion in Barranquilla 🌊**
+Código de portafolio personal. Puedes usarlo como inspiración, pero no lo copies tal cual.
