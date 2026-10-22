@@ -172,6 +172,18 @@ export function initPortfolio() {
 		dark = t === 'dark';
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
+		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
+		const bg = PALETTE[t].bg;
+		document.documentElement.style.backgroundColor = bg;
+		document.documentElement.style.colorScheme = t;
+		document.body.style.backgroundColor = bg;
+		let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+		if (!meta) {
+			meta = document.createElement('meta');
+			meta.name = 'theme-color';
+			document.head.appendChild(meta);
+		}
+		meta.content = bg;
 		if (ready) buildDots(false);
 	}
 
