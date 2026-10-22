@@ -1,6 +1,9 @@
 ---
 import './portfolio.css';
 import { ChatBot } from '../islands/ChatBot';
+
+// Set to true when the first real project is published: restores the project list and stage below.
+const showProjects = false;
 ---
 
 <div data-kd style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#2A3BFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
@@ -146,8 +149,10 @@ import { ChatBot } from '../islands/ChatBot';
 <section id="proyectos" data-screen-label="03 Proyectos" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(72px,10cqw,140px) var(--g)">
 <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px 16px; padding-bottom:20px; border-bottom:1px solid var(--line-strong)">
   <h2 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,7cqw,104px); line-height:.9; letter-spacing:-.02em">Proyectos <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; color:var(--accent); letter-spacing:-.03em">destacados</em></h2>
-  <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">Casos de ejemplo</span>
+  <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">{showProjects ? 'Casos de ejemplo' : 'Próximamente'}</span>
 </div>
+{showProjects ? (
+<>
 <div style="display:grid; gap:var(--L-pjGap); grid-template-columns:var(--L-pjCols)">
   <ul data-k="rows" style="list-style:none; margin:0; padding:0; min-width:0">
     <li><button type="button" data-act="0" aria-pressed="true" style="position:relative; display:block; width:100%; text-align:left; cursor:pointer; padding:var(--L-rowPad) 0; border-bottom:1px solid var(--line); transition:opacity .45s, padding-left .45s cubic-bezier(.7,0,.2,1); opacity:1; padding-left:18px" class="hv3">
@@ -191,6 +196,14 @@ import { ChatBot } from '../islands/ChatBot';
   </div>
 </div>
 <p style="margin:28px 0 0; display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)"><span>Proyectos de ejemplo. Los enlaces se activan cuando cada caso de estudio esté publicado.</span><span style="font-family:'Reenie Beanie',cursive; color:var(--accent); font-size:28px; line-height:1; text-transform:none; letter-spacing:0; transform:rotate(-3deg)">los reales vienen en camino</span></p>
+</>
+) : (
+<div style="position:relative; display:grid; justify-items:start; gap:clamp(16px,2.4cqw,32px); padding:clamp(56px,9cqw,140px) 0 clamp(40px,6cqw,88px); border-bottom:1px solid var(--line)">
+      <p style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(52px,13.5cqw,230px); line-height:.84; letter-spacing:-.03em; color:transparent; -webkit-text-stroke:1.5px var(--fg)">Próximamente<em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; letter-spacing:-.04em; -webkit-text-stroke:0; color:var(--accent)">.</em></p>
+      <p style="margin:0; max-width:46ch; color:var(--muted); font-size:14px; text-wrap:pretty">Estoy preparando el primer caso de estudio. Cuando esté publicado, aparecerá aquí.</p>
+      <span style="font-family:'Reenie Beanie',cursive; color:var(--accent); font-size:28px; line-height:1; transform:rotate(-3deg)">el primero está en camino</span>
+    </div>
+)}
 </section>
 
 <section id="experiencia" data-screen-label="04 Experiencia" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(72px,10cqw,140px) var(--g)">
