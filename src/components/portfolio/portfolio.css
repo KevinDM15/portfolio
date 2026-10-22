@@ -41,3 +41,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .kd-right{margin-left:auto;display:flex;align-items:center;gap:18px}
 .kd-clock{color:var(--muted);font-variant-numeric:tabular-nums}
 section[id]{scroll-margin-top:60px}
+.kd-menu{display:none}
+@media (max-width:759px){
+.kd-menu{display:inline-flex;align-items:center;gap:10px;padding:0;color:var(--fg);font:inherit;letter-spacing:.06em;text-transform:uppercase}
+.kd-burger{display:block;width:14px;height:1px;background:currentColor;box-shadow:0 5px 0 currentColor;transform:translateY(-2.5px)}
+.kd-nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;padding:4px clamp(16px,4vw,56px) 12px;background:var(--bg);border-bottom:1px solid var(--line-strong);box-shadow:0 24px 40px -28px rgba(0,0,0,.45)}
+header[data-open] .kd-nav{display:flex}
+.kd-nav a{padding:14px 0;border-bottom:1px solid var(--line);font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:800;font-size:28px;line-height:1;letter-spacing:.01em;text-decoration:none;color:var(--fg)}
+.kd-nav a:last-child{border-bottom:0}
+.kd-nav a.on{color:var(--accent);text-decoration:none}
+}
