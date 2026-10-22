@@ -10,6 +10,21 @@ const PALETTE = {
 	light: { bg: '#EFEEE9', surface: '#E4E3DC', fg: '#0F0F11', muted: '#5D5D66', accent: '#D4470E', c2: '#B97A00', c3: '#2F9E68', on2: '#FFFFFF', on3: '#FFFFFF' },
 };
 const DEFAULT_THEME: ThemeName = 'light';
+const THEME_KEY = 'kd-theme';
+
+const savedTheme = (): ThemeName | null => {
+	try {
+		const v = localStorage.getItem(THEME_KEY);
+		return v === 'dark' || v === 'light' ? v : null;
+	} catch {
+		return null;
+	}
+};
+const saveTheme = (t: ThemeName) => {
+	try {
+		localStorage.setItem(THEME_KEY, t);
+	} catch {}
+};
 
 const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)).join(',');
 const themeVars = (t: ThemeName) => {
@@ -51,6 +66,7 @@ export function initPortfolio() {
 	const themeEl = $<HTMLElement>('[data-k="theme"]');
 	const rowsEl = $<HTMLElement>('[data-k="rows"]');
 	const secEl = $<SVGElement>('[data-k="sec"]');
+	const progEl = $<HTMLElement>('[data-k="progress"]');
 	const colsEl = $<HTMLElement>('[data-k="cols"]');
 	const toastEl = $<HTMLElement>('[data-k="toast"]');
 	const hhEl = $<SVGElement>('[data-k="hh"]');
@@ -83,7 +99,7 @@ export function initPortfolio() {
 	const frames = $$<HTMLElement>('[data-frame]');
 	const navLinks = $$<HTMLElement>('[data-nav]');
 
-	const st = { w: 1280, small: false, cur: 0, nav: '', time: '--:--' };
+	const st = { w: 1280, cur: 0, nav: '', time: '--:--' };
 	let dark = DEFAULT_THEME === 'dark';
 	let inkC = '#0F0F11';
 	let hotC = '#D4470E';
@@ -97,11 +113,9 @@ export function initPortfolio() {
 	const setVars = (vars: Record<string, string>) => Object.entries(vars).forEach(([k, v]) => wrap.style.setProperty(k, v));
 
 	function applyLayout() {
-		const { w, small } = st;
+		const { w } = st;
 		const n = w < 760, m = w < 860, l = w < 1080, xs = w < 600;
 		const L: Record<string, string> = {
-			glassW: small ? 'min(660px, 100%)' : 'min(900px, 100%)',
-			glassH: small ? '50px' : '58px',
 			orbPos: n ? 'relative' : 'absolute',
 			orbRight: n ? 'auto' : 'var(--g)',
 			orbMargin: n ? '0 auto' : 'auto 0',
@@ -149,7 +163,7 @@ export function initPortfolio() {
 		[0, 1].forEach((i) => Object.entries(sc(i)).forEach(([k, v]) => (vars[`--sc${i}-${k}`] = v)));
 		setVars(vars);
 
-		const show: Record<string, boolean> = { nav: !n, clock: !n && !small, mailNote: !m, upNote: !l };
+		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l };
 		$$<HTMLElement>('[data-if]').forEach((el) => {
 			el.style.display = show[el.dataset.if as string] ? '' : 'none';
 		});
@@ -189,7 +203,9 @@ export function initPortfolio() {
 	/* ---------- clock ---------- */
 	function tick() {
 		st.time = new Intl.DateTimeFormat('es-CO', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Bogota' }).format(new Date());
-		$$<HTMLElement>('[data-time]').forEach((e) => (e.textContent = st.time));
+		$$<HTMLElement>('[data-time]').forEach((e) => {
+			e.textContent = st.time;
+		});
 		const [hh, mm] = (st.time.match(/\d+/g) || [0, 0]).map(Number);
 		hhEl?.style.setProperty('transform', `rotate(${(hh % 12) * 30 + mm * 0.5}deg)`);
 		mmEl?.style.setProperty('transform', `rotate(${mm * 6}deg)`);
@@ -200,6 +216,8 @@ export function initPortfolio() {
 		const vars = themeVars(t);
 		Object.entries(vars).forEach(([k, v]) => root!.style.setProperty(k, v));
 		dark = t === 'dark';
+		root!.dataset.t = t;
+		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c2'], vars['--c3']];
@@ -220,6 +238,7 @@ export function initPortfolio() {
 
 	function toggleTheme() {
 		const next: ThemeName = dark ? 'light' : 'dark';
+		saveTheme(next);
 		const vt = (document as any).startViewTransition as ((cb: () => void) => { ready: Promise<void> }) | undefined;
 		if (!vt || reduce || !themeEl) return applyTheme(next);
 		const r = themeEl.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
@@ -338,11 +357,12 @@ export function initPortfolio() {
 		});
 	}
 
+	/* ---------- header progress line ---------- */
+	const ACCENT: Record<string, string> = { sobre: '--c3', proyectos: '--c2' };
+
 	/* ---------- scroll ---------- */
 	function scrollFx() {
 		const vh = innerHeight, y = scrollY;
-		const small = y > 90;
-		if (small !== st.small) { st.small = small; applyLayout(); }
 		const ease = (x: number) => 1 - Math.pow(1 - x, 3);
 		const prog = (top: number, from: number, span: number) => ease(Math.max(0, Math.min(1, (vh * from - top) / (vh * span))));
 		if (!reduce) {
@@ -372,14 +392,21 @@ export function initPortfolio() {
 					break;
 				}
 			}
-		let nav = '';
-		['proyectos', 'experiencia', 'contacto'].forEach((id) => {
-			const s = wrap!.querySelector('#' + id);
-			if (!s) return;
-			const r = s.getBoundingClientRect();
-			if (r.top < vh / 2 && r.bottom > vh / 2) nav = id;
+		// status bar: current section, scroll percentage and a progress line tinted with the section accent
+		// the current section is the last one whose top has passed the middle of the screen
+		let cur = 'inicio';
+		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
+			const el = wrap!.querySelector('#' + id);
+			if (el && el.getBoundingClientRect().top < vh / 2) cur = id;
 		});
-		if (nav !== st.nav) { st.nav = nav; applyNav(); }
+		if (cur !== st.nav) {
+			st.nav = cur;
+			applyNav();
+			if (progEl) progEl.style.background = `var(${ACCENT[cur] ?? '--c1'})`;
+		}
+		const max = document.documentElement.scrollHeight - vh;
+		const p = max > 0 ? Math.max(0, Math.min(1, y / max)) : 0;
+		if (progEl) progEl.style.transform = `scaleX(${p.toFixed(4)})`;
 	}
 
 	/* ---------- toast, confetti, copy ---------- */
@@ -457,7 +484,7 @@ export function initPortfolio() {
 	}).observe(wrap);
 	st.w = Math.round(wrap.clientWidth) || 1280;
 	applyLayout();
-	applyTheme(DEFAULT_THEME);
+	applyTheme(savedTheme() ?? DEFAULT_THEME);
 	applyProjects();
 	tick();
 	setInterval(tick, 20000);
