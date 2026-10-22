@@ -2,7 +2,7 @@
 
 Portafolio personal de Kevin Díaz, desarrollador full-stack en Barranquilla, Colombia. Una sola página con retrato de puntos interactivo, tema claro y oscuro, y un asistente de IA que responde con los datos de mi hoja de vida.
 
-**Sitio:** https://portfolio-kevin-dev.vercel.app
+**Sitio:** https://kevindev.co
 
 | Claro | Oscuro |
 |---|---|
