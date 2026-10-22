@@ -4,6 +4,8 @@ import { GROQ_API_KEY } from 'astro:env/server';
 
 export const prerender = false;
 
+const MODEL = 'openai/gpt-oss-20b';
+
 const SYSTEM_PROMPT = `Eres el asistente personal de Kevin Díaz, desarrollador Full-Stack con más de 6 años de experiencia. Tu rol es representar a Kevin de forma auténtica, cercana y profesional. Responde como si fueras su portavoz — con conocimiento real de quién es y cómo trabaja. No inventes información fuera de lo que está aquí.
 
 ## Quién es Kevin
@@ -62,10 +64,11 @@ export const POST: APIRoute = async ({ request }) => {
 	const { messages } = body;
 
 	const stream = await groq.chat.completions.create({
-		model: 'llama-3.1-8b-instant',
+		model: MODEL,
 		messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
 		stream: true,
 		max_tokens: 280,
+		reasoning_effort: 'low',
 	});
 
 	const encoder = new TextEncoder();
@@ -87,7 +90,7 @@ export const POST: APIRoute = async ({ request }) => {
 			try {
 				const lastUserMessage = [...messages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? '';
 				const suggestionsResponse = await groq.chat.completions.create({
-					model: 'llama-3.1-8b-instant',
+					model: MODEL,
 					messages: [
 						{
 							role: 'system',
