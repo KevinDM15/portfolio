@@ -66,6 +66,7 @@ export function initPortfolio() {
 	const themeEl = $<HTMLElement>('[data-k="theme"]');
 	const rowsEl = $<HTMLElement>('[data-k="rows"]');
 	const secEl = $<SVGElement>('[data-k="sec"]');
+	const progEl = $<HTMLElement>('[data-k="progress"]');
 	const colsEl = $<HTMLElement>('[data-k="cols"]');
 	const toastEl = $<HTMLElement>('[data-k="toast"]');
 	const hhEl = $<SVGElement>('[data-k="hh"]');
@@ -98,7 +99,7 @@ export function initPortfolio() {
 	const frames = $$<HTMLElement>('[data-frame]');
 	const navLinks = $$<HTMLElement>('[data-nav]');
 
-	const st = { w: 1280, small: false, cur: 0, nav: '', time: '--:--' };
+	const st = { w: 1280, cur: 0, nav: '', time: '--:--' };
 	let dark = DEFAULT_THEME === 'dark';
 	let inkC = '#0F0F11';
 	let hotC = '#D4470E';
@@ -112,11 +113,9 @@ export function initPortfolio() {
 	const setVars = (vars: Record<string, string>) => Object.entries(vars).forEach(([k, v]) => wrap.style.setProperty(k, v));
 
 	function applyLayout() {
-		const { w, small } = st;
+		const { w } = st;
 		const n = w < 760, m = w < 860, l = w < 1080, xs = w < 600;
 		const L: Record<string, string> = {
-			glassW: small ? 'min(660px, 100%)' : 'min(900px, 100%)',
-			glassH: small ? '50px' : '58px',
 			orbPos: n ? 'relative' : 'absolute',
 			orbRight: n ? 'auto' : 'var(--g)',
 			orbMargin: n ? '0 auto' : 'auto 0',
@@ -164,7 +163,7 @@ export function initPortfolio() {
 		[0, 1].forEach((i) => Object.entries(sc(i)).forEach(([k, v]) => (vars[`--sc${i}-${k}`] = v)));
 		setVars(vars);
 
-		const show: Record<string, boolean> = { nav: !n, clock: !n && !small, mailNote: !m, upNote: !l };
+		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l };
 		$$<HTMLElement>('[data-if]').forEach((el) => {
 			el.style.display = show[el.dataset.if as string] ? '' : 'none';
 		});
@@ -359,8 +358,6 @@ export function initPortfolio() {
 	/* ---------- scroll ---------- */
 	function scrollFx() {
 		const vh = innerHeight, y = scrollY;
-		const small = y > 90;
-		if (small !== st.small) { st.small = small; applyLayout(); }
 		const ease = (x: number) => 1 - Math.pow(1 - x, 3);
 		const prog = (top: number, from: number, span: number) => ease(Math.max(0, Math.min(1, (vh * from - top) / (vh * span))));
 		if (!reduce) {
@@ -398,6 +395,20 @@ export function initPortfolio() {
 			if (r.top < vh / 2 && r.bottom > vh / 2) nav = id;
 		});
 		if (nav !== st.nav) { st.nav = nav; applyNav(); }
+		if (progEl) {
+			// scroll progress line, tinted with the accent of the section in view
+			const max = document.documentElement.scrollHeight - vh;
+			progEl.style.transform = `scaleX(${(max > 0 ? Math.max(0, Math.min(1, y / max)) : 0).toFixed(4)})`;
+			const accentOf: Record<string, string> = { sobre: '--c3', proyectos: '--c2' };
+			let sec = '--c1';
+			['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
+				const el = wrap!.querySelector('#' + id);
+				if (!el) return;
+				const r = el.getBoundingClientRect();
+				if (r.top < vh / 2 && r.bottom > vh / 2) sec = accentOf[id] ?? '--c1';
+			});
+			progEl.style.background = `var(${sec})`;
+		}
 	}
 
 	/* ---------- toast, confetti, copy ---------- */

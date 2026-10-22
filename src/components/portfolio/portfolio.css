@@ -12,9 +12,6 @@ a:hover{color:var(--accent,#D4470E)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
 :focus-visible{outline:2px solid var(--accent,#D4470E);outline-offset:3px}
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
-[data-nav]{color:var(--muted);background:transparent}
-[data-nav].on{color:var(--fg);background:color-mix(in srgb, var(--fg) 14%, transparent)}
-.hv0:hover{color:var(--fg) !important;background:color-mix(in srgb, var(--fg) 14%, transparent) !important}
 .hv1:hover{background:color-mix(in srgb, var(--fg) 20%, transparent) !important;transform:scale(1.08) rotate(20deg) !important}
 .hv2:hover{transform:translateY(-3px) !important;border-color:var(--line-strong) !important;color:var(--fg) !important}
 .hv3:hover{opacity:1 !important}
@@ -35,3 +32,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 [data-kd][data-t="light"] [data-icon="sun"]{display:none}
 [data-kd][data-t="dark"] [data-icon="moon"]{display:none}
 
+
+/* header nav: plain mono links, the active section is underlined */
+.kd-nav{display:flex;align-items:center;gap:14px}
+.kd-nav a{text-decoration:none;color:var(--muted);transition:color .3s}
+.kd-nav a:hover,.kd-nav a.on{color:var(--fg)}
+.kd-nav a.on{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
