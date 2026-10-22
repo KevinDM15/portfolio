@@ -163,7 +163,8 @@ export function initPortfolio() {
 		[0, 1].forEach((i) => Object.entries(sc(i)).forEach(([k, v]) => (vars[`--sc${i}-${k}`] = v)));
 		setVars(vars);
 
-		const show: Record<string, boolean> = { nav: !n, clock: !n, mailNote: !m, upNote: !l };
+		if (!n) setMenu(false);
+		const show: Record<string, boolean> = { nav: true, clock: !n, mailNote: !m, upNote: !l };
 		$$<HTMLElement>('[data-if]').forEach((el) => {
 			el.style.display = show[el.dataset.if as string] ? '' : 'none';
 		});
@@ -196,6 +197,15 @@ export function initPortfolio() {
 		});
 	}
 
+	const barEl = $<HTMLElement>('[data-k="bar"]');
+	const menuBtn = $<HTMLButtonElement>('[data-k="menu"]');
+	const menuLabel = $<HTMLElement>('[data-k="menu-label"]');
+	function setMenu(open: boolean) {
+		if (!barEl || !menuBtn) return;
+		if (open) barEl.setAttribute('data-open', ''); else barEl.removeAttribute('data-open');
+		menuBtn.setAttribute('aria-expanded', String(open));
+		if (menuLabel) menuLabel.textContent = open ? 'Cerrar' : 'Menú';
+	}
 	function applyNav() {
 		navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === st.nav));
 	}
@@ -477,6 +487,10 @@ export function initPortfolio() {
 	mh?.addEventListener('mouseenter', () => mAnim?.pause());
 	mh?.addEventListener('mouseleave', () => mAnim?.play());
 	themeEl?.addEventListener('click', toggleTheme);
+	menuBtn?.addEventListener('click', () => setMenu(!barEl?.hasAttribute('data-open')));
+	$$<HTMLElement>('.kd-nav a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+	addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+	addEventListener('pointerdown', (e) => { if (barEl?.hasAttribute('data-open') && !barEl.contains(e.target as Node)) setMenu(false); });
 
 	new ResizeObserver((e) => {
 		const w = Math.round(e[0].contentRect.width);
