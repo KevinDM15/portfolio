@@ -102,7 +102,7 @@ export const POST: APIRoute = async ({ request }) => {
 						},
 					],
 					stream: false,
-					max_tokens: 128,
+					max_tokens: 400,
 				});
 
 				const raw = suggestionsResponse.choices[0]?.message?.content ?? '[]';
