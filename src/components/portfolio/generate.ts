@@ -89,10 +89,22 @@ export function initGeneration({ root, wrap, main, orb, delay, onPortrait }: Opt
 		logTimer = window.setTimeout(() => logEl.classList.remove('on'), 2600);
 	}
 
+	// readable frame labels: the section plus what the block is (its heading, or its first words)
+	const KIND: Record<string, string> = { figure: 'diagrama', aside: 'recorrido', button: 'acción', a: 'enlace' };
+	const clean = (s: string) => s.replace(/[()]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+	const short = (s: string) => (s.length > 30 ? s.slice(0, 29).trimEnd() + '…' : s);
 	const nameOf = (u: HTMLElement) => {
-		const host = u.closest<HTMLElement>('[data-screen-label], [aria-label]');
-		const raw = host?.dataset.screenLabel ?? host?.getAttribute('aria-label') ?? 'bloque';
-		return `${raw.replace(/^\d+\s*/, '').toLowerCase()} · <${u.tagName.toLowerCase()}>`;
+		const host = u.closest<HTMLElement>('[data-screen-label]');
+		const section = clean((host?.dataset.screenLabel ?? u.getAttribute('aria-label') ?? 'bloque').replace(/^\d+\s*/, ''));
+		if (!host || u === host) return section;
+		let part = '';
+		if (orb && (u === orb || u.contains(orb))) part = 'retrato';
+		else {
+			const head = u.matches('h1,h2,h3') ? u : u.querySelector<HTMLElement>('h1,h2,h3');
+			part = clean(head?.getAttribute('aria-label') ?? head?.innerText ?? '') || KIND[u.tagName.toLowerCase()] || clean(u.innerText ?? '') || 'bloque';
+		}
+		part = short(part);
+		return part === section ? section : `${section} / ${part}`;
 	};
 
 	function decode(u: HTMLElement, tl: gsap.core.Timeline) {

@@ -55,7 +55,7 @@ header[data-open] .kd-nav{display:flex}
 .kg-frame{position:absolute;box-sizing:border-box;border:1px dashed color-mix(in srgb,var(--accent) 75%,transparent);visibility:hidden}
 .kg-tag{position:absolute;left:-1px;bottom:100%;padding:2px 7px;background:var(--accent);color:var(--on-accent,#fff);font:500 10px/1.4 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .kg-scan{position:absolute;left:0;right:0;top:0;height:2px;margin-top:-1px;background:var(--accent);box-shadow:0 0 14px 1px var(--accent)}
-.kg-log{position:fixed;left:20px;bottom:18px;z-index:55;display:grid;gap:2px;padding:10px 14px;background:color-mix(in srgb,var(--bg) 94%,transparent);border:1px solid var(--line-strong);font:400 10.5px/1.5 'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);pointer-events:none;opacity:0;transition:opacity .5s}
+.kg-log{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:55;display:grid;gap:2px;padding:10px 14px;background:color-mix(in srgb,var(--bg) 94%,transparent);border:1px solid var(--line-strong);font:400 10.5px/1.5 'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);pointer-events:none;opacity:0;transition:opacity .5s}
 .kg-log.on{opacity:1}
 .kg-log b{font-weight:500;color:var(--c3)}
 @media (max-width:859px){.kg-log{display:none}}
