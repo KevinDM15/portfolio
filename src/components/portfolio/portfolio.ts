@@ -102,6 +102,8 @@ export function initPortfolio() {
 	const st = { w: 1280, cur: 0, nav: '', time: '--:--' };
 	let dark = DEFAULT_THEME === 'dark';
 	let inkC = '#0F0F11';
+	// the portrait is always printed as dark ink on paper; on the dark theme it sits on a paper-coloured card
+	let portraitInk = '#0F0F11';
 	let hotC = '#D4470E';
 	let hotSet = ['#D4470E', '#2F9E68'];
 	let ready = false;
@@ -223,6 +225,8 @@ export function initPortfolio() {
 		root!.dataset.t = t;
 		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
 		inkC = vars['--fg'];
+		portraitInk = t === 'dark' ? vars['--bg'] : vars['--fg'];
+		cv!.style.backgroundColor = t === 'dark' ? vars['--fg'] : '';
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c3']];
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
@@ -291,7 +295,7 @@ export function initPortfolio() {
 		// crop to the bust so the face is large; the same crop is applied to the matte
 		const iw = img.naturalWidth, ih = img.naturalHeight, crop = Math.min(iw, ih) * 0.8;
 		o.drawImage(img, (iw - crop) / 2, 0, crop, crop, 0, 0, n, n);
-		const px = o.getImageData(0, 0, n, n).data, inv = !dark, dots: Dot[] = [];
+		const px = o.getImageData(0, 0, n, n).data, dots: Dot[] = [];
 		const M = new Float32Array(n * n).fill(1);
 		if (maskOk) {
 			o.clearRect(0, 0, n, n);
@@ -324,7 +328,7 @@ export function initPortfolio() {
 					continue;
 				}
 				// the floor keeps every cell visible, so the square reads as a frame on paper too
-				const l = 0.2 + 0.8 * (inv ? Math.pow(1 - v, 0.85) : Math.pow(v, 0.9));
+				const l = 0.2 + 0.8 * Math.pow(1 - v, 0.85);
 				const hx = (x + 0.5) * s, hy = (y + 0.5) * s;
 				dots.push({
 					hx, hy,
@@ -363,7 +367,7 @@ export function initPortfolio() {
 		if (asciiP < 1) {
 			// each dot shows a luminance glyph (with some 0/1 noise) until its own threshold passes
 			const RAMP = '.:-=+*#%@', solid: Dot[] = [];
-			ctx.fillStyle = inkC;
+			ctx.fillStyle = portraitInk;
 			ctx.font = `500 ${Math.max(8, Math.round(cell * 1.25))}px 'DM Mono', monospace`;
 			ctx.textAlign = 'center';
 			ctx.textBaseline = 'middle';
@@ -372,8 +376,8 @@ export function initPortfolio() {
 				const lum = Math.min(0.999, p.r / (cell * 0.56));
 				ctx.fillText(Math.random() < 0.04 ? (Math.random() < 0.5 ? '0' : '1') : RAMP[Math.floor(lum * RAMP.length)], p.x, p.y);
 			}
-			paint(solid, inkC);
-		} else paint(cold, inkC);
+			paint(solid, portraitInk);
+		} else paint(cold, portraitInk);
 		hotSet.forEach((c, g) => paint(hot.filter((p) => p.g === g), c));
 	}
 
