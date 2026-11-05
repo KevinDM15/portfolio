@@ -310,15 +310,20 @@ export function initPortfolio() {
 		inside.sort((p, q) => p - q);
 		const lo = inside[Math.floor(inside.length * 0.03)] ?? 0, hi = inside[Math.floor(inside.length * 0.97)] ?? 1, span = Math.max(0.05, hi - lo);
 		const at = (x: number, y: number) => L[Math.max(0, Math.min(n - 1, y)) * n + Math.max(0, Math.min(n - 1, x))];
+		const inM = (x: number, y: number) => x >= 0 && y >= 0 && x < n && y < n && M[y * n + x] >= 0.5;
 		for (let y = 0; y < n; y++)
 			for (let x = 0; x < n; x++) {
-				// clean cut-out: nothing outside the silhouette
-				if (M[y * n + x] < 0.5) continue;
-				let blur = 0;
-				for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) blur += at(x + i, y + j);
-				const c = L[y * n + x];
-				const v = Math.max(0, Math.min(1, (c + 0.9 * (c - blur / 9) - lo) / span));
-				// a floor keeps the whole body readable: the dark shirt on a dark page, the bright skin on paper
+				let v = 0.9; // studio backdrop: the photo's background is replaced by flat white
+				if (M[y * n + x] >= 0.5) {
+					let blur = 0;
+					for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) blur += at(x + i, y + j);
+					const c = L[y * n + x];
+					v = Math.max(0, Math.min(1, (c + 0.9 * (c - blur / 9) - lo) / span));
+				} else if (maskOk && (inM(x - 1, y) || inM(x + 1, y) || inM(x, y - 1) || inM(x, y + 1))) {
+					// one empty cell around the silhouette, a keyline that separates the figure from the backdrop
+					continue;
+				}
+				// the floor keeps every cell visible, so the square reads as a frame on paper too
 				const l = 0.2 + 0.8 * (inv ? Math.pow(1 - v, 0.85) : Math.pow(v, 0.9));
 				const hx = (x + 0.5) * s, hy = (y + 0.5) * s;
 				dots.push({
@@ -565,7 +570,7 @@ export function initPortfolio() {
 		else secEl.animate([{ transform: `rotate(${a0}deg)` }, { transform: `rotate(${a0 + 360}deg)` }], { duration: 60000, iterations: Infinity });
 	}
 
-	// build once the photo and its matte are in; without the matte the portrait keeps its background
+	// build once the photo and its matte are in; without the matte the portrait keeps the photo's own background
 	let pending = 2;
 	const loaded = () => { if (--pending > 0) return; ready = true; buildDots(!reduce); };
 	img.onload = loaded;
