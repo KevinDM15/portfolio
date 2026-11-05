@@ -49,7 +49,26 @@ header[data-open] .kd-nav{display:flex}
 .kd-nav a.on{color:var(--accent);text-decoration:none}
 }
 
-/* while the particle scene runs, the dots draw the diagram and the timeline bars themselves */
-[data-kd][data-scene] [data-scene-box]{background:transparent!important}
-[data-kd][data-scene] [data-scene-box] svg :is(circle,polygon,path,rect,ellipse){opacity:0!important}
-[data-kd][data-scene] #experiencia [data-bar]{background:transparent!important}
+/* page "generation": boot log, per-block scan frames and build log */
+[data-kd][data-gen] main{visibility:hidden}
+.kg-layer{position:absolute;inset:0;z-index:6;pointer-events:none}
+.kg-frame{position:absolute;box-sizing:border-box;border:1px dashed color-mix(in srgb,var(--accent) 75%,transparent);visibility:hidden}
+.kg-tag{position:absolute;left:-1px;bottom:100%;padding:2px 7px;background:var(--accent);color:var(--on-accent,#fff);font:500 10px/1.4 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.kg-scan{position:absolute;left:0;right:0;top:0;height:2px;margin-top:-1px;background:var(--accent);box-shadow:0 0 14px 1px var(--accent)}
+.kg-log{position:fixed;left:20px;bottom:18px;z-index:55;display:grid;gap:2px;padding:10px 14px;background:color-mix(in srgb,var(--bg) 94%,transparent);border:1px solid var(--line-strong);font:400 10.5px/1.5 'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);pointer-events:none;opacity:0;transition:opacity .5s}
+.kg-log.on{opacity:1}
+.kg-log b{font-weight:500;color:var(--c3)}
+@media (max-width:859px){.kg-log{display:none}}
+
+.kb{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:var(--bg);color:var(--fg);font:400 12px/1.8 'DM Mono',ui-monospace,Menlo,monospace;letter-spacing:.02em;animation:kb-out .45s cubic-bezier(.7,0,.2,1) 1.75s forwards}
+[data-kd][data-noboot] .kb{display:none}
+.kb-in{width:min(460px,calc(100vw - 48px))}
+.kb p{margin:0;opacity:0;animation:kb-in .01s linear forwards;animation-delay:calc(var(--i,0) * .26s + .1s)}
+.kb p b{font-weight:500;color:var(--c3)}
+.kb .kb-cmd b{color:var(--accent)}
+.kb-bar{display:flex;align-items:center;gap:12px;margin-top:16px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.kb-bar i{flex:1;height:8px;background:repeating-linear-gradient(90deg,var(--accent) 0 6px,transparent 6px 9px);clip-path:inset(0 100% 0 0);animation:kb-fill 1.35s steps(26) .25s forwards}
+@keyframes kb-in{to{opacity:1}}
+@keyframes kb-fill{to{clip-path:inset(0 0 0 0)}}
+@keyframes kb-out{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0);visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.kb{display:none}}

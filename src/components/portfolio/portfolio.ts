@@ -1,5 +1,7 @@
 type ThemeName = 'dark' | 'light';
-type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number };
+import { initGeneration } from './generate';
+
+type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number; k: number };
 
 const EMAIL = 'kevindiazm.14@gmail.com';
 const SKEW = 'skewY(-6deg) rotate(-1.5deg) ';
@@ -223,7 +225,6 @@ export function initPortfolio() {
 		inkC = vars['--fg'];
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c3']];
-		sc?.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
 		const bg = PALETTE[t].bg;
 		document.documentElement.style.backgroundColor = bg;
@@ -264,39 +265,13 @@ export function initPortfolio() {
 	let steps = 1;
 	const mouse = { x: -999, y: -999 };
 	const img = new Image();
-	// one page-wide particle scene (face -> diagram -> timeline -> contact ring), loaded after first paint
-	// into a fixed canvas behind the content; the 2D portrait paints first and stays as the fallback
-	let sc: ReturnType<(typeof import('./scene3d'))['createScene3D']> | null = null;
-	function bootScene3D() {
-		import('./scene3d').then((m) => {
-			const diagram = $<HTMLElement>('[data-scene-box]');
-			const button = $<HTMLElement>('button[data-copy][data-magnet]');
-			const bars = $$<HTMLElement>('#experiencia [data-bar]');
-			if (!orbEl || !diagram || !button || !bars.length) return;
-			const gl = document.createElement('canvas');
-			gl.setAttribute('aria-hidden', 'true');
-			gl.style.cssText = 'position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none';
-			root!.insertBefore(gl, wrap);
-			const inst = m.createScene3D(gl, img, { face: orbEl, diagram, bars, button }, reduce);
-			if (!inst) { gl.remove(); return; }
-			inst.setTheme(dark);
-			inst.setColors({ ink: inkC, hot: [hotSet[0], hotSet[1]] });
-			inst.build();
-			sc = inst;
-			(window as any).__kdScene = inst;
-			root!.setAttribute('data-scene', '');
-			cv.style.opacity = '0';
-			addEventListener('resize', () => inst.build());
-		}).catch(() => {});
-	}
+	// "generation": the portrait is drawn as ASCII glyphs until its block resolves (0 = glyphs, 1 = dots)
+	let asciiP = 1;
+	let cell = 9;
 
 	function buildDots(scatter: boolean) {
 		if (!ready) return;
-		if (sc) {
-			sc.setTheme(dark);
-			sc.build();
-			return;
-		}
+
 		const w = cv!.clientWidth, h = cv!.clientHeight;
 		if (!w) return;
 		W = w; H = h;
@@ -305,6 +280,7 @@ export function initPortfolio() {
 		ctx = cv!.getContext('2d')!;
 		ctx.setTransform(d, 0, 0, d, 0, 0);
 		const n = Math.round(W / 9), s = W / n;
+		cell = s;
 		const off = document.createElement('canvas');
 		off.width = off.height = n;
 		const o = off.getContext('2d')!;
@@ -327,7 +303,7 @@ export function initPortfolio() {
 					hx, hy,
 					x: scatter ? W / 2 + (Math.random() - 0.5) * W * 1.6 : hx,
 					y: scatter ? H / 2 + (Math.random() - 0.5) * H * 1.6 : hy,
-					vx: 0, vy: 0, r: l * s * (inv ? 0.56 : 0.58), h: 0, g: Math.floor(Math.random() * 2),
+					vx: 0, vy: 0, r: l * s * (inv ? 0.56 : 0.58), h: 0, g: Math.floor(Math.random() * 2), k: Math.random(),
 				});
 			}
 		P = dots;
@@ -357,7 +333,20 @@ export function initPortfolio() {
 			arr.forEach((p) => { ctx!.moveTo(p.x + p.r, p.y); ctx!.arc(p.x, p.y, p.r, 0, 6.2832); });
 			ctx!.fill();
 		};
-		paint(cold, inkC);
+		if (asciiP < 1) {
+			// each dot shows a luminance glyph (with some 0/1 noise) until its own threshold passes
+			const RAMP = '.:-=+*#%@', solid: Dot[] = [];
+			ctx.fillStyle = inkC;
+			ctx.font = `500 ${Math.max(8, Math.round(cell * 1.25))}px 'DM Mono', monospace`;
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+			for (const p of cold) {
+				if (p.k < asciiP) { solid.push(p); continue; }
+				const lum = Math.min(0.999, p.r / (cell * 0.58));
+				ctx.fillText(Math.random() < 0.04 ? (Math.random() < 0.5 ? '0' : '1') : RAMP[Math.floor(lum * RAMP.length)], p.x, p.y);
+			}
+			paint(solid, inkC);
+		} else paint(cold, inkC);
 		hotSet.forEach((c, g) => paint(hot.filter((p) => p.g === g), c));
 	}
 
@@ -478,8 +467,8 @@ export function initPortfolio() {
 
 	function copy(e: MouseEvent) {
 		const x = e.clientX, y = e.clientY;
-		const ok = () => { say('Correo copiado'); burst(x, y); sc?.burst(x, y); };
-		const fail = () => { say('Copia: ' + EMAIL); burst(x, y); sc?.burst(x, y); };
+		const ok = () => { say('Correo copiado'); burst(x, y); };
+		const fail = () => { say('Copia: ' + EMAIL); burst(x, y); };
 		try { navigator.clipboard.writeText(EMAIL).then(ok, fail); } catch { fail(); }
 	}
 
@@ -557,18 +546,14 @@ export function initPortfolio() {
 	img.onload = () => {
 		ready = true;
 		buildDots(!reduce);
-		const idle = (window as any).requestIdleCallback as undefined | ((cb: () => void, o?: { timeout: number }) => void);
-		const boot = () => bootScene3D();
-		if (idle) idle(boot, { timeout: 1500 }); else setTimeout(boot, 300);
 	};
 	img.src = '/img/retrato.jpg';
 	addEventListener('pointermove', (e) => {
 		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);
 		mouse.x = (e.clientX - r.left) * k;
 		mouse.y = (e.clientY - r.top) * k;
-		sc?.setMouse(e.clientX, e.clientY);
 	});
-	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; sc?.clearMouse(); });
+	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; });
 
 	let last = 0;
 	const loop = () => {
@@ -577,12 +562,17 @@ export function initPortfolio() {
 		last = now;
 		const cr = cv.getBoundingClientRect();
 		const vis = cr.bottom > 0 && cr.top < innerHeight && cr.width > 0;
-		if (sc) { if (ready) sc.frame(steps, now); }
-		else if (vis && ready && !reduce) draw();
+		if (vis && ready && !reduce) draw();
 		requestAnimationFrame(loop);
 	};
 	requestAnimationFrame(loop);
 
 	addEventListener('scroll', scrollFx, { passive: true });
 	scrollFx();
+
+	const mainEl = root.querySelector<HTMLElement>('main');
+	if (!reduce && mainEl && root.hasAttribute('data-gen')) {
+		asciiP = 0;
+		initGeneration({ root, wrap, main: mainEl, orb: orbEl, delay: root.hasAttribute('data-noboot') ? 0.15 : 1.95, onPortrait: (v) => (asciiP = v) });
+	}
 }
