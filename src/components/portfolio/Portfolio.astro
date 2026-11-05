@@ -23,6 +23,31 @@ const showProjects = false;
 		} catch (e) {}
 	})();
 </script>
+<script is:inline>
+	// Generation flags, set before first paint: skip the boot log on repeat visits, skip everything under reduced motion
+	(function () {
+		try {
+			var r = document.currentScript.parentElement, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, seen = false;
+			try { seen = sessionStorage.getItem('kd-boot') === '1'; sessionStorage.setItem('kd-boot', '1'); } catch (e) {}
+			if (reduce || seen) r.setAttribute('data-noboot', '');
+			if (!reduce) {
+				r.setAttribute('data-gen', '');
+				// safety net: never leave the page hidden if the main script fails
+				setTimeout(function () { r.removeAttribute('data-gen'); }, 5000);
+			}
+		} catch (e) {}
+	})();
+</script>
+<div data-k="boot" class="kb" aria-hidden="true">
+  <div class="kb-in">
+    <p class="kb-cmd"><b>&gt;</b> kevin build --portfolio</p>
+    <p style="--i:1"><b>[ ok ]</b> tokens · papel, tinta, terracota, verde</p>
+    <p style="--i:2"><b>[ ok ]</b> tipografías · barlow, instrument, dm mono</p>
+    <p style="--i:3"><b>[ ok ]</b> retrato · muestreando puntos</p>
+    <p style="--i:4"><b>[ ok ]</b> secciones · inicio, sobre mí, proyectos, experiencia, contacto</p>
+    <div class="kb-bar"><span>compilando</span><i></i></div>
+  </div>
+</div>
 <div data-k="wrap" style="container-type:inline-size; position:relative; overflow-x:clip; --g:clamp(16px,4cqw,56px)">
 
 <div data-k="cols" aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; z-index:0">

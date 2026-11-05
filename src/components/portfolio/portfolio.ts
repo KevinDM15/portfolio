@@ -1,5 +1,7 @@
 type ThemeName = 'dark' | 'light';
-type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number };
+import { initGeneration } from './generate';
+
+type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number; k: number };
 
 const EMAIL = 'kevindiazm.14@gmail.com';
 const SKEW = 'skewY(-6deg) rotate(-1.5deg) ';
@@ -100,6 +102,8 @@ export function initPortfolio() {
 	const st = { w: 1280, cur: 0, nav: '', time: '--:--' };
 	let dark = DEFAULT_THEME === 'dark';
 	let inkC = '#0F0F11';
+	// the portrait is always printed as dark ink on paper; on the dark theme it sits on a paper-coloured card
+	let portraitInk = '#0F0F11';
 	let hotC = '#D4470E';
 	let hotSet = ['#D4470E', '#2F9E68'];
 	let ready = false;
@@ -221,6 +225,7 @@ export function initPortfolio() {
 		root!.dataset.t = t;
 		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
 		inkC = vars['--fg'];
+		portraitInk = t === 'dark' ? vars['--bg'] : vars['--fg'];
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c3']];
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
@@ -263,9 +268,16 @@ export function initPortfolio() {
 	let steps = 1;
 	const mouse = { x: -999, y: -999 };
 	const img = new Image();
+	// person matte for the portrait (white = subject), generated once from retrato.jpg
+	const maskImg = new Image();
+	let maskOk = false;
+	// "generation": the portrait is drawn as ASCII glyphs until its block resolves (0 = glyphs, 1 = dots)
+	let asciiP = 1;
+	let cell = 9;
 
 	function buildDots(scatter: boolean) {
 		if (!ready) return;
+
 		const w = cv!.clientWidth, h = cv!.clientHeight;
 		if (!w) return;
 		W = w; H = h;
@@ -273,30 +285,55 @@ export function initPortfolio() {
 		cv!.width = W * d; cv!.height = H * d;
 		ctx = cv!.getContext('2d')!;
 		ctx.setTransform(d, 0, 0, d, 0, 0);
-		const n = Math.round(W / 9), s = W / n;
+		const n = Math.round(W / 6.5), s = W / n;
+		cell = s;
 		const off = document.createElement('canvas');
 		off.width = off.height = n;
 		const o = off.getContext('2d')!;
-		o.drawImage(img, 0, 0, n, n);
-		const px = o.getImageData(0, 0, n, n).data, inv = !dark, dots: Dot[] = [];
+		o.imageSmoothingQuality = 'high';
+		// crop to the bust so the face is large; the same crop is applied to the matte
+		const iw = img.naturalWidth, ih = img.naturalHeight, crop = Math.min(iw, ih) * 0.8;
+		o.drawImage(img, (iw - crop) / 2, 0, crop, crop, 0, 0, n, n);
+		const px = o.getImageData(0, 0, n, n).data, dots: Dot[] = [];
+		const M = new Float32Array(n * n).fill(1);
+		if (maskOk) {
+			o.clearRect(0, 0, n, n);
+			const mw = maskImg.naturalWidth, mh = maskImg.naturalHeight, mc = Math.min(mw, mh) * 0.8;
+			o.drawImage(maskImg, (mw - mc) / 2, 0, mc, mc, 0, 0, n, n);
+			const mp = o.getImageData(0, 0, n, n).data;
+			for (let i = 0; i < n * n; i++) M[i] = mp[i * 4] / 255;
+		}
+		// luminance with auto levels taken from the subject only, plus a light unsharp mask for eyes, mouth and beard
+		const L = new Float32Array(n * n);
+		const inside: number[] = [];
+		for (let i = 0; i < n * n; i++) {
+			L[i] = (0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2]) / 255;
+			if (M[i] > 0.5) inside.push(L[i]);
+		}
+		inside.sort((p, q) => p - q);
+		const lo = inside[Math.floor(inside.length * 0.03)] ?? 0, hi = inside[Math.floor(inside.length * 0.97)] ?? 1, span = Math.max(0.05, hi - lo);
+		const at = (x: number, y: number) => L[Math.max(0, Math.min(n - 1, y)) * n + Math.max(0, Math.min(n - 1, x))];
+		const inM = (x: number, y: number) => x >= 0 && y >= 0 && x < n && y < n && M[y * n + x] >= 0.5;
 		for (let y = 0; y < n; y++)
 			for (let x = 0; x < n; x++) {
-				const i = (y * n + x) * 4;
-				let l = (0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2]) / 255;
-				if (inv) {
-					l = 1 - l;
-					l = Math.pow(Math.max(0, Math.min(1, (l - 0.14) / 0.66)), 1.1);
-				} else {
-					const vx = x / n - 0.5, vy = y / n - 0.5, fade = 1 - Math.min(1, Math.pow(Math.hypot(vx, vy) * 1.55, 3)) * 0.85;
-					l = Math.pow(Math.max(0, Math.min(1, (l - 0.06) / 0.46)), 0.62) * fade;
+				let v = 0.9; // studio backdrop: the photo's background is replaced by flat white
+				if (M[y * n + x] >= 0.5) {
+					let blur = 0;
+					for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) blur += at(x + i, y + j);
+					const c = L[y * n + x];
+					v = Math.max(0, Math.min(1, (c + 0.9 * (c - blur / 9) - lo) / span));
+				} else if (maskOk && (inM(x - 1, y) || inM(x + 1, y) || inM(x, y - 1) || inM(x, y + 1))) {
+					// one empty cell around the silhouette, a keyline that separates the figure from the backdrop
+					continue;
 				}
-				if (l < 0.08) continue;
+				// the floor keeps every cell visible, so the square reads as a frame on paper too
+				const l = 0.2 + 0.8 * Math.pow(1 - v, 0.85);
 				const hx = (x + 0.5) * s, hy = (y + 0.5) * s;
 				dots.push({
 					hx, hy,
 					x: scatter ? W / 2 + (Math.random() - 0.5) * W * 1.6 : hx,
 					y: scatter ? H / 2 + (Math.random() - 0.5) * H * 1.6 : hy,
-					vx: 0, vy: 0, r: l * s * (inv ? 0.56 : 0.58), h: 0, g: Math.floor(Math.random() * 2),
+					vx: 0, vy: 0, r: l * s * 0.56, h: 0, g: Math.floor(Math.random() * 2), k: Math.random(),
 				});
 			}
 		P = dots;
@@ -326,7 +363,20 @@ export function initPortfolio() {
 			arr.forEach((p) => { ctx!.moveTo(p.x + p.r, p.y); ctx!.arc(p.x, p.y, p.r, 0, 6.2832); });
 			ctx!.fill();
 		};
-		paint(cold, inkC);
+		if (asciiP < 1) {
+			// each dot shows a luminance glyph (with some 0/1 noise) until its own threshold passes
+			const RAMP = '.:-=+*#%@', solid: Dot[] = [];
+			ctx.fillStyle = portraitInk;
+			ctx.font = `500 ${Math.max(8, Math.round(cell * 1.25))}px 'DM Mono', monospace`;
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+			for (const p of cold) {
+				if (p.k < asciiP) { solid.push(p); continue; }
+				const lum = Math.min(0.999, p.r / (cell * 0.56));
+				ctx.fillText(Math.random() < 0.04 ? (Math.random() < 0.5 ? '0' : '1') : RAMP[Math.floor(lum * RAMP.length)], p.x, p.y);
+			}
+			paint(solid, portraitInk);
+		} else paint(cold, portraitInk);
 		hotSet.forEach((c, g) => paint(hot.filter((p) => p.g === g), c));
 	}
 
@@ -395,6 +445,7 @@ export function initPortfolio() {
 				}
 			}
 		// status bar: current section, scroll percentage and a progress line tinted with the section accent
+
 		// the current section is the last one whose top has passed the middle of the screen
 		let cur = 'inicio';
 		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
@@ -522,7 +573,13 @@ export function initPortfolio() {
 		else secEl.animate([{ transform: `rotate(${a0}deg)` }, { transform: `rotate(${a0 + 360}deg)` }], { duration: 60000, iterations: Infinity });
 	}
 
-	img.onload = () => { ready = true; buildDots(!reduce); };
+	// build once the photo and its matte are in; without the matte the portrait keeps the photo's own background
+	let pending = 2;
+	const loaded = () => { if (--pending > 0) return; ready = true; buildDots(!reduce); };
+	img.onload = loaded;
+	maskImg.onload = () => { maskOk = true; loaded(); };
+	maskImg.onerror = loaded;
+	maskImg.src = '/img/retrato-mascara.png';
 	img.src = '/img/retrato.jpg';
 	addEventListener('pointermove', (e) => {
 		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);
@@ -545,4 +602,10 @@ export function initPortfolio() {
 
 	addEventListener('scroll', scrollFx, { passive: true });
 	scrollFx();
+
+	const mainEl = root.querySelector<HTMLElement>('main');
+	if (!reduce && mainEl && root.hasAttribute('data-gen')) {
+		asciiP = 0;
+		initGeneration({ root, wrap, main: mainEl, orb: orbEl, delay: root.hasAttribute('data-noboot') ? 0.15 : 1.95, onPortrait: (v) => (asciiP = v) });
+	}
 }
