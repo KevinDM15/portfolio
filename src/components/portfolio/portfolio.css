@@ -72,3 +72,7 @@ header[data-open] .kd-nav{display:flex}
 @keyframes kb-fill{to{clip-path:inset(0 0 0 0)}}
 @keyframes kb-out{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0);visibility:hidden}}
 @media (prefers-reduced-motion:reduce){.kb{display:none}}
+
+/* portrait: rounded on both themes; on the dark theme it is a paper card with a solid offset shadow, like a print */
+[data-k="cv"]{border-radius:clamp(18px,2.4cqw,30px)}
+[data-kd][data-t="dark"] [data-k="cv"]{background:var(--fg);box-shadow:0 0 0 1px color-mix(in srgb,var(--fg) 30%,transparent),clamp(8px,1cqw,14px) clamp(8px,1cqw,14px) 0 0 var(--c1)}

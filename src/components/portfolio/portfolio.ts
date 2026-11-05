@@ -226,7 +226,6 @@ export function initPortfolio() {
 		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
 		inkC = vars['--fg'];
 		portraitInk = t === 'dark' ? vars['--bg'] : vars['--fg'];
-		cv!.style.backgroundColor = t === 'dark' ? vars['--fg'] : '';
 		hotC = vars['--accent'];
 		hotSet = [vars['--c1'], vars['--c3']];
 		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
