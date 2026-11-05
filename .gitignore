@@ -31,4 +31,5 @@ pnpm-debug.log*
 .playwright-mcp/
 *.png
 !docs/screenshots/*.png
+!public/img/retrato-mascara.png
 *.txt

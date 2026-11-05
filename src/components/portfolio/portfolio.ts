@@ -265,6 +265,9 @@ export function initPortfolio() {
 	let steps = 1;
 	const mouse = { x: -999, y: -999 };
 	const img = new Image();
+	// person matte for the portrait (white = subject), generated once from retrato.jpg
+	const maskImg = new Image();
+	let maskOk = false;
 	// "generation": the portrait is drawn as ASCII glyphs until its block resolves (0 = glyphs, 1 = dots)
 	let asciiP = 1;
 	let cell = 9;
@@ -285,30 +288,38 @@ export function initPortfolio() {
 		off.width = off.height = n;
 		const o = off.getContext('2d')!;
 		o.imageSmoothingQuality = 'high';
-		// crop to head and shoulders so the face fills the frame instead of a third of it
-		const iw = img.naturalWidth, ih = img.naturalHeight, crop = Math.min(iw, ih) * 0.72;
+		// crop to the bust so the face is large; the same crop is applied to the matte
+		const iw = img.naturalWidth, ih = img.naturalHeight, crop = Math.min(iw, ih) * 0.8;
 		o.drawImage(img, (iw - crop) / 2, 0, crop, crop, 0, 0, n, n);
 		const px = o.getImageData(0, 0, n, n).data, inv = !dark, dots: Dot[] = [];
-		// luminance with auto levels and a light unsharp mask, so eyes, mouth and beard keep their edges
+		const M = new Float32Array(n * n).fill(1);
+		if (maskOk) {
+			o.clearRect(0, 0, n, n);
+			const mw = maskImg.naturalWidth, mh = maskImg.naturalHeight, mc = Math.min(mw, mh) * 0.8;
+			o.drawImage(maskImg, (mw - mc) / 2, 0, mc, mc, 0, 0, n, n);
+			const mp = o.getImageData(0, 0, n, n).data;
+			for (let i = 0; i < n * n; i++) M[i] = mp[i * 4] / 255;
+		}
+		// luminance with auto levels taken from the subject only, plus a light unsharp mask for eyes, mouth and beard
 		const L = new Float32Array(n * n);
-		for (let i = 0; i < n * n; i++) L[i] = (0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2]) / 255;
-		const sorted = Float32Array.from(L).sort();
-		const lo = sorted[Math.floor(n * n * 0.03)], hi = sorted[Math.floor(n * n * 0.97)], span = Math.max(0.05, hi - lo);
+		const inside: number[] = [];
+		for (let i = 0; i < n * n; i++) {
+			L[i] = (0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2]) / 255;
+			if (M[i] > 0.5) inside.push(L[i]);
+		}
+		inside.sort((p, q) => p - q);
+		const lo = inside[Math.floor(inside.length * 0.03)] ?? 0, hi = inside[Math.floor(inside.length * 0.97)] ?? 1, span = Math.max(0.05, hi - lo);
 		const at = (x: number, y: number) => L[Math.max(0, Math.min(n - 1, y)) * n + Math.max(0, Math.min(n - 1, x))];
 		for (let y = 0; y < n; y++)
 			for (let x = 0; x < n; x++) {
+				// clean cut-out: nothing outside the silhouette
+				if (M[y * n + x] < 0.5) continue;
 				let blur = 0;
 				for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) blur += at(x + i, y + j);
 				const c = L[y * n + x];
 				const v = Math.max(0, Math.min(1, (c + 0.9 * (c - blur / 9) - lo) / span));
-				// soft oval around head and shoulders: the background fades out instead of competing with the face
-				// narrow around the head, widening below the chin to keep the shoulders
-				const fy = y / n, rx = 0.44 + Math.max(0, fy - 0.6) * 1.1;
-				const dx = (x / n - 0.5) / rx, dy = (fy - 0.45) / (fy > 0.45 ? 0.7 : 0.5);
-				const e = Math.max(0, Math.min(1, (Math.hypot(dx, dy) - 0.7) / 0.34));
-				const m = 1 - e * e * (3 - 2 * e);
-				const l = (inv ? Math.pow(1 - v, 0.85) : Math.pow(v, 0.9)) * m;
-				if (l < 0.07) continue;
+				// a floor keeps the whole body readable: the dark shirt on a dark page, the bright skin on paper
+				const l = 0.2 + 0.8 * (inv ? Math.pow(1 - v, 0.85) : Math.pow(v, 0.9));
 				const hx = (x + 0.5) * s, hy = (y + 0.5) * s;
 				dots.push({
 					hx, hy,
@@ -554,10 +565,13 @@ export function initPortfolio() {
 		else secEl.animate([{ transform: `rotate(${a0}deg)` }, { transform: `rotate(${a0 + 360}deg)` }], { duration: 60000, iterations: Infinity });
 	}
 
-	img.onload = () => {
-		ready = true;
-		buildDots(!reduce);
-	};
+	// build once the photo and its matte are in; without the matte the portrait keeps its background
+	let pending = 2;
+	const loaded = () => { if (--pending > 0) return; ready = true; buildDots(!reduce); };
+	img.onload = loaded;
+	maskImg.onload = () => { maskOk = true; loaded(); };
+	maskImg.onerror = loaded;
+	maskImg.src = '/img/retrato-mascara.png';
 	img.src = '/img/retrato.jpg';
 	addEventListener('pointermove', (e) => {
 		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);
