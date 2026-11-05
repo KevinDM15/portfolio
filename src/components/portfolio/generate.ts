@@ -5,9 +5,9 @@ gsap.registerPlugin(ScrambleTextPlugin);
 
 /*
  * "Generation" of the page while scrolling. Main is split into blocks no taller than the viewport;
- * each one stays clipped until it enters, then a dashed frame with a scan line sweeps it top to
- * bottom while its headings decode. Blocks play once with a fixed duration (never scrubbed), so
- * text is not left half-scrambled when the scroll stops.
+ * each one stays hidden until it enters, then a dashed frame appears and the block resolves cell by
+ * cell (glyphs first, then the real content) while its headings decode. Blocks play once with a
+ * fixed duration (never scrubbed), so text is not left half-scrambled when the scroll stops.
  */
 
 type Options = {
@@ -23,7 +23,7 @@ type Options = {
 
 const GLYPHS = 'ABCDEFGHJKLMNPRSTUVXYZ0123456789#/<>_';
 const MONO_GLYPHS = '01<>/_#';
-const PAD = 120; // lets hand notes that overflow a block stay visible once it is generated
+const CELL_GLYPHS = '01#/<>_=+*';
 const LEAF = 'ul,ol,p,h1,h2,h3,figure,article,button,a';
 
 // blocks: an element that fits in the viewport, or a leaf; taller containers are split into their children
@@ -72,21 +72,20 @@ export function initGeneration({ root, wrap, main, orb, delay, onPortrait }: Opt
 	layer.setAttribute('aria-hidden', 'true');
 	wrap.appendChild(layer);
 
-	const logEl = document.createElement('div');
+	// build status: one line in the header bar, so it never covers page content
+	const logEl = document.createElement('span');
 	logEl.className = 'kg-log';
 	logEl.setAttribute('aria-hidden', 'true');
-	root.appendChild(logEl);
+	const logHost = root.querySelector('.kd-right');
+	if (logHost) logHost.prepend(logEl);
 	let logTimer: number | undefined;
 	function log(label: string, ms: number) {
-		const line = document.createElement('div');
 		const ok = document.createElement('b');
 		ok.textContent = '[ ok ]';
-		line.append(ok, ` ${label} · ${Math.round(ms)} ms`);
-		logEl.appendChild(line);
-		while (logEl.children.length > 5) logEl.firstElementChild!.remove();
+		logEl.replaceChildren(ok, ` ${label} · ${Math.round(ms)} ms`);
 		logEl.classList.add('on');
 		clearTimeout(logTimer);
-		logTimer = window.setTimeout(() => logEl.classList.remove('on'), 2600);
+		logTimer = window.setTimeout(() => logEl.classList.remove('on'), 2200);
 	}
 
 	// readable frame labels: the section plus what the block is (its heading, or its first words)
@@ -123,39 +122,70 @@ export function initGeneration({ root, wrap, main, orb, delay, onPortrait }: Opt
 		}
 	}
 
+	// the colour behind a block, so its cover cells look like empty page until they clear
+	function bgBehind(u: HTMLElement) {
+		for (let n = u.parentElement; n && n !== document.documentElement; n = n.parentElement) {
+			const c = getComputedStyle(n).backgroundColor;
+			if (c && c !== 'transparent' && c !== 'rgba(0, 0, 0, 0)') return c;
+		}
+		return getComputedStyle(root).getPropertyValue('--bg').trim() || '#EFEEE9';
+	}
+
 	function run(u: HTMLElement) {
 		const r = u.getBoundingClientRect();
 		// blocks already scrolled past (deep link, restored scroll) appear generated
 		if (r.bottom < 0) { u.style.clipPath = ''; if (orb && (u === orb || u.contains(orb))) onPortrait(1); return; }
 		const w = wrap.getBoundingClientRect(), h = r.height;
 		const cs = getComputedStyle(u);
+		const accent = cs.getPropertyValue('--accent').trim() || '#D4470E';
 		const frame = document.createElement('div');
 		frame.className = 'kg-frame';
 		frame.style.cssText = `left:${r.left - w.left}px; top:${r.top - w.top}px; width:${r.width}px; height:${h}px`;
-		frame.style.setProperty('--accent', cs.getPropertyValue('--accent'));
+		frame.style.setProperty('--accent', accent);
 		frame.style.setProperty('--on-accent', cs.getPropertyValue('--on-accent') || '#fff');
 		const tag = document.createElement('span');
 		tag.className = 'kg-tag';
 		const label = nameOf(u);
 		tag.textContent = label;
-		const scan = document.createElement('i');
-		scan.className = 'kg-scan';
-		frame.append(tag, scan);
-		layer.appendChild(frame);
 
-		const d = gsap.utils.clamp(0.45, 1.15, 0.35 + (h / 900) * 0.8);
+		// cover made of cells; each clears at its own threshold, mostly random with a slight top-to-bottom drift
+		const cover = document.createElement('canvas');
+		cover.className = 'kg-cells';
+		const cw = Math.ceil(r.width), ch = Math.ceil(h);
+		cover.width = cw; cover.height = ch;
+		const ctx = cover.getContext('2d')!;
+		const cell = innerWidth < 760 ? 18 : 26;
+		const cols = Math.ceil(cw / cell), rows = Math.ceil(ch / cell);
+		const thr = new Float32Array(cols * rows);
+		for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) thr[y * cols + x] = (0.72 * Math.random() + 0.28 * (y / Math.max(1, rows - 1))) * 0.9;
+		const bg = bgBehind(u);
+		ctx.font = `500 ${Math.round(cell * 0.6)}px 'DM Mono', monospace`;
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		const paint = (p: number) => {
+			ctx.clearRect(0, 0, cw, ch);
+			const tick = Math.floor(p * 36);
+			for (let i = 0; i < thr.length; i++) {
+				const t = thr[i];
+				if (t < p) continue;
+				const x = (i % cols) * cell, y = Math.floor(i / cols) * cell;
+				ctx.fillStyle = bg;
+				ctx.fillRect(x, y, cell + 0.5, cell + 0.5);
+				// cells about to clear show a glyph first
+				if (t < p + 0.1) { ctx.fillStyle = accent; ctx.fillText(CELL_GLYPHS[(i * 7 + tick) % CELL_GLYPHS.length], x + cell / 2, y + cell / 2); }
+			}
+		};
+		paint(0);
+		frame.append(cover, tag);
+		layer.appendChild(frame);
+		gsap.set(frame, { autoAlpha: 1 });
+		u.style.clipPath = '';
+
+		const d = gsap.utils.clamp(0.6, 1.2, 0.5 + (h / 900) * 0.7);
 		const st = { p: 0 };
-		const tl = gsap.timeline({ onComplete: () => { u.style.clipPath = ''; frame.remove(); } });
-		tl.fromTo(frame, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.12 }, 0)
-			.to(st, {
-				p: 1, duration: d, ease: 'power1.inOut',
-				onUpdate: () => {
-					u.style.clipPath = `inset(0px -${PAD}px ${(1 - st.p) * (h + PAD) - PAD}px -${PAD}px)`;
-					scan.style.transform = `translateY(${st.p * h}px)`;
-				},
-				onComplete: () => log(label, d * 1000),
-			}, 0.08)
-			.to(frame, { autoAlpha: 0, duration: 0.3 }, 0.08 + d);
+		const tl = gsap.timeline({ onComplete: () => frame.remove() });
+		tl.to(st, { p: 1, duration: d, ease: 'none', onUpdate: () => paint(st.p), onComplete: () => log(label, d * 1000) }, 0)
+			.to(frame, { autoAlpha: 0, duration: 0.3 }, d);
 		decode(u, tl);
 		if (orb && (u === orb || u.contains(orb))) {
 			const port = { p: 0 };
