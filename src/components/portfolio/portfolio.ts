@@ -279,31 +279,42 @@ export function initPortfolio() {
 		cv!.width = W * d; cv!.height = H * d;
 		ctx = cv!.getContext('2d')!;
 		ctx.setTransform(d, 0, 0, d, 0, 0);
-		const n = Math.round(W / 9), s = W / n;
+		const n = Math.round(W / 6.5), s = W / n;
 		cell = s;
 		const off = document.createElement('canvas');
 		off.width = off.height = n;
 		const o = off.getContext('2d')!;
-		o.drawImage(img, 0, 0, n, n);
+		o.imageSmoothingQuality = 'high';
+		// crop to head and shoulders so the face fills the frame instead of a third of it
+		const iw = img.naturalWidth, ih = img.naturalHeight, crop = Math.min(iw, ih) * 0.72;
+		o.drawImage(img, (iw - crop) / 2, 0, crop, crop, 0, 0, n, n);
 		const px = o.getImageData(0, 0, n, n).data, inv = !dark, dots: Dot[] = [];
+		// luminance with auto levels and a light unsharp mask, so eyes, mouth and beard keep their edges
+		const L = new Float32Array(n * n);
+		for (let i = 0; i < n * n; i++) L[i] = (0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2]) / 255;
+		const sorted = Float32Array.from(L).sort();
+		const lo = sorted[Math.floor(n * n * 0.03)], hi = sorted[Math.floor(n * n * 0.97)], span = Math.max(0.05, hi - lo);
+		const at = (x: number, y: number) => L[Math.max(0, Math.min(n - 1, y)) * n + Math.max(0, Math.min(n - 1, x))];
 		for (let y = 0; y < n; y++)
 			for (let x = 0; x < n; x++) {
-				const i = (y * n + x) * 4;
-				let l = (0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2]) / 255;
-				if (inv) {
-					l = 1 - l;
-					l = Math.pow(Math.max(0, Math.min(1, (l - 0.14) / 0.66)), 1.1);
-				} else {
-					const vx = x / n - 0.5, vy = y / n - 0.5, fade = 1 - Math.min(1, Math.pow(Math.hypot(vx, vy) * 1.55, 3)) * 0.85;
-					l = Math.pow(Math.max(0, Math.min(1, (l - 0.06) / 0.46)), 0.62) * fade;
-				}
-				if (l < 0.08) continue;
+				let blur = 0;
+				for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) blur += at(x + i, y + j);
+				const c = L[y * n + x];
+				const v = Math.max(0, Math.min(1, (c + 0.9 * (c - blur / 9) - lo) / span));
+				// soft oval around head and shoulders: the background fades out instead of competing with the face
+				// narrow around the head, widening below the chin to keep the shoulders
+				const fy = y / n, rx = 0.44 + Math.max(0, fy - 0.6) * 1.1;
+				const dx = (x / n - 0.5) / rx, dy = (fy - 0.45) / (fy > 0.45 ? 0.7 : 0.5);
+				const e = Math.max(0, Math.min(1, (Math.hypot(dx, dy) - 0.7) / 0.34));
+				const m = 1 - e * e * (3 - 2 * e);
+				const l = (inv ? Math.pow(1 - v, 0.85) : Math.pow(v, 0.9)) * m;
+				if (l < 0.07) continue;
 				const hx = (x + 0.5) * s, hy = (y + 0.5) * s;
 				dots.push({
 					hx, hy,
 					x: scatter ? W / 2 + (Math.random() - 0.5) * W * 1.6 : hx,
 					y: scatter ? H / 2 + (Math.random() - 0.5) * H * 1.6 : hy,
-					vx: 0, vy: 0, r: l * s * (inv ? 0.56 : 0.58), h: 0, g: Math.floor(Math.random() * 2), k: Math.random(),
+					vx: 0, vy: 0, r: l * s * 0.56, h: 0, g: Math.floor(Math.random() * 2), k: Math.random(),
 				});
 			}
 		P = dots;
@@ -342,7 +353,7 @@ export function initPortfolio() {
 			ctx.textBaseline = 'middle';
 			for (const p of cold) {
 				if (p.k < asciiP) { solid.push(p); continue; }
-				const lum = Math.min(0.999, p.r / (cell * 0.58));
+				const lum = Math.min(0.999, p.r / (cell * 0.56));
 				ctx.fillText(Math.random() < 0.04 ? (Math.random() < 0.5 ? '0' : '1') : RAMP[Math.floor(lum * RAMP.length)], p.x, p.y);
 			}
 			paint(solid, inkC);
