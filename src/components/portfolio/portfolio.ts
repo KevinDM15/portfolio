@@ -62,7 +62,6 @@ export function initPortfolio() {
 	const orbEl = $<HTMLElement>('[data-k="orb"]');
 	const marqEl = $<HTMLElement>('[data-k="marq"]');
 	const stEl = $<HTMLElement>('[data-k="st"]');
-	const ringEl = $<SVGElement>('[data-k="ring"]');
 	const themeEl = $<HTMLElement>('[data-k="theme"]');
 	const rowsEl = $<HTMLElement>('[data-k="rows"]');
 	const secEl = $<SVGElement>('[data-k="sec"]');
@@ -72,29 +71,6 @@ export function initPortfolio() {
 	const hhEl = $<SVGElement>('[data-k="hh"]');
 	const mmEl = $<SVGElement>('[data-k="mm"]');
 	const rows = rowsEl ? Array.from(rowsEl.children) as HTMLElement[] : [];
-	const rvEls = $$<HTMLElement>('[data-rv]');
-	const parEls = $$<HTMLElement>('[data-par]');
-	const words: HTMLElement[] = [];
-	if (stEl && !reduce) {
-		const wrapWords = (node: Node) => {
-			Array.from(node.childNodes).forEach((c) => {
-				if (c.nodeType === Node.ELEMENT_NODE) return wrapWords(c);
-				if (c.nodeType !== Node.TEXT_NODE || !c.textContent?.trim()) return;
-				const frag = document.createDocumentFragment();
-				c.textContent.split(/(\s+)/).forEach((part) => {
-					if (!part) return;
-					if (/^\s+$/.test(part)) return frag.append(part);
-					const span = document.createElement('span');
-					span.textContent = part;
-					span.style.cssText = 'display:inline-block; will-change:opacity,transform';
-					words.push(span);
-					frag.append(span);
-				});
-				c.replaceWith(frag);
-			});
-		};
-		wrapWords(stEl);
-	}
 
 	const frames = $$<HTMLElement>('[data-frame]');
 	const navLinks = $$<HTMLElement>('[data-nav]');
@@ -206,6 +182,7 @@ export function initPortfolio() {
 		navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === st.nav));
 	}
 
+
 	/* ---------- clock ---------- */
 	function tick() {
 		st.time = new Intl.DateTimeFormat('es-CO', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Bogota' }).format(new Date());
@@ -262,6 +239,14 @@ export function initPortfolio() {
 	}
 
 	/* ---------- dot portrait ---------- */
+	// true while the cursor is over the portrait or dots are still settling after it left
+	let settle = 0;
+	function active() {
+		const near = mouse.x > -200 && mouse.x < W + 200 && mouse.y > -200 && mouse.y < H + 200;
+		if (near) settle = 60;
+		else if (settle > 0) settle--;
+		return near || settle > 0;
+	}
 	let P: Dot[] = [];
 	let W = 0, H = 0;
 	let ctx: CanvasRenderingContext2D | null = null;
@@ -393,19 +378,13 @@ export function initPortfolio() {
 			{ rootMargin: '0px 0px -8% 0px' },
 		);
 		$$<HTMLElement>('[data-note]').forEach((n) => {
-			const d = n.closest('[data-screen-label="01 Hero"]') ? 1500 : 0;
+			const d = 0;
 			const a: Animation[] = [];
 			n.querySelectorAll('[data-t]').forEach((t) => a.push(t.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: d, fill: 'both' })));
 			n.querySelectorAll('[data-ink]').forEach((p) => a.push(p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 900, delay: d + 150, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'both' })));
 			a.forEach((x) => x.pause());
 			(n as any)._anims = a;
 			nio!.observe(n);
-		});
-		$$<HTMLElement>('[data-bar]').forEach((b) => {
-			const a = b.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 1100, delay: (+(b.dataset.bar || 0)) * 140, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'both' });
-			a.pause();
-			(b as any)._anims = [a];
-			nio!.observe(b);
 		});
 	}
 
@@ -415,26 +394,7 @@ export function initPortfolio() {
 	/* ---------- scroll ---------- */
 	function scrollFx() {
 		const vh = innerHeight, y = scrollY;
-		const ease = (x: number) => 1 - Math.pow(1 - x, 3);
-		const prog = (top: number, from: number, span: number) => ease(Math.max(0, Math.min(1, (vh * from - top) / (vh * span))));
-		if (!reduce) {
-			// each word fades in as it rises into the reading zone, so text is fully readable by mid-screen
-			const tops = words.map((w) => w.getBoundingClientRect().top);
-			words.forEach((w, i) => {
-				const p = prog(tops[i], 0.95, 0.3);
-				w.style.opacity = String(0.12 + 0.88 * p);
-				w.style.transform = `translateY(${((1 - p) * 0.28).toFixed(3)}em)`;
-			});
-			rvEls.forEach((el) => {
-				const p = prog(el.getBoundingClientRect().top, 0.96, 0.18);
-				el.style.opacity = String(p);
-				el.style.transform = `translateY(${((1 - p) * 26).toFixed(1)}px)`;
-			});
-			parEls.forEach((el) => {
-				const r = el.getBoundingClientRect();
-				el.style.transform = `translateY(${((vh / 2 - (r.top + r.height / 2)) * 0.09).toFixed(1)}px)`;
-			});
-		}
+
 		if (pinY != null && Math.abs(scrollY - pinY) > 200) pinY = null;
 		if (pinY == null)
 			for (let i = 0; i < rows.length; i++) {
@@ -548,24 +508,7 @@ export function initPortfolio() {
 
 	if (!reduce) {
 		mAnim = marqEl?.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-50%)' }], { duration: 38000, iterations: Infinity });
-		ringEl?.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], { duration: 18000, iterations: Infinity });
-		$$<HTMLElement>('[data-ln]').forEach((el, i) =>
-			el.animate([{ transform: 'translateY(108%)' }, { transform: 'translateY(0)' }], { duration: 1250, delay: 100 + i * 120, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' }),
-		);
-		orbEl?.animate([{ transform: 'scale(.86)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 1600, delay: 200, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
 		setupNotes();
-		$$<SVGElement>('[data-pk]').forEach((c, i) => {
-			const dx = +(c.dataset.dx || 0), dy = +(c.dataset.dy || 0);
-			c.animate(
-				[
-					{ transform: 'translate(0px,0px)', opacity: 0 },
-					{ opacity: 1, offset: 0.15 },
-					{ opacity: 1, offset: 0.85 },
-					{ transform: `translate(${dx}px,${dy}px)`, opacity: 0 },
-				],
-				{ duration: 2600, delay: i * 650, iterations: Infinity, direction: c.dataset.rev ? 'reverse' : 'normal', easing: 'cubic-bezier(.6,0,.4,1)' },
-			);
-		});
 	}
 	if (secEl) {
 		const d = new Date(), a0 = (d.getSeconds() + d.getMilliseconds() / 1000) * 6;
@@ -595,7 +538,7 @@ export function initPortfolio() {
 		last = now;
 		const cr = cv.getBoundingClientRect();
 		const vis = cr.bottom > 0 && cr.top < innerHeight && cr.width > 0;
-		if (vis && ready && !reduce) draw();
+		if (vis && ready && !reduce && (asciiP < 1 || active())) draw();
 		requestAnimationFrame(loop);
 	};
 	requestAnimationFrame(loop);
@@ -606,6 +549,6 @@ export function initPortfolio() {
 	const mainEl = root.querySelector<HTMLElement>('main');
 	if (!reduce && mainEl && root.hasAttribute('data-gen')) {
 		asciiP = 0;
-		initGeneration({ root, wrap, main: mainEl, orb: orbEl, delay: root.hasAttribute('data-noboot') ? 0.15 : 1.95, onPortrait: (v) => (asciiP = v) });
+		initGeneration({ root, wrap, main: mainEl, orb: orbEl, delay: root.hasAttribute('data-noboot') ? 0.15 : 1.25, onPortrait: (v) => (asciiP = v) });
 	}
 }
