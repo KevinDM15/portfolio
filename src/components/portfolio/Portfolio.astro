@@ -117,8 +117,9 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 		<aside class="kd-path">
 			<p>Del JavaScript de 2018 al Next.js, React Native y las integraciones con IA de hoy, pasando por Go, NestJS y AWS. Siempre en equipos que entregan.</p>
 			<div class="kd-tl" aria-hidden="true">
-				{lanes.map((x) => <div class="row"><div><b>{x.name}</b><small>{x.when}</small></div><div class="lane"><i class="bar" style={`--l:${pct(x.l)};--w:${pct(x.w)}`}></i></div></div>)}
-				<div class="axis"><span>'18</span><span>'20</span><span>'22</span><span>'24</span><span>'26</span></div>
+				<div class="years">{[0, 24, 48, 72, 96].map((m, i) => <i style={`--x:${pct(m)}`}><span>'{18 + i * 2}</span></i>)}</div>
+				{lanes.map((x) => <div class="row" data-end={x.l + x.w >= 88 ? '' : undefined} data-now={x.when.endsWith('hoy') ? '' : undefined} style={`--l:${pct(x.l)};--w:${pct(x.w)}`}><span class="who"><b>{x.name}</b><small>{x.when}</small></span><i class="bar"></i></div>)}
+				<i class="now"><span>hoy</span></i>
 			</div>
 		</aside>
 		<div>
