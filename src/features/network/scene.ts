@@ -58,7 +58,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	glowLayer.filters = [new BlurFilter({ strength: 16, quality: 3 })];
 	glowLayer.alpha = 0.4;
 	const world = new Container();
-	app.stage.addChild(world, glowLayer, route, gates, packet);
+	app.stage.addChild(world, gates, packet);
 
 	/* ---------- ambient map in three depths: far is small, dim and slow; near is big, bright and quick ---------- */
 	type ANode = Pt & { r: number };
@@ -71,6 +71,9 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		{ par: 0.14, alpha: 0.55, size: 1.9, density: 1 / 170000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
 	];
 	layers.forEach((l) => world.addChild(l.g, l.tr));
+	// the cable sits between the mid and near layers, so the nearest nodes pass in front of it: it reads as background
+	world.addChildAt(glowLayer, 4);
+	world.addChildAt(route, 5);
 	function buildAmbient() {
 		const w = app.screen.width, h = app.screen.height + 520;
 		layers.forEach((L) => {
@@ -114,8 +117,19 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	};
 	let hops = 0, ms = 0;
 	const status = (text: string) => onStatus({ hops, ms, text });
-	// after the first hop the cable runs down the left gutter, beside the plates and always on screen
-	const gutterX = () => Math.max(10, (rNodes[1]?.doc.x ?? 40) - 34);
+	// after the first hop the cable runs in the gutters beside the plates, switching sides between sections:
+	// odd nodes (sobre mí, experiencia) anchor on the left, even ones (proyectos, contacto) on the right
+	const side = (i: number) => (i % 2 ? 'left' : 'right');
+	const gutter = (s: 'left' | 'right') => s === 'left'
+		? Math.max(10, (rNodes[1]?.doc.x ?? 40) - 34)
+		: Math.min(innerWidth - 10, (rNodes[2]?.doc.x ?? innerWidth - 40) + 34);
+	function cable(i: number): Pt[] {
+		const a = rNodes[i].doc, b = rNodes[i + 1].doc;
+		const ga = gutter(side(i)), gb = gutter(side(i + 1));
+		// down its own gutter, across the empty band above the next heading, down the other gutter, into the anchor
+		const yGap = Math.max(a.y + Math.abs(a.x - ga) + 20, b.y - 110);
+		return [a, { x: ga, y: a.y + Math.abs(a.x - ga) }, { x: ga, y: yGap }, { x: gb, y: yGap }, { x: gb, y: b.y - Math.abs(b.x - gb) }, b];
+	}
 
 	function markers(): Pt[] {
 		const a = rNodes[0], b = rNodes[1];
@@ -156,7 +170,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 			if (hop.state === 'open' && segT >= 0.62) resolve(hop.open, 'ruta automática');
 			if (hop.state !== 'done') return { x: a.doc.x, y: a.doc.y - scrollY };
 		}
-		const pts = seg === 0 ? angular(a.doc, b.doc, hopBends()[hop.chosen]) : angular(a.doc, b.doc, 0, gutterX());
+		const pts = seg === 0 ? angular(a.doc, b.doc, hopBends()[hop.chosen]) : cable(seg);
 		const p = along(pts, ease(segT));
 		return { x: p.x, y: p.y - scrollY };
 	}
@@ -189,10 +203,10 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 			if (p1.y < -600 || p0.y > innerHeight + 600) continue;
 			const bends = i === 0 && hop.state !== 'done' ? hopBends() : [i === 0 ? hopBends()[hop.chosen] : 0];
 			bends.forEach((bend) => {
-				const pts = i === 0 ? angular(p0, p1, bend) : angular(p0, p1, 0, gutterX());
+				const pts = i === 0 ? angular(p0, p1, bend) : cable(i).map((p) => ({ x: p.x, y: p.y - scrollY }));
 				const live = b.lit || (i === seg && hop.state === 'done');
-				path(route, pts).stroke({ color: live ? CYAN : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.95 : 0.4, width: live ? 2.5 : 1.2 });
-				if (live) path(glow, pts).stroke({ color: CYAN, alpha: 0.7, width: 9 });
+				path(route, pts).stroke({ color: live ? CYAN : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.5 : 0.28, width: live ? 1.6 : 1 });
+				if (live) path(glow, pts).stroke({ color: CYAN, alpha: 0.4, width: 7 });
 			});
 			// node: a diamond core inside a diamond ring that pulses once lit
 			const lit = b.lit, pulse = reduce ? 0 : (Math.sin(clock * 3 + i) + 1) / 2;

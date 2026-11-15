@@ -179,7 +179,8 @@ body{margin:0;background:#060A16}
 .kd-waves .w2{fill:rgba(238,242,255,.28);animation:kd-wave 21s linear infinite reverse}
 .kd-waves .w3{fill:#EEF2FF;animation:kd-wave 15s linear infinite}
 @keyframes kd-wave{to{transform:translateX(-50%)}}
-.kd-waves .kd-anchor{position:absolute;left:calc(var(--gx) + 1px);top:18%;background:#5AD3F3;box-shadow:0 0 10px rgba(90,211,243,.5)}
+.kd-waves .kd-anchor{position:absolute;right:calc(var(--gx) + 1px);top:18%;background:#5AD3F3;box-shadow:0 0 10px rgba(90,211,243,.5)}
+.kd-head .kd-anchor:last-child{margin-left:14px}
 .kd-paper .kd-sec{padding-top:clamp(60px,8vw,110px);padding-bottom:clamp(40px,6vw,80px)}
 .kd-paper .kd-anchor{background:var(--fg);box-shadow:none}
 .kd-paper .kd-top-fade{display:none}
