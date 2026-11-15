@@ -72,10 +72,10 @@ body{margin:0;background:#060A16}
 .kd-head small{margin-left:auto;font:400 13px/1 var(--mono);color:var(--muted);white-space:nowrap}
 
 /* ---------- hero ---------- */
-.kd-hero{position:relative;min-height:100vh;max-width:1500px;margin:0 auto;padding:130px var(--gx) 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);align-items:center;gap:clamp(24px,5vw,90px)}
+.kd-hero{position:relative;min-height:100vh;max-width:1240px;margin:0 auto;padding:130px var(--gx) 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,540px);align-items:center;gap:clamp(24px,4vw,56px)}
 .kd-kicker{display:flex;align-items:center;gap:10px;margin:0 0 18px;font:400 13px/1 var(--mono);color:var(--cyan)}
 .kd-kicker i{width:7px;height:7px;background:currentColor;transform:rotate(45deg)}
-.kd-hero h1{font-size:clamp(68px,9vw,136px);font-weight:700;line-height:.92;letter-spacing:-.045em}
+.kd-hero h1{font-size:clamp(68px,10vw,150px);font-weight:700;line-height:.92;letter-spacing:-.045em}
 .kd-claim{max-width:30ch;margin:28px 0 36px;font:400 clamp(18px,1.5vw,23px)/1.4 var(--text);color:var(--muted);text-wrap:balance}
 /* the name is already the hero: the bar shows it only once the page scrolls */
 .kd-top .kd-mark{opacity:0;transition:opacity .35s}
