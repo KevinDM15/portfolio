@@ -4,7 +4,12 @@ import { ChatBot } from '../islands/ChatBot';
 
 // Set to true when the first real project is published.
 const showProjects = false;
-const tech = ['React', 'React Native', 'Next.js', 'TypeScript', 'NestJS', 'Go', 'Python', 'PostgreSQL', 'AWS', 'GCP', 'LLMs', 'Arquitectura hexagonal'];
+// the stack as network modules: name, where it lives in my work, a short interface-like id and its mark
+const tech = [
+	{ name: 'React', kind: 'frontend', id: 'ui0', icon: 'react' }, { name: 'Next.js', kind: 'frontend', id: 'ui1', icon: 'nextdotjs' }, { name: 'React Native', kind: 'móvil', id: 'mb0', icon: 'react' }, { name: 'TypeScript', kind: 'lenguaje', id: 'ts0', icon: 'typescript' },
+	{ name: 'NestJS', kind: 'backend', id: 'api0', icon: 'nestjs' }, { name: 'Go', kind: 'backend', id: 'api1', icon: 'go' }, { name: 'Python', kind: 'backend', id: 'api2', icon: 'python' }, { name: 'PostgreSQL', kind: 'datos', id: 'db0', icon: 'postgresql' },
+	{ name: 'AWS', kind: 'cloud', id: 'cl0', icon: 'amazonwebservices' }, { name: 'GCP', kind: 'cloud', id: 'cl1', icon: 'googlecloud' }, { name: 'LLMs', kind: 'IA', id: 'ai0', icon: 'llm' }, { name: 'Arquitectura hexagonal', kind: 'diseño', id: 'arq', icon: 'hexagonal' },
+];
 const jobs = [
 	{ when: 'Jun 2026 — hoy', span: '4 meses y contando', name: 'Universidad de la Costa', role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web con Vite y React y diseño arquitecturas y planes técnicos para nuevas funcionalidades. Migro de forma progresiva módulos legacy (PHP, JavaScript y jQuery) hacia una arquitectura moderna, con React en el frontend y Python serverless en el backend.', tags: ['React', 'Vite', 'Python', 'Serverless'] },
 	{ when: 'Ene 2026 — hoy', span: '9 meses y contando', name: 'El Sol Neighborhood Educational Center', role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web y móviles con Next.js, React y React Native, con interfaces multiplataforma que priorizan rendimiento, usabilidad y consistencia visual. Diseño arquitecturas y planes técnicos, y trabajo en equipos ágiles con Scrum.', tags: ['Next.js', 'React', 'React Native'] },
@@ -57,7 +62,7 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 </section>
 
 <div class="kd-band" aria-label="Tecnologías">
-	<ul>{[...tech, ...tech].map((t) => <li>{t}</li>)}</ul>
+	<ul>{[...tech, ...tech].map((x, i) => <li style={`--d:${(i * 0.37) % 2.4}s`}><span class="mark"><img src={`/svg/tech/${x.icon}.svg`} alt="" width="36" height="36" /></span><span class="txt"><b>{x.name}</b><small>{x.kind}</small></span><span class="meta"><i aria-hidden="true"></i><em aria-hidden="true">{x.id}</em></span></li>)}</ul>
 </div>
 
 <section id="sobre" class="kd-sec">
