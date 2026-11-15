@@ -1,583 +1,100 @@
-type ThemeName = 'dark' | 'light';
-import { initGeneration } from './generate';
-
-type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number; k: number };
-
+/*
+ * Behaviour of the landing: Bogotá clock, copy-to-clipboard, plate reveal, portrait tilt, the route in the
+ * header, and the living network behind everything (loaded on demand from features/network).
+ */
 const EMAIL = 'kevindiazm.14@gmail.com';
 const NODE_LABELS: Record<string, string> = { 'sobre-mi': 'sobre mí', proyectos: 'proyectos', experiencia: 'experiencia', contacto: 'contacto' };
-const SKEW = 'skewY(-6deg) rotate(-1.5deg) ';
-const LINE = '1px solid var(--line)';
-
-const PALETTE = {
-	dark: { bg: '#070A14', surface: '#0F1424', fg: '#F2F4FF', muted: '#8C92B0', accent: '#FF5A2B', c3: '#B8FF3A', on3: '#070A14' },
-	light: { bg: '#EFEEE9', surface: '#E4E3DC', fg: '#0F0F11', muted: '#5D5D66', accent: '#D4470E', c3: '#2F9E68', on3: '#FFFFFF' },
-};
-const DEFAULT_THEME: ThemeName = 'dark'; // the network map is dark only
-const THEME_KEY = 'kd-theme';
-
-const savedTheme = (): ThemeName | null => {
-	try {
-		const v = localStorage.getItem(THEME_KEY);
-		return v === 'dark' || v === 'light' ? v : null;
-	} catch {
-		return null;
-	}
-};
-const saveTheme = (t: ThemeName) => {
-	try {
-		localStorage.setItem(THEME_KEY, t);
-	} catch {}
-};
-
-const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)).join(',');
-const themeVars = (t: ThemeName) => {
-	const s = PALETTE[t];
-	const dk = t === 'dark';
-	return {
-		'--bg': s.bg,
-		'--surface': s.surface,
-		'--fg': s.fg,
-		'--muted': s.muted,
-		'--line': `rgba(${rgb(s.fg)},${dk ? 0.11 : 0.12})`,
-		'--line-strong': `rgba(${rgb(s.fg)},${dk ? 0.28 : 0.32})`,
-		'--accent': s.accent,
-		'--c1': s.accent,
-		'--c3': s.c3,
-		'--c3-on': s.on3,
-		'--c4': '#2BE4FF',
-		'--c5': '#8B5CFF',
-		'--grain': dk ? '.07' : '.12',
-	};
-};
 
 export function initPortfolio() {
 	const root = document.querySelector<HTMLElement>('[data-kd]');
-	const wrap = root?.querySelector<HTMLElement>('[data-k="wrap"]');
-	const cv = root?.querySelector<HTMLCanvasElement>('[data-k="cv"]');
-	if (!root || !wrap || !cv) return;
-	if (root.dataset.ready) return;
+	if (!root || root.dataset.ready) return;
 	root.dataset.ready = '1';
-
 	const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel);
 	const $$ = <T extends Element>(sel: string) => Array.from(root.querySelectorAll<T>(sel));
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	const orbEl = $<HTMLElement>('[data-k="orb"]');
-	const marqEl = $<HTMLElement>('[data-k="marq"]');
-	const stEl = $<HTMLElement>('[data-k="st"]');
-	const themeEl = $<HTMLElement>('[data-k="theme"]');
-	const rowsEl = $<HTMLElement>('[data-k="rows"]');
-	const secEl = $<SVGElement>('[data-k="sec"]');
-	const progEl = $<HTMLElement>('[data-k="progress"]');
-	const colsEl = $<HTMLElement>('[data-k="cols"]');
-	const toastEl = $<HTMLElement>('[data-k="toast"]');
-	const hhEl = $<SVGElement>('[data-k="hh"]');
-	const mmEl = $<SVGElement>('[data-k="mm"]');
-	const rows = rowsEl ? Array.from(rowsEl.children) as HTMLElement[] : [];
-
-	const frames = $$<HTMLElement>('[data-frame]');
-	const navLinks = $$<HTMLElement>('[data-nav]');
-
-	const st = { w: 1280, cur: 0, nav: '', time: '--:--' };
-	let dark = DEFAULT_THEME === 'dark';
-	let inkC = '#0F0F11';
-	// the portrait is always printed as dark ink on paper; on the dark theme it sits on a paper-coloured card
-	let portraitInk = '#0F0F11';
-	let hotC = '#D4470E';
-	let hotSet = ['#D4470E', '#2F9E68'];
-	let ready = false;
-	let pinY: number | null = null;
-	let mAnim: Animation | undefined;
-	let toastTimer: number | undefined;
-
-	/* ---------- layout (container width) ---------- */
-	const setVars = (vars: Record<string, string>) => Object.entries(vars).forEach(([k, v]) => wrap.style.setProperty(k, v));
-
-	function applyLayout() {
-		const { w } = st;
-		const n = w < 760, m = w < 860, l = w < 1080, xs = w < 600;
-		const L: Record<string, string> = {
-			orbPos: n ? 'relative' : 'absolute',
-			orbRight: n ? 'auto' : 'var(--g)',
-			orbMargin: n ? '0 auto' : 'auto 0',
-			orbW: n ? 'min(100%, 380px)' : 'min(46cqw, 580px)',
-			orbTop: n ? 'auto' : '0px',
-			orbBottom: n ? 'auto' : '0px',
-			heroMin: n ? '0px' : 'max(760px, min(92svh, 980px))',
-			'pn-l': n ? 'auto' : '3%',
-			'pn-r': n ? '0px' : 'auto',
-			'pn-t': 'auto',
-			'pn-b': n ? '-64px' : '-14%',
-			figCol: n ? 'auto' : l ? '2 / -1' : 'auto',
-			figMt: l ? '48px' : '0px',
-			frInset: m ? '16% 3% 5% 3%' : '6% 4% 14% 10%',
-			cPr: m ? '0px' : '28px',
-			availFlex: n ? '1 1 100%' : '0 0 auto',
-			leadCols: n ? 'minmax(0,1fr)' : l ? '140px minmax(0,1fr)' : '140px minmax(0,1fr) minmax(300px,440px)',
-			pjCols: m ? 'minmax(0,1fr)' : 'minmax(0,1.05fr) minmax(0,1fr)',
-			pjGap: m ? '0px' : 'clamp(24px,5cqw,80px)',
-			stageTop: m ? '76px' : 'calc(64px + 7vh)',
-			stageH: m ? '330px' : 'min(64vh, 560px)',
-			stageOrder: m ? '-1' : '0',
-			stageBorder: m ? LINE : '0',
-			rowPad: m ? '26px' : 'clamp(28px, 6.2vh, 76px)',
-			xpCols: m ? 'minmax(0,1fr)' : 'minmax(0,5fr) minmax(0,7fr)',
-			xpPos: m ? 'static' : 'sticky',
-			itemCols: m ? 'minmax(0,1fr)' : '150px minmax(0,1fr)',
-			cHeroDir: m ? 'column' : 'row',
-			cHeroAlign: m ? 'flex-start' : 'center',
-			cCols: m ? 'minmax(0,1fr)' : '1.1fr 1.3fr .9fr',
-			sfTopDir: xs ? 'column' : 'row',
-			sfTopAlign: xs ? 'flex-start' : 'flex-end',
-			sfBarDir: xs ? 'column' : 'row',
-			sfBarAlign: xs ? 'flex-start' : 'center',
-		};
-		const vars: Record<string, string> = {};
-		for (const [k, v] of Object.entries(L)) vars[`--L-${k}`] = v;
-		const cc = (i: number) => (m ? { bl: '0', bt: LINE, pl: '0px' } : { bl: i ? LINE : '0', bt: '0', pl: i ? '28px' : '0px' });
-		[0, 1, 2].forEach((i) => Object.entries(cc(i)).forEach(([k, v]) => (vars[`--cc${i}-${k}`] = v)));
-		setVars(vars);
-
-		if (!n) setMenu(false);
-		const show: Record<string, boolean> = { nav: true, clock: !n, mailNote: !m, upNote: !l };
-		$$<HTMLElement>('[data-if]').forEach((el) => {
-			el.style.display = show[el.dataset.if as string] ? '' : 'none';
-		});
-
-		if (colsEl) {
-			const nc = n ? 4 : 12, cw = Math.min(1480, w), left = (w - cw) / 2 + 16, span = cw - 32;
-			colsEl.replaceChildren(
-				...Array.from({ length: nc + 1 }, (_, i) => {
-					const el = document.createElement('i');
-					el.style.cssText = `position:absolute; top:0; bottom:0; width:1px; background:var(--line); left:${left + (span * i) / nc}px`;
-					return el;
-				}),
-			);
-		}
-	}
-
-	function applyProjects() {
-		rows.forEach((li, i) => {
-			const b = li.firstElementChild as HTMLElement;
-			const on = i === st.cur;
-			b.style.opacity = on ? '1' : '.4';
-			b.style.paddingLeft = on ? '18px' : '0px';
-			b.setAttribute('aria-pressed', String(on));
-		});
-		frames.forEach((f, i) => {
-			const on = i === st.cur, back = i === (st.cur + 3) % 4;
-			f.style.transform = SKEW + (on ? 'translateX(0)' : back ? 'translate(-7%,6%)' : 'translateX(10%)');
-			f.style.opacity = on ? '1' : back ? '.35' : '0';
-			f.style.zIndex = on ? '2' : back ? '1' : '0';
-		});
-	}
-
-	const barEl = $<HTMLElement>('[data-k="bar"]');
-	const menuBtn = $<HTMLButtonElement>('[data-k="menu"]');
-	const menuLabel = $<HTMLElement>('[data-k="menu-label"]');
-	function setMenu(open: boolean) {
-		if (!barEl || !menuBtn) return;
-		if (open) barEl.setAttribute('data-open', ''); else barEl.removeAttribute('data-open');
-		menuBtn.setAttribute('aria-expanded', String(open));
-		if (menuLabel) menuLabel.textContent = open ? 'Cerrar' : 'Menú';
-	}
-	function applyNav() {
-		navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === st.nav));
-	}
-
-
-	/* ---------- clock ---------- */
+	/* ---------- clock (Bogotá) ---------- */
+	const timeEls = $$<HTMLElement>('[data-time]');
+	const hh = $<SVGLineElement>('[data-k="hh"]'), mm = $<SVGLineElement>('[data-k="mm"]'), sec = $<SVGGElement>('[data-k="sec"]');
 	function tick() {
-		st.time = new Intl.DateTimeFormat('es-CO', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Bogota' }).format(new Date());
-		$$<HTMLElement>('[data-time]').forEach((e) => {
-			e.textContent = st.time;
-		});
-		const [hh, mm] = (st.time.match(/\d+/g) || [0, 0]).map(Number);
-		hhEl?.style.setProperty('transform', `rotate(${(hh % 12) * 30 + mm * 0.5}deg)`);
-		mmEl?.style.setProperty('transform', `rotate(${mm * 6}deg)`);
+		const now = new Date();
+		const parts = new Intl.DateTimeFormat('es-CO', { timeZone: 'America/Bogota', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).formatToParts(now);
+		const get = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
+		const h = get('hour') % 24, m = get('minute'), s = get('second');
+		const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+		timeEls.forEach((el) => { if (el.textContent !== label) el.textContent = label; });
+		hh?.setAttribute('transform', `rotate(${(h % 12) * 30 + m * 0.5} 50 50)`);
+		mm?.setAttribute('transform', `rotate(${m * 6 + s * 0.1} 50 50)`);
+		sec?.setAttribute('transform', `rotate(${s * 6} 50 50)`);
 	}
+	tick();
+	setInterval(tick, 1000);
 
-	/* ---------- theme ---------- */
-	function applyTheme(t: ThemeName) {
-		const vars = themeVars(t);
-		Object.entries(vars).forEach(([k, v]) => root!.style.setProperty(k, v));
-		dark = t === 'dark';
-		root!.dataset.t = t;
-		themeEl?.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-		inkC = vars['--fg'];
-		portraitInk = t === 'dark' ? vars['--bg'] : vars['--fg'];
-		hotC = vars['--accent'];
-		hotSet = [vars['--c1'], vars['--c3']];
-		// keep the browser chrome (mobile status bar, overscroll) in sync with the theme
-		const bg = PALETTE[t].bg;
-		document.documentElement.style.backgroundColor = bg;
-		document.documentElement.style.colorScheme = t;
-		document.body.style.backgroundColor = bg;
-		let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-		if (!meta) {
-			meta = document.createElement('meta');
-			meta.name = 'theme-color';
-			document.head.appendChild(meta);
-		}
-		meta.content = bg;
-		if (ready) buildDots(false);
-	}
-
-	function toggleTheme() {
-		const next: ThemeName = dark ? 'light' : 'dark';
-		saveTheme(next);
-		const vt = (document as any).startViewTransition as ((cb: () => void) => { ready: Promise<void> }) | undefined;
-		if (!vt || reduce || !themeEl) return applyTheme(next);
-		const r = themeEl.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
-		const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-		(document as any)
-			.startViewTransition(() => applyTheme(next))
-			.ready.then(() => {
-				document.documentElement.animate(
-					{ clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-					{ duration: 750, easing: 'cubic-bezier(.7,0,.2,1)', pseudoElement: '::view-transition-new(root)' } as KeyframeAnimationOptions,
-				);
-			})
-			.catch(() => {});
-	}
-
-	/* ---------- dot portrait ---------- */
-	// true while the cursor is over the portrait or dots are still settling after it left
-	let settle = 0;
-	function active() {
-		const near = mouse.x > -200 && mouse.x < W + 200 && mouse.y > -200 && mouse.y < H + 200;
-		if (near) settle = 60;
-		else if (settle > 0) settle--;
-		return near || settle > 0;
-	}
-	let P: Dot[] = [];
-	let W = 0, H = 0;
-	let ctx: CanvasRenderingContext2D | null = null;
-	let steps = 1;
-	const mouse = { x: -999, y: -999 };
-	const img = new Image();
-	// person matte for the portrait (white = subject), generated once from retrato.jpg
-	const maskImg = new Image();
-	let maskOk = false;
-	// "generation": the portrait is drawn as ASCII glyphs until its block resolves (0 = glyphs, 1 = dots)
-	let asciiP = 1;
-	let cell = 9;
-
-	function buildDots(scatter: boolean) {
-		if (!ready) return;
-
-		const w = cv!.clientWidth, h = cv!.clientHeight;
-		if (!w) return;
-		W = w; H = h;
-		const d = Math.min(devicePixelRatio || 1, 2);
-		cv!.width = W * d; cv!.height = H * d;
-		ctx = cv!.getContext('2d')!;
-		ctx.setTransform(d, 0, 0, d, 0, 0);
-		const n = Math.round(W / 6.5), s = W / n;
-		cell = s;
-		const off = document.createElement('canvas');
-		off.width = off.height = n;
-		const o = off.getContext('2d')!;
-		o.imageSmoothingQuality = 'high';
-		// crop to the bust so the face is large; the same crop is applied to the matte
-		const iw = img.naturalWidth, ih = img.naturalHeight, crop = Math.min(iw, ih) * 0.8;
-		o.drawImage(img, (iw - crop) / 2, 0, crop, crop, 0, 0, n, n);
-		const px = o.getImageData(0, 0, n, n).data, dots: Dot[] = [];
-		const M = new Float32Array(n * n).fill(1);
-		if (maskOk) {
-			o.clearRect(0, 0, n, n);
-			const mw = maskImg.naturalWidth, mh = maskImg.naturalHeight, mc = Math.min(mw, mh) * 0.8;
-			o.drawImage(maskImg, (mw - mc) / 2, 0, mc, mc, 0, 0, n, n);
-			const mp = o.getImageData(0, 0, n, n).data;
-			for (let i = 0; i < n * n; i++) M[i] = mp[i * 4] / 255;
-		}
-		// luminance with auto levels taken from the subject only, plus a light unsharp mask for eyes, mouth and beard
-		const L = new Float32Array(n * n);
-		const inside: number[] = [];
-		for (let i = 0; i < n * n; i++) {
-			L[i] = (0.299 * px[i * 4] + 0.587 * px[i * 4 + 1] + 0.114 * px[i * 4 + 2]) / 255;
-			if (M[i] > 0.5) inside.push(L[i]);
-		}
-		inside.sort((p, q) => p - q);
-		const lo = inside[Math.floor(inside.length * 0.03)] ?? 0, hi = inside[Math.floor(inside.length * 0.97)] ?? 1, span = Math.max(0.05, hi - lo);
-		const at = (x: number, y: number) => L[Math.max(0, Math.min(n - 1, y)) * n + Math.max(0, Math.min(n - 1, x))];
-		const inM = (x: number, y: number) => x >= 0 && y >= 0 && x < n && y < n && M[y * n + x] >= 0.5;
-		for (let y = 0; y < n; y++)
-			for (let x = 0; x < n; x++) {
-				let v = 0.9; // studio backdrop: the photo's background is replaced by flat white
-				if (M[y * n + x] >= 0.5) {
-					let blur = 0;
-					for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) blur += at(x + i, y + j);
-					const c = L[y * n + x];
-					v = Math.max(0, Math.min(1, (c + 0.9 * (c - blur / 9) - lo) / span));
-				} else if (maskOk && (inM(x - 1, y) || inM(x + 1, y) || inM(x, y - 1) || inM(x, y + 1))) {
-					// one empty cell around the silhouette, a keyline that separates the figure from the backdrop
-					continue;
-				}
-				// the floor keeps every cell visible, so the square reads as a frame on paper too
-				const l = 0.2 + 0.8 * Math.pow(1 - v, 0.85);
-				const hx = (x + 0.5) * s, hy = (y + 0.5) * s;
-				dots.push({
-					hx, hy,
-					x: scatter ? W / 2 + (Math.random() - 0.5) * W * 1.6 : hx,
-					y: scatter ? H / 2 + (Math.random() - 0.5) * H * 1.6 : hy,
-					vx: 0, vy: 0, r: l * s * 0.56, h: 0, g: Math.floor(Math.random() * 2), k: Math.random(),
-				});
-			}
-		P = dots;
-		draw();
-	}
-
-	function draw() {
-		if (!ctx) return;
-		ctx.clearRect(0, 0, W, H);
-		const R = 90, cold: Dot[] = [], hot: Dot[] = [];
-		for (const p of P) {
-			if (!reduce)
-				for (let s = 0; s < steps; s++) {
-					const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
-					if (d2 < R * R) {
-						const dd = Math.sqrt(d2) || 1, f = (1 - dd / R) * 5.5;
-						p.vx += (dx / dd) * f; p.vy += (dy / dd) * f; p.h = 1;
-					}
-					p.vx += (p.hx - p.x) * 0.055; p.vy += (p.hy - p.y) * 0.055;
-					p.vx *= 0.82; p.vy *= 0.82; p.x += p.vx; p.y += p.vy; p.h *= 0.965;
-				}
-			(p.h > 0.12 ? hot : cold).push(p);
-		}
-		const paint = (arr: Dot[], c: string) => {
-			ctx!.fillStyle = c;
-			ctx!.beginPath();
-			arr.forEach((p) => { ctx!.moveTo(p.x + p.r, p.y); ctx!.arc(p.x, p.y, p.r, 0, 6.2832); });
-			ctx!.fill();
-		};
-		if (asciiP < 1) {
-			// each dot shows a luminance glyph (with some 0/1 noise) until its own threshold passes
-			const RAMP = '.:-=+*#%@', solid: Dot[] = [];
-			ctx.fillStyle = portraitInk;
-			ctx.font = `500 ${Math.max(8, Math.round(cell * 1.25))}px 'DM Mono', monospace`;
-			ctx.textAlign = 'center';
-			ctx.textBaseline = 'middle';
-			for (const p of cold) {
-				if (p.k < asciiP) { solid.push(p); continue; }
-				const lum = Math.min(0.999, p.r / (cell * 0.56));
-				ctx.fillText(Math.random() < 0.04 ? (Math.random() < 0.5 ? '0' : '1') : RAMP[Math.floor(lum * RAMP.length)], p.x, p.y);
-			}
-			paint(solid, portraitInk);
-		} else paint(cold, portraitInk);
-		hotSet.forEach((c, g) => paint(hot.filter((p) => p.g === g), c));
-	}
-
-	/* ---------- notes, bars ---------- */
-	let nio: IntersectionObserver | undefined;
-	function setupNotes() {
-		nio?.disconnect();
-		nio = new IntersectionObserver(
-			(es) => es.forEach((e) => {
-				if (!e.isIntersecting) return;
-				((e.target as any)._anims || []).forEach((a: Animation) => a.play());
-				nio!.unobserve(e.target);
-			}),
-			{ rootMargin: '0px 0px -8% 0px' },
-		);
-		$$<HTMLElement>('[data-note]').forEach((n) => {
-			const d = 0;
-			const a: Animation[] = [];
-			n.querySelectorAll('[data-t]').forEach((t) => a.push(t.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: d, fill: 'both' })));
-			n.querySelectorAll('[data-ink]').forEach((p) => a.push(p.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 900, delay: d + 150, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'both' })));
-			a.forEach((x) => x.pause());
-			(n as any)._anims = a;
-			nio!.observe(n);
-		});
-	}
-
-	/* ---------- header progress line ---------- */
-	const ACCENT: Record<string, string> = { sobre: '--c3' };
-
-	/* ---------- scroll ---------- */
-	function scrollFx() {
-		const vh = innerHeight, y = scrollY;
-
-		if (pinY != null && Math.abs(scrollY - pinY) > 200) pinY = null;
-		if (pinY == null)
-			for (let i = 0; i < rows.length; i++) {
-				const r = rows[i].getBoundingClientRect();
-				if (r.top < vh * 0.58 && r.bottom > vh * 0.58) {
-					if (st.cur !== i) { st.cur = i; applyProjects(); }
-					break;
-				}
-			}
-		// status bar: current section, scroll percentage and a progress line tinted with the section accent
-
-		// the current section is the last one whose top has passed the middle of the screen
-		let cur = 'inicio';
-		['sobre', 'proyectos', 'experiencia', 'contacto'].forEach((id) => {
-			const el = wrap!.querySelector('#' + id);
-			if (el && el.getBoundingClientRect().top < vh / 2) cur = id;
-		});
-		if (cur !== st.nav) {
-			st.nav = cur;
-			applyNav();
-			if (progEl) progEl.style.background = `var(${ACCENT[cur] ?? '--c1'})`;
-		}
-		const max = document.documentElement.scrollHeight - vh;
-		const p = max > 0 ? Math.max(0, Math.min(1, y / max)) : 0;
-		if (progEl) progEl.style.transform = `scaleX(${p.toFixed(4)})`;
-	}
-
-	/* ---------- toast, confetti, copy ---------- */
-	function say(msg: string) {
-		if (!toastEl) return;
+	/* ---------- copy email ---------- */
+	const toast = $<HTMLElement>('[data-k="toast"]');
+	let toastTimer: number | undefined;
+	function say(text: string) {
+		if (!toast) return;
+		toast.textContent = text;
+		toast.classList.add('on');
 		clearTimeout(toastTimer);
-		toastEl.textContent = msg;
-		toastEl.style.opacity = '1';
-		toastEl.style.transform = 'translate(-50%, 0)';
-		toastTimer = window.setTimeout(() => {
-			toastEl.style.opacity = '0';
-			toastEl.style.transform = 'translate(-50%, 24px)';
-		}, 1900);
+		toastTimer = window.setTimeout(() => toast.classList.remove('on'), 1800);
 	}
-
-	function burst(x: number, y: number) {
-		if (reduce) return;
-		const cs = getComputedStyle(root!);
-		const cl = ['--c1', '--c3'].map((v) => cs.getPropertyValue(v).trim() || '#D4470E').concat('#0F0F11', '#F2C9A7');
-		for (let i = 0; i < 38; i++) {
-			const c = document.createElement('i'), w = 6 + Math.random() * 8;
-			c.style.cssText = `position:fixed;left:${x}px;top:${y}px;width:${w}px;height:${w * 0.5}px;background:${cl[i % cl.length]};z-index:80;pointer-events:none;`;
-			document.body.appendChild(c);
-			const dx = (Math.random() - 0.5) * 560, up = 90 + Math.random() * 240, fall = 380 + Math.random() * 220, rot = Math.random() * 720;
-			c.animate(
-				[
-					{ transform: 'translate(0,0) rotate(0)', opacity: 1, easing: 'cubic-bezier(.2,.7,.3,1)' },
-					{ transform: `translate(${dx}px,${-up}px) rotate(${rot / 2}deg)`, opacity: 1, offset: 0.28, easing: 'cubic-bezier(.5,0,.9,.6)' },
-					{ transform: `translate(${dx * 1.1}px,${fall - up}px) rotate(${rot}deg)`, opacity: 0 },
-				],
-				{ duration: 1800 },
-			).onfinish = () => c.remove();
-		}
-	}
-
-	function copy(e: MouseEvent) {
-		const x = e.clientX, y = e.clientY;
-		const ok = () => { say('Correo copiado'); burst(x, y); };
-		const fail = () => { say('Copia: ' + EMAIL); burst(x, y); };
+	$$<HTMLElement>('[data-copy]').forEach((el) => el.addEventListener('click', () => {
+		const ok = () => say('Correo copiado');
+		const fail = () => say('Copia: ' + EMAIL);
 		try { navigator.clipboard.writeText(EMAIL).then(ok, fail); } catch { fail(); }
-	}
+	}));
 
-	/* ---------- wiring ---------- */
-	root.addEventListener('pointermove', (e) => {
-		const t = (e.target as Element).closest<HTMLElement>('[data-glow]');
-		if (t) {
-			const r = t.getBoundingClientRect();
-			t.style.setProperty('--mx', e.clientX - r.left + 'px');
-			t.style.setProperty('--my', e.clientY - r.top + 'px');
-		}
-		const mg = (e.target as Element).closest<HTMLElement>('[data-magnet]');
-		if (mg && !reduce) {
-			const r = mg.getBoundingClientRect();
-			mg.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.3}px, ${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
-		}
-	});
-	$$<HTMLElement>('[data-magnet]').forEach((el) => el.addEventListener('pointerleave', () => (el.style.transform = '')));
-	// the portrait card tilts toward the cursor while it is near the hero
-	if (orbEl && !reduce) {
+	/* ---------- plates settle flat when they come into view ---------- */
+	const rio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.in = '1'; rio.unobserve(e.target); } }), { rootMargin: '0px 0px -14% 0px' });
+	$$<HTMLElement>('[data-reveal]').forEach((el) => rio.observe(el));
+
+	/* ---------- the portrait plate tilts toward the cursor ---------- */
+	const tilt = $<HTMLElement>('[data-tilt]');
+	if (tilt && !reduce && matchMedia('(hover: hover)').matches) {
 		root.addEventListener('pointermove', (e) => {
-			const r = orbEl.getBoundingClientRect();
+			const r = tilt.getBoundingClientRect();
 			const dx = (e.clientX - (r.left + r.width / 2)) / r.width, dy = (e.clientY - (r.top + r.height / 2)) / r.height;
 			const near = Math.abs(dx) < 1.4 && Math.abs(dy) < 1.4;
-			orbEl.style.transform = near ? `perspective(1200px) rotateY(${(dx * 9).toFixed(2)}deg) rotateX(${(-dy * 9).toFixed(2)}deg)` : '';
+			tilt.style.transform = near ? `perspective(1200px) rotateY(${(-10 + dx * 10).toFixed(2)}deg) rotateX(${(2 - dy * 10).toFixed(2)}deg)` : '';
 		});
-		document.addEventListener('pointerleave', () => (orbEl.style.transform = ''));
-	}
-	// glass panels settle flat once they are in view
-	const gio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.in = '1'; gio.unobserve(e.target); } }), { rootMargin: '0px 0px -18% 0px' });
-	$$<HTMLElement>('[data-glass]').forEach((el) => gio.observe(el));
-	$$<HTMLElement>('[data-copy]').forEach((el) => el.addEventListener('click', copy as EventListener));
-	$$<HTMLElement>('[data-act]').forEach((el) => {
-		const set = () => {
-			pinY = scrollY;
-			const i = +(el.dataset.act || 0);
-			if (st.cur !== i) { st.cur = i; applyProjects(); }
-		};
-		['mouseenter', 'focus', 'click'].forEach((ev) => el.addEventListener(ev, set));
-	});
-	const mh = $<HTMLElement>('[data-marq-host]');
-	mh?.addEventListener('mouseenter', () => mAnim?.pause());
-	mh?.addEventListener('mouseleave', () => mAnim?.play());
-	themeEl?.addEventListener('click', toggleTheme);
-	menuBtn?.addEventListener('click', () => setMenu(!barEl?.hasAttribute('data-open')));
-	$$<HTMLElement>('.kd-nav a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-	addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
-	addEventListener('pointerdown', (e) => { if (barEl?.hasAttribute('data-open') && !barEl.contains(e.target as Node)) setMenu(false); });
-
-	new ResizeObserver((e) => {
-		const w = Math.round(e[0].contentRect.width);
-		if (Math.abs(w - st.w) > 1) { st.w = w; applyLayout(); buildDots(false); }
-	}).observe(wrap);
-	st.w = Math.round(wrap.clientWidth) || 1280;
-	applyLayout();
-	applyTheme(DEFAULT_THEME);
-	applyProjects();
-	tick();
-	setInterval(tick, 20000);
-
-	if (!reduce) {
-		mAnim = marqEl?.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-50%)' }], { duration: 38000, iterations: Infinity });
-		setupNotes();
-	}
-	if (secEl) {
-		const d = new Date(), a0 = (d.getSeconds() + d.getMilliseconds() / 1000) * 6;
-		if (reduce) secEl.style.transform = `rotate(${a0}deg)`;
-		else secEl.animate([{ transform: `rotate(${a0}deg)` }, { transform: `rotate(${a0 + 360}deg)` }], { duration: 60000, iterations: Infinity });
+		document.addEventListener('pointerleave', () => (tilt.style.transform = ''));
 	}
 
-	// build once the photo and its matte are in; without the matte the portrait keeps the photo's own background
-	let pending = 2;
-	const loaded = () => { if (--pending > 0) return; ready = true; buildDots(!reduce); };
-	img.onload = loaded;
-	maskImg.onload = () => { maskOk = true; loaded(); };
-	maskImg.onerror = loaded;
-	maskImg.src = '/img/retrato-mascara.png';
-	img.src = '/img/retrato.jpg';
-	addEventListener('pointermove', (e) => {
-		const r = cv.getBoundingClientRect(), k = cv.clientWidth / (r.width || 1);
-		mouse.x = (e.clientX - r.left) * k;
-		mouse.y = (e.clientY - r.top) * k;
-	});
-	document.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; });
+	/* ---------- the route in the header: where you are, what you passed ---------- */
+	const links = $$<HTMLAnchorElement>('[data-nav]');
+	const order = ['inicio', 'sobre', 'proyectos', 'experiencia', 'contacto'];
+	let cur = '';
+	function route() {
+		const vh = innerHeight;
+		let now = 'inicio';
+		order.slice(1).forEach((id) => { const el = root!.querySelector('#' + id); if (el && el.getBoundingClientRect().top < vh / 2) now = id; });
+		if (now === cur) return;
+		cur = now;
+		const idx = order.indexOf(now);
+		links.forEach((a) => {
+			const i = order.indexOf(a.dataset.nav!);
+			if (i === idx) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+			if (i < idx) a.dataset.lit = '1'; else delete a.dataset.lit;
+		});
+	}
+	addEventListener('scroll', route, { passive: true });
+	route();
 
-	let last = 0;
-	const loop = () => {
-		const now = performance.now();
-		steps = Math.max(1, Math.min(40, Math.round((now - (last || now)) / 16.7)));
-		last = now;
-		const cr = cv.getBoundingClientRect();
-		const vis = cr.bottom > 0 && cr.top < innerHeight && cr.width > 0;
-		if (vis && ready && !reduce && (asciiP < 1 || active())) draw();
-		requestAnimationFrame(loop);
-	};
-	requestAnimationFrame(loop);
-
-	addEventListener('scroll', scrollFx, { passive: true });
-	scrollFx();
-
-	/* ---------- network map ---------- */
-	const netEl = root.querySelector<HTMLCanvasElement>('[data-k="net"]');
-	const traceEl = root.querySelector<HTMLElement>('[data-k="trace"]');
-	if (netEl && orbEl) {
-		const nodeEls = $$<HTMLElement>('[data-node]');
+	/* ---------- the living network ---------- */
+	const net = $<HTMLCanvasElement>('[data-k="net"]');
+	const trace = $<HTMLElement>('[data-k="trace"]');
+	const first = $<HTMLElement>('[data-node="inicio"]');
+	if (net && first) {
+		const rest = $$<HTMLElement>('[data-node]').filter((el) => el !== first);
 		import('../../features/network/scene').then((m) => m.createNetwork({
-			canvas: netEl, reduce,
-			// on phones the portrait sits above the headline, so the route leaves from the end of the hero instead
-			nodes: [{ id: 'inicio', label: 'inicio', el: orbEl, anchor: 'bottom', narrow: root.querySelector<HTMLElement>('main > section') ?? undefined }, ...nodeEls.map((el) => ({ id: el.dataset.node!, label: NODE_LABELS[el.dataset.node!] ?? el.dataset.node!, el }))],
-			onStatus: (s) => { if (traceEl) traceEl.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${s.hops} ${s.hops === 1 ? 'salto' : 'saltos'} · ${s.ms} ms` }), ` ${s.text}`); },
+			canvas: net, reduce,
+			nodes: [
+				{ id: 'inicio', label: 'inicio', el: first, anchor: 'bottom', narrow: root!.querySelector<HTMLElement>('.kd-hero') ?? undefined },
+				...rest.map((el) => ({ id: el.dataset.node!, label: NODE_LABELS[el.dataset.node!] ?? el.dataset.node!, el })),
+			],
+			onStatus: (s) => { if (trace) trace.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${s.hops} ${s.hops === 1 ? 'salto' : 'saltos'} · ${s.ms} ms` }), ` ${s.text}`); },
 		})).catch(() => {});
-	}
-
-	const mainEl = root.querySelector<HTMLElement>('main');
-	if (!reduce && mainEl && root.hasAttribute('data-gen')) {
-		asciiP = 0;
-		initGeneration({ root, wrap, main: mainEl, orb: orbEl, delay: root.hasAttribute('data-noboot') ? 0.15 : 1.25, onPortrait: (v) => (asciiP = v) });
 	}
 }
