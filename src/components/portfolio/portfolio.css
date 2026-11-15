@@ -106,7 +106,7 @@ body{margin:0;background:#060A16}
 @keyframes kd-blink{0%,100%{opacity:1}50%{opacity:.25}}
 
 /* ---------- sobre mí ---------- */
-#sobre{padding-top:calc(clamp(90px,12vw,160px) + 70vh)}
+#sobre{padding-top:calc(clamp(90px,12vw,160px) + 16vh)}
 .kd-about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(30px,5vw,80px);align-items:center}
 .kd-about .kd-pw{transform:perspective(1600px) rotateY(5deg)}
 .kd-about .kd-pw[data-in]{transform:perspective(1600px) rotateY(5deg)}
@@ -234,7 +234,7 @@ body{margin:0;background:#060A16}
 	.kd-band .mark{width:52px;height:52px}
 	.kd-band b{font-size:17px}
 	.kd-route a span{display:none}
-	#sobre{padding-top:calc(clamp(90px,12vw,160px) + 60vh)}
+	#sobre{padding-top:calc(clamp(90px,12vw,160px) + 8vh)}
 	.kd-foot{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){
