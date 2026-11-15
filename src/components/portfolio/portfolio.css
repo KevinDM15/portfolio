@@ -76,5 +76,16 @@ header[data-open] .kd-nav{display:flex}
 @media (prefers-reduced-motion:reduce){.kb{display:none}}
 
 /* portrait: rounded on both themes; on the dark theme it is a paper card with a solid offset shadow, like a print */
-[data-k="cv"]{border-radius:clamp(18px,2.4cqw,30px)}
-[data-kd][data-t="dark"] [data-k="cv"]{background:var(--fg);box-shadow:0 0 0 1px color-mix(in srgb,var(--fg) 30%,transparent),clamp(8px,1cqw,14px) clamp(8px,1cqw,14px) 0 0 var(--c1)}
+/* the portrait is a glass card: it tilts toward the cursor and the route plugs into it */
+[data-k="orb"]{transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);will-change:transform}
+[data-k="cv"]{border-radius:clamp(28px,3.4cqw,44px)}
+[data-kd][data-t="dark"] [data-k="cv"]{background:var(--fg);box-shadow:0 0 0 1px rgba(242,244,255,.22),inset 0 2px 0 rgba(255,255,255,.6),0 60px 140px -40px rgba(43,228,255,.5),0 30px 60px -30px rgba(0,0,0,.9)}
+/* fog: colour in the depth, under the map */
+[data-kd]::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(70% 55% at 18% 8%,rgba(139,92,255,.26),transparent 62%),radial-gradient(55% 45% at 88% 72%,rgba(43,228,255,.16),transparent 60%),radial-gradient(40% 35% at 60% 100%,rgba(255,90,43,.10),transparent 60%)}
+/* ports: where a cable plugs into a section */
+.kd-port{display:inline-flex;align-items:center;gap:10px;align-self:start;padding:9px 16px 9px 13px;border-radius:999px;font:500 13px/1 'DM Mono',monospace;letter-spacing:.02em;color:var(--c3);background:rgba(184,255,58,.08);box-shadow:inset 0 0 0 1px rgba(184,255,58,.28),0 0 28px rgba(184,255,58,.18)}
+.kd-port::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor}
+/* glass panels: a section floats over the map and settles flat when it comes into view */
+.kd-glass{box-sizing:border-box;padding:clamp(28px,4cqw,60px);border-radius:clamp(28px,4cqw,48px);background:linear-gradient(160deg,rgba(22,28,52,.72),rgba(10,14,28,.5));-webkit-backdrop-filter:blur(24px) saturate(1.3);backdrop-filter:blur(24px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(184,255,58,.10),0 50px 140px -60px rgba(184,255,58,.4),0 40px 90px -40px rgba(0,0,0,.85);transform:perspective(1600px) rotateX(7deg) translateY(34px);transform-origin:50% 0;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.kd-glass[data-in]{transform:perspective(1600px) rotateX(0) translateY(0)}
+@media (prefers-reduced-motion:reduce){.kd-glass{transform:none}[data-k="orb"]{transition:none}}

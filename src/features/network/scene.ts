@@ -1,4 +1,4 @@
-import { Application, Container, Graphics } from 'pixi.js';
+import { Application, BlurFilter, Container, Graphics } from 'pixi.js';
 
 /*
  * The living network behind the landing. The visitor is a data packet: scrolling moves it along a
@@ -29,31 +29,44 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	const app = new Application();
 	await app.init({ canvas, resizeTo: window, backgroundAlpha: 0, antialias: true, resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true });
 
-	const ambient = new Graphics(), traffic = new Graphics(), route = new Graphics(), gates = new Graphics(), packet = new Graphics();
+	const route = new Graphics(), gates = new Graphics(), packet = new Graphics();
+	// bloom: the live cable and the packet are drawn a second time, wide and blurred, under the sharp pass
+	const glow = new Graphics();
+	const glowLayer = new Container();
+	glowLayer.addChild(glow);
+	glowLayer.filters = [new BlurFilter({ strength: 16, quality: 3 })];
+	glowLayer.alpha = 0.85;
 	const world = new Container();
-	world.addChild(ambient, traffic, route, gates, packet);
-	app.stage.addChild(world);
+	app.stage.addChild(world, glowLayer, route, gates, packet);
 
-	/* ---------- ambient map: fixed to the viewport, drifts slightly with the scroll ---------- */
+	/* ---------- ambient map in three depths: far is small, dim and slow; near is big, bright and quick ---------- */
 	type ANode = Pt & { r: number };
 	type ALink = { a: number; b: number };
 	type Car = { l: number; t: number; v: number; c: number; s: number };
-	let aNodes: ANode[] = [], aLinks: ALink[] = [], cars: Car[] = [];
+	type Layer = { par: number; alpha: number; size: number; density: number; g: Graphics; tr: Graphics; nodes: ANode[]; links: ALink[]; cars: Car[] };
+	const layers: Layer[] = [
+		{ par: 0.02, alpha: 0.28, size: 0.6, density: 1 / 52000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
+		{ par: 0.06, alpha: 0.55, size: 1, density: 1 / 44000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
+		{ par: 0.14, alpha: 0.95, size: 1.9, density: 1 / 170000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
+	];
+	layers.forEach((l) => world.addChild(l.g, l.tr));
 	function buildAmbient() {
-		const w = app.screen.width, h = app.screen.height + 420;
-		const n = Math.round((w * h) / 42000);
-		aNodes = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, r: 2 + Math.random() * 2.5 }));
-		aLinks = [];
-		aNodes.forEach((p, i) => {
-			const near = aNodes.map((q, j) => ({ j, d: (q.x - p.x) ** 2 + (q.y - p.y) ** 2 })).filter((o) => o.j !== i).sort((a, b) => a.d - b.d).slice(0, 2);
-			near.forEach((o) => { if (!aLinks.some((l) => (l.a === o.j && l.b === i) || (l.a === i && l.b === o.j))) aLinks.push({ a: i, b: o.j }); });
+		const w = app.screen.width, h = app.screen.height + 520;
+		layers.forEach((L) => {
+			const n = Math.max(6, Math.round(w * h * L.density));
+			L.nodes = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, r: (2 + Math.random() * 2.5) * L.size }));
+			L.links = [];
+			L.nodes.forEach((p, i) => {
+				const near = L.nodes.map((q, j) => ({ j, d: (q.x - p.x) ** 2 + (q.y - p.y) ** 2 })).filter((o) => o.j !== i).sort((a, b) => a.d - b.d).slice(0, 2);
+				near.forEach((o) => { if (!L.links.some((l) => (l.a === o.j && l.b === i) || (l.a === i && l.b === o.j))) L.links.push({ a: i, b: o.j }); });
+			});
+			L.cars = Array.from({ length: Math.round(L.links.length * 1.3) }, () => ({ l: Math.floor(Math.random() * L.links.length), t: Math.random(), v: (0.06 + Math.random() * 0.2) * (0.6 + L.par * 4) * (Math.random() < 0.5 ? 1 : -1), c: [CYAN, VIOLET, LIME][Math.floor(Math.random() * 3)], s: (2 + Math.random() * 2) * L.size }));
+			L.g.clear();
+			L.links.forEach((l) => { const a = L.nodes[l.a], b = L.nodes[l.b]; L.g.moveTo(a.x, a.y).lineTo(b.x, b.y); });
+			L.g.stroke({ color: VIOLET, alpha: 0.18 * L.alpha, width: L.size });
+			L.nodes.forEach((p) => L.g.circle(p.x, p.y, p.r));
+			L.g.fill({ color: CYAN, alpha: 0.5 * L.alpha });
 		});
-		cars = Array.from({ length: Math.round(aLinks.length * 1.4) }, () => ({ l: Math.floor(Math.random() * aLinks.length), t: Math.random(), v: (0.08 + Math.random() * 0.22) * (Math.random() < 0.5 ? 1 : -1), c: [CYAN, VIOLET, LIME][Math.floor(Math.random() * 3)], s: 2 + Math.random() * 2 }));
-		ambient.clear();
-		aLinks.forEach((l) => { const a = aNodes[l.a], b = aNodes[l.b]; ambient.moveTo(a.x, a.y).lineTo(b.x, b.y); });
-		ambient.stroke({ color: VIOLET, alpha: 0.16, width: 1 });
-		aNodes.forEach((p) => ambient.rect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2));
-		ambient.fill({ color: CYAN, alpha: 0.35 });
 	}
 
 	/* ---------- route nodes anchored to the page ---------- */
@@ -137,14 +150,15 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	function draw(dt: number) {
 		clock += dt;
 		const w = app.screen.width;
-		ambient.y = -scrollY * 0.06;
-		// traffic
-		traffic.clear();
-		traffic.y = ambient.y;
-		if (!reduce) cars.forEach((c) => { c.t += c.v * dt; if (c.t > 1 || c.t < 0) { c.l = Math.floor(Math.random() * aLinks.length); c.t = c.v > 0 ? 0 : 1; } });
-		cars.forEach((c) => { const l = aLinks[c.l]; if (!l) return; const a = aNodes[l.a], b = aNodes[l.b]; const x = a.x + (b.x - a.x) * c.t, y = a.y + (b.y - a.y) * c.t; traffic.rect(x - c.s / 2, y - c.s / 2, c.s, c.s).fill({ color: c.c, alpha: 0.75 }); });
+		layers.forEach((L) => {
+			L.g.y = L.tr.y = -scrollY * L.par;
+			L.tr.clear();
+			if (!reduce) L.cars.forEach((c) => { c.t += c.v * dt; if (c.t > 1 || c.t < 0) { c.l = Math.floor(Math.random() * L.links.length); c.t = c.v > 0 ? 0 : 1; } });
+			L.cars.forEach((c) => { const l = L.links[c.l]; if (!l) return; const a = L.nodes[l.a], b = L.nodes[l.b]; const x = a.x + (b.x - a.x) * c.t, y = a.y + (b.y - a.y) * c.t; L.tr.circle(x, y, c.s / 2).fill({ color: c.c, alpha: 0.8 * L.alpha }); });
+		});
 		// route
 		route.clear();
+		glow.clear();
 		for (let i = 0; i < rNodes.length - 1; i++) {
 			const a = rNodes[i], b = rNodes[i + 1];
 			const p0 = { x: a.doc.x, y: a.doc.y - scrollY }, p1 = { x: b.doc.x, y: b.doc.y - scrollY };
@@ -154,14 +168,16 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 				const { c1, c2 } = cable(p0, p1, bend);
 				route.moveTo(p0.x, p0.y).bezierCurveTo(c1.x, c1.y, c2.x, c2.y, p1.x, p1.y);
 				const live = b.lit || (i === seg && hop.state === 'done');
-				route.stroke({ color: live ? LIME : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.9 : 0.45, width: live ? 2 : 1.2 });
+				route.stroke({ color: live ? LIME : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.95 : 0.4, width: live ? 2.5 : 1.2 });
+				if (live) glow.moveTo(p0.x, p0.y).bezierCurveTo(c1.x, c1.y, c2.x, c2.y, p1.x, p1.y).stroke({ color: LIME, alpha: 0.7, width: 9 });
 			});
 			// node
 			const lit = b.lit, pulse = reduce ? 0 : (Math.sin(clock * 3 + i) + 1) / 2;
 			route.circle(p1.x, p1.y, 16 + (lit ? pulse * 5 : 0)).stroke({ color: lit ? LIME : MUTED, alpha: lit ? 0.5 + pulse * 0.4 : 0.5, width: 1.5 });
-			route.rect(p1.x - 5, p1.y - 5, 10, 10).fill({ color: lit ? LIME : MUTED, alpha: lit ? 1 : 0.6 });
+			route.circle(p1.x, p1.y, 5).fill({ color: lit ? LIME : MUTED, alpha: lit ? 1 : 0.6 });
+			if (lit) glow.circle(p1.x, p1.y, 14).fill({ color: LIME, alpha: 0.8 });
 		}
-		if (rNodes[0]) { const p = { x: rNodes[0].doc.x, y: rNodes[0].doc.y - scrollY }; route.rect(p.x - 5, p.y - 5, 10, 10).fill({ color: LIME }); }
+		if (rNodes[0]) { const p = { x: rNodes[0].doc.x, y: rNodes[0].doc.y - scrollY }; route.circle(p.x, p.y, 5).fill({ color: LIME }); glow.circle(p.x, p.y, 12).fill({ color: LIME, alpha: 0.8 }); }
 		// hop markers
 		gates.clear();
 		if (hop.state === 'open') {
@@ -173,8 +189,8 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 					gates.circle(m.x, m.y, 18 + pulse * 6).stroke({ color: LIME, alpha: 0.9, width: 2 });
 					gates.circle(m.x, m.y, 7).fill({ color: LIME });
 				} else {
-					const s = 14 + hop.flash * 6;
-					gates.rect(m.x - s, m.y - s, s * 2, s * 2).fill({ color: CORAL, alpha: 0.85 + hop.flash * 0.15 });
+					const s = 15 + hop.flash * 6;
+					gates.circle(m.x, m.y, s).fill({ color: CORAL, alpha: 0.85 + hop.flash * 0.15 });
 					gates.moveTo(m.x - 6, m.y - 6).lineTo(m.x + 6, m.y + 6).moveTo(m.x + 6, m.y - 6).lineTo(m.x - 6, m.y + 6).stroke({ color: 0x070a14, width: 2.5 });
 				}
 			});
@@ -186,9 +202,10 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		trail.unshift({ x: pos.x, y: pos.y });
 		if (trail.length > 14) trail.pop();
 		packet.clear();
-		trail.forEach((p, i) => { const s = 9 - i * 0.5; packet.rect(p.x - s / 2, p.y - s / 2, s, s).fill({ color: CORAL, alpha: Math.max(0.04, 0.9 - i * 0.07) }); });
-		packet.rect(pos.x - 7, pos.y - 7, 14, 14).fill({ color: FG });
-		packet.rect(pos.x - 4, pos.y - 4, 8, 8).fill({ color: CORAL });
+		trail.forEach((p, i) => { const s = 4.5 - i * 0.25; packet.circle(p.x, p.y, s).fill({ color: CORAL, alpha: Math.max(0.04, 0.9 - i * 0.07) }); });
+		packet.circle(pos.x, pos.y, 7).fill({ color: FG });
+		packet.circle(pos.x, pos.y, 4).fill({ color: CORAL });
+		glow.circle(pos.x, pos.y, 18).fill({ color: CORAL, alpha: 0.9 });
 		if (w > 0) arrive();
 	}
 

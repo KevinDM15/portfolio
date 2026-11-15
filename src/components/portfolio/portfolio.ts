@@ -480,6 +480,19 @@ export function initPortfolio() {
 		}
 	});
 	$$<HTMLElement>('[data-magnet]').forEach((el) => el.addEventListener('pointerleave', () => (el.style.transform = '')));
+	// the portrait card tilts toward the cursor while it is near the hero
+	if (orbEl && !reduce) {
+		root.addEventListener('pointermove', (e) => {
+			const r = orbEl.getBoundingClientRect();
+			const dx = (e.clientX - (r.left + r.width / 2)) / r.width, dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+			const near = Math.abs(dx) < 1.4 && Math.abs(dy) < 1.4;
+			orbEl.style.transform = near ? `perspective(1200px) rotateY(${(dx * 9).toFixed(2)}deg) rotateX(${(-dy * 9).toFixed(2)}deg)` : '';
+		});
+		document.addEventListener('pointerleave', () => (orbEl.style.transform = ''));
+	}
+	// glass panels settle flat once they are in view
+	const gio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.in = '1'; gio.unobserve(e.target); } }), { rootMargin: '0px 0px -18% 0px' });
+	$$<HTMLElement>('[data-glass]').forEach((el) => gio.observe(el));
 	$$<HTMLElement>('[data-copy]').forEach((el) => el.addEventListener('click', copy as EventListener));
 	$$<HTMLElement>('[data-act]').forEach((el) => {
 		const set = () => {
