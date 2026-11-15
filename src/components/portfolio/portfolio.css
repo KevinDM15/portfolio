@@ -65,7 +65,7 @@ body{margin:0;background:#060A16}
 [data-reveal][data-in]{transform:none;opacity:1}
 
 /* section anchors: where the cable plugs in */
-.kd-sec{position:relative;max-width:1500px;margin:0 auto;padding:clamp(90px,12vw,160px) var(--gx)}
+.kd-sec{position:relative;max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,140px) var(--gx)}
 .kd-head{display:flex;align-items:center;gap:18px;margin-bottom:clamp(28px,4vw,48px)}
 .kd-anchor{flex:none;display:block;width:10px;height:10px;background:var(--cyan);transform:rotate(45deg);box-shadow:0 0 10px rgba(90,211,243,.5)}
 .kd-head h2{font-size:clamp(28px,3.2vw,46px);line-height:1.05}
@@ -113,7 +113,7 @@ body{margin:0;background:#060A16}
 
 /* ---------- sobre mí ---------- */
 #sobre{padding-top:calc(clamp(90px,12vw,160px) + 16vh)}
-.kd-about{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(30px,5vw,80px);align-items:center}
+.kd-about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:clamp(24px,4vw,56px);align-items:center}
 .kd-about .kd-pw{transform:perspective(1600px) rotateY(5deg)}
 .kd-about .kd-pw[data-in]{transform:perspective(1600px) rotateY(5deg)}
 .kd-about .kd-plate{padding:clamp(36px,5vw,76px) clamp(30px,5vw,72px)}
@@ -124,7 +124,7 @@ body{margin:0;background:#060A16}
 .kd-readouts::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,rgba(46,230,255,.5),transparent)}
 .kd-readouts b{display:block;font:600 clamp(26px,2.4vw,36px)/1 var(--display);letter-spacing:-.02em;color:var(--fg)}
 .kd-readouts span{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
-.kd-orbit{position:sticky;top:120px;justify-self:center;width:min(100%,440px);aspect-ratio:1}
+.kd-orbit{position:sticky;top:120px;justify-self:end;width:min(100%,440px);aspect-ratio:1}
 .kd-orbit svg{width:100%;height:100%;overflow:visible}
 .kd-orbit .o{fill:none;stroke:rgba(46,230,255,.4);stroke-width:1.2;stroke-dasharray:4 10}
 .kd-orbit .i{fill:none;stroke:rgba(238,242,255,.35);stroke-width:1.2}
@@ -143,7 +143,7 @@ body{margin:0;background:#060A16}
 .kd-soon .pending i{width:14px;height:14px;background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted);transform:rotate(45deg);animation:kd-pulse 2.4s ease-in-out infinite}
 
 /* ---------- experiencia ---------- */
-.kd-exp{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,5vw,80px);align-items:start}
+.kd-exp{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
 .kd-path{position:sticky;top:110px}
 .kd-path>p{margin:0 0 30px;max-width:40ch;color:var(--muted)}
 .kd-tl{display:grid;gap:14px}
@@ -188,7 +188,7 @@ body{margin:0;background:#060A16}
 .kd-paper .kd-foot small{color:var(--muted)}
 
 /* ---------- contacto ---------- */
-.kd-contact{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,80px);align-items:start}
+.kd-contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,540px);gap:clamp(24px,4vw,56px);align-items:start}
 .kd-contact h2{font-size:clamp(36px,4.6vw,68px);line-height:1.02;text-wrap:balance}
 .kd-contact h2 b{display:block;font-weight:400;color:var(--muted)}
 .kd-contact-lede{margin:22px 0 0;max-width:44ch;color:var(--muted);font-size:17px}
@@ -223,7 +223,7 @@ body{margin:0;background:#060A16}
 .kd-clock p{margin:4px 0 0;font:400 12px/1 var(--mono);color:var(--muted)}
 
 /* ---------- footer ---------- */
-.kd-foot{position:relative;z-index:1;max-width:1500px;margin:0 auto;padding:60px var(--gx) 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end}
+.kd-foot{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px var(--gx) 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end}
 .kd-foot p{margin:0;font:600 clamp(24px,2.6vw,36px)/1.05 var(--display);letter-spacing:-.02em}
 .kd-foot p b{font-weight:400;color:var(--muted)}
 .kd-foot small{display:block;margin-top:14px;font:400 12px/1.6 var(--mono);color:var(--muted)}
@@ -237,6 +237,12 @@ body{margin:0;background:#060A16}
 
 /* ---------- responsive ---------- */
 @media (max-width:1080px){.kd-trace{display:none}}
+@media (max-width:1100px){
+	.kd-about{grid-template-columns:minmax(0,1fr) minmax(0,360px)}
+	.kd-exp{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+	.kd-contact{grid-template-columns:minmax(0,1fr) minmax(0,440px)}
+	.kd-hero{grid-template-columns:minmax(0,1fr) minmax(0,440px)}
+}
 @media (max-width:900px){
 	.kd-hero{grid-template-columns:minmax(0,1fr);padding-top:110px;gap:36px}
 	.kd-hero h1{font-size:clamp(60px,18vw,88px)}
