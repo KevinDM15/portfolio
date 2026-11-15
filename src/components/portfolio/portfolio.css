@@ -263,6 +263,11 @@ body{margin:0;background:#060A16}
 	#sobre{padding-top:calc(clamp(90px,12vw,160px) + 8vh)}
 	.kd-foot{grid-template-columns:minmax(0,1fr)}
 }
+@media (max-width:600px){
+	.kd-readouts{grid-template-columns:minmax(0,1fr);gap:14px}
+	.kd-readouts div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:baseline}
+	.kd-readouts span{margin-top:0}
+}
 @media (prefers-reduced-motion:reduce){
 	[data-reveal]{transform:none;opacity:1;transition:none}
 	.kd-band ul,.kd-band .meta i,.kd-avail i,.kd-soon .pending i,.kd-waves path{animation:none}
