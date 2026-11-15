@@ -84,6 +84,7 @@ export function initPortfolio() {
 		if (!bar || !paper) return;
 		const onPaper = paper.getBoundingClientRect().top < 40;
 		if (onPaper) bar.dataset.paper = '1'; else delete bar.dataset.paper;
+		if (scrollY > 24) bar.dataset.scrolled = '1'; else delete bar.dataset.scrolled;
 	}
 	addEventListener('scroll', () => { route(); tone(); }, { passive: true });
 	route();
