@@ -107,7 +107,7 @@ export function initGeneration({ root, wrap, main, orb, delay, onPortrait }: Opt
 	};
 
 	function decode(u: HTMLElement, tl: gsap.core.Timeline) {
-		const heads = u.matches('h1,h2,h3') ? [u] : Array.from(u.querySelectorAll<HTMLElement>('h1,h2,h3'));
+		const heads = u.matches('h1,h2') ? [u] : Array.from(u.querySelectorAll<HTMLElement>('h1,h2'));
 		heads.forEach((h, i) => {
 			const words = wrapWords(h);
 			if (!words.length) return;
