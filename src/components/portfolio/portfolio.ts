@@ -4,14 +4,15 @@ import { initGeneration } from './generate';
 type Dot = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; r: number; h: number; g: number; k: number };
 
 const EMAIL = 'kevindiazm.14@gmail.com';
+const NODE_LABELS: Record<string, string> = { 'sobre-mi': 'sobre mí', proyectos: 'proyectos', experiencia: 'experiencia', contacto: 'contacto' };
 const SKEW = 'skewY(-6deg) rotate(-1.5deg) ';
 const LINE = '1px solid var(--line)';
 
 const PALETTE = {
-	dark: { bg: '#0F0F11', surface: '#18181B', fg: '#EFEEE9', muted: '#9C9CA4', accent: '#F2602B', c3: '#5DD39E', on3: '#0F0F11' },
+	dark: { bg: '#070A14', surface: '#0F1424', fg: '#F2F4FF', muted: '#8C92B0', accent: '#FF5A2B', c3: '#B8FF3A', on3: '#070A14' },
 	light: { bg: '#EFEEE9', surface: '#E4E3DC', fg: '#0F0F11', muted: '#5D5D66', accent: '#D4470E', c3: '#2F9E68', on3: '#FFFFFF' },
 };
-const DEFAULT_THEME: ThemeName = 'light';
+const DEFAULT_THEME: ThemeName = 'dark'; // the network map is dark only
 const THEME_KEY = 'kd-theme';
 
 const savedTheme = (): ThemeName | null => {
@@ -43,6 +44,8 @@ const themeVars = (t: ThemeName) => {
 		'--c1': s.accent,
 		'--c3': s.c3,
 		'--c3-on': s.on3,
+		'--c4': '#2BE4FF',
+		'--c5': '#8B5CFF',
 		'--grain': dk ? '.07' : '.12',
 	};
 };
@@ -501,7 +504,7 @@ export function initPortfolio() {
 	}).observe(wrap);
 	st.w = Math.round(wrap.clientWidth) || 1280;
 	applyLayout();
-	applyTheme(savedTheme() ?? DEFAULT_THEME);
+	applyTheme(DEFAULT_THEME);
 	applyProjects();
 	tick();
 	setInterval(tick, 20000);
@@ -545,6 +548,19 @@ export function initPortfolio() {
 
 	addEventListener('scroll', scrollFx, { passive: true });
 	scrollFx();
+
+	/* ---------- network map ---------- */
+	const netEl = root.querySelector<HTMLCanvasElement>('[data-k="net"]');
+	const traceEl = root.querySelector<HTMLElement>('[data-k="trace"]');
+	if (netEl && orbEl) {
+		const nodeEls = $$<HTMLElement>('[data-node]');
+		import('../../features/network/scene').then((m) => m.createNetwork({
+			canvas: netEl, reduce,
+			// on phones the portrait sits above the headline, so the route leaves from the end of the hero instead
+			nodes: [{ id: 'inicio', label: 'inicio', el: orbEl, anchor: 'bottom', narrow: root.querySelector<HTMLElement>('main > section') ?? undefined }, ...nodeEls.map((el) => ({ id: el.dataset.node!, label: NODE_LABELS[el.dataset.node!] ?? el.dataset.node!, el }))],
+			onStatus: (s) => { if (traceEl) traceEl.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${s.hops} ${s.hops === 1 ? 'salto' : 'saltos'} · ${s.ms} ms` }), ` ${s.text}`); },
+		})).catch(() => {});
+	}
 
 	const mainEl = root.querySelector<HTMLElement>('main');
 	if (!reduce && mainEl && root.hasAttribute('data-gen')) {

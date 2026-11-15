@@ -41,8 +41,7 @@ export function initGeneration({ root, wrap, main, orb, delay, onPortrait }: Opt
 	const logEl = document.createElement('span');
 	logEl.className = 'kg-log';
 	logEl.setAttribute('aria-hidden', 'true');
-	const logHost = root.querySelector('.kd-right');
-	if (logHost) logHost.prepend(logEl);
+	// not mounted: the header line belongs to the network traceroute now
 	let logTimer: number | undefined;
 	function log(label: string, ms: number) {
 		const ok = document.createElement('b');

@@ -6,23 +6,21 @@ import { ChatBot } from '../islands/ChatBot';
 const showProjects = false;
 ---
 
-<div data-kd data-t="light" style="--bg:#EFEEE9; --surface:#E4E3DC; --fg:#0F0F11; --muted:#5D5D66; --line:rgba(15,15,17,.12); --line-strong:rgba(15,15,17,.32); --accent:#D4470E; --c1:#D4470E; --c3:#2F9E68; --c3-on:#FFFFFF; --grain:.12; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
+<div data-kd data-t="dark" style="--bg:#070A14; --surface:#0F1424; --fg:#F2F4FF; --muted:#8C92B0; --line:rgba(242,244,255,.11); --line-strong:rgba(242,244,255,.28); --accent:#FF5A2B; --c1:#FF5A2B; --c3:#B8FF3A; --c3-on:#070A14; --c4:#2BE4FF; --c5:#8B5CFF; --grain:.07; position:relative; background:var(--bg); color:var(--fg); font:400 16px/1.6 'DM Mono',ui-monospace,Menlo,monospace; letter-spacing:-.01em; -webkit-font-smoothing:antialiased">
 <script is:inline>
-	// Paint a saved dark theme before first render; mirrors the dark palette in portfolio.ts
+	// The map is dark only: paint the chrome before first render; mirrors the dark palette in portfolio.ts
 	(function () {
 		try {
-			if (localStorage.getItem('kd-theme') !== 'dark') return;
-			var r = document.currentScript.parentElement, v = {"--bg": "#0F0F11", "--surface": "#18181B", "--fg": "#EFEEE9", "--muted": "#9C9CA4", "--line": "rgba(239,238,233,.11)", "--line-strong": "rgba(239,238,233,.28)", "--accent": "#F2602B", "--c1": "#F2602B", "--c3": "#5DD39E", "--c3-on": "#0F0F11", "--grain": ".07"};
-			for (var k in v) r.style.setProperty(k, v[k]);
-			r.setAttribute('data-t', 'dark');
-			document.documentElement.style.backgroundColor = v['--bg'];
+			var bg = '#070A14';
+			document.documentElement.style.backgroundColor = bg;
 			document.documentElement.style.colorScheme = 'dark';
-			document.body.style.backgroundColor = v['--bg'];
+			document.body.style.backgroundColor = bg;
 			var m = document.querySelector('meta[name="theme-color"]');
-			if (m) m.content = v['--bg'];
+			if (m) m.content = bg;
 		} catch (e) {}
 	})();
 </script>
+<canvas data-k="net" class="kd-net" aria-hidden="true"></canvas>
 <script is:inline>
 	// Generation flags, set before first paint: skip the boot log on repeat visits, skip everything under reduced motion
 	(function () {
@@ -40,12 +38,12 @@ const showProjects = false;
 </script>
 <div data-k="boot" class="kb" aria-hidden="true">
   <div class="kb-in">
-    <p class="kb-cmd"><b>&gt;</b> kevin build --portfolio</p>
-    <p style="--i:1"><b>[ ok ]</b> tokens · papel, tinta, terracota, verde</p>
+    <p class="kb-cmd"><b>&gt;</b> kevin connect --portfolio</p>
+    <p style="--i:1"><b>[ ok ]</b> red · nodos, enlaces, tráfico</p>
     <p style="--i:2"><b>[ ok ]</b> tipografías · barlow, instrument, dm mono</p>
     <p style="--i:3"><b>[ ok ]</b> retrato · muestreando puntos</p>
-    <p style="--i:4"><b>[ ok ]</b> secciones · inicio, sobre mí, proyectos, experiencia, contacto</p>
-    <div class="kb-bar"><span>compilando</span><i></i></div>
+    <p style="--i:4"><b>[ ok ]</b> ruta · inicio, sobre mí, proyectos, experiencia, contacto</p>
+    <div class="kb-bar"><span>conectando</span><i></i></div>
   </div>
 </div>
 <div data-k="wrap" style="container-type:inline-size; position:relative; overflow-x:clip; --g:clamp(16px,4cqw,56px)">
@@ -124,9 +122,9 @@ const showProjects = false;
 </div>
 </div>
 
-<section id="sobre" data-screen-label="02 Sobre mí" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(96px,16cqw,220px) var(--g)">
+<section id="sobre" data-screen-label="02 Sobre mí" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:calc(clamp(96px,16cqw,220px) + 70vh) var(--g) clamp(96px,16cqw,220px)">
 <div style="display:grid; gap:12px clamp(24px,4cqw,64px); align-items:start; grid-template-columns:var(--L-leadCols)">
-  <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-top:.6em">( Sobre mí )</span>
+  <span data-node="sobre-mi" style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-top:.6em">( Sobre mí )</span>
   <div style="min-width:0"><p data-k="st" style="margin:0; max-width:20ch; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(34px,5.4cqw,88px); line-height:.98; letter-spacing:-.015em; color:var(--fg)">Llevo más de seis años construyendo productos digitales. Hoy los resuelvo con <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; letter-spacing:-.03em">agentes de IA</em>, y yo decido el rumbo.</p>
 <div style="display:grid; gap:16px; margin-top:clamp(28px,4cqw,56px)"><p data-rv style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Hoy casi nada lo resuelvo solo. Trabajo con agentes de IA como con un equipo: cada uno recibe una tarea pequeña, un alcance claro y un criterio para saber cuándo terminó.</p><p data-rv style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Todo empieza por entender el problema y escribir qué se espera, con criterios que se puedan comprobar. Esa especificación es la fuente de verdad: los agentes la leen y yo la defiendo.</p><p data-rv style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Después divido el trabajo en piezas independientes y las reparto. Nada se da por bueno hasta que se prueba, y una revisión aparte contrasta el resultado con lo que se pidió.</p><p data-rv style="margin:0; max-width:56ch; color:var(--muted); font-size:14px; text-wrap:pretty">Las decisiones de fondo son mías, y las entregas son pequeñas y fáciles de revisar, cada una con su porqué. Lo que se aprende queda guardado para la próxima vez. Lo oriento a código que otra persona pueda mantener sin sufrir.</p></div></div>
   <figure data-par style="position:relative; margin:0; width:100%; max-width:520px; grid-column:var(--L-figCol); margin-top:var(--L-figMt)">
@@ -174,7 +172,7 @@ const showProjects = false;
 
 <section id="proyectos" data-screen-label="03 Proyectos" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(72px,10cqw,140px) var(--g)">
 <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px 16px; padding-bottom:20px; border-bottom:1px solid var(--line-strong)">
-  <h2 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,7cqw,104px); line-height:.9; letter-spacing:-.02em">Proyectos <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; color:var(--accent); letter-spacing:-.03em">destacados</em></h2>
+  <h2 data-node="proyectos" style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,7cqw,104px); line-height:.9; letter-spacing:-.02em">Proyectos <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; color:var(--accent); letter-spacing:-.03em">destacados</em></h2>
   <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">{showProjects ? 'Casos de ejemplo' : 'Próximamente'}</span>
 </div>
 {showProjects ? (
@@ -234,7 +232,7 @@ const showProjects = false;
 
 <section id="experiencia" data-screen-label="04 Experiencia" style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:clamp(72px,10cqw,140px) var(--g)">
 <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px 16px; padding-bottom:20px; border-bottom:1px solid var(--line-strong)">
-  <h2 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,7cqw,104px); line-height:.9; letter-spacing:-.02em">Experiencia <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; color:var(--accent); letter-spacing:-.03em">laboral</em></h2>
+  <h2 data-node="experiencia" style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,7cqw,104px); line-height:.9; letter-spacing:-.02em">Experiencia <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; color:var(--accent); letter-spacing:-.03em">laboral</em></h2>
   <span style="font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)">2018 — hoy</span>
 </div>
 <div style="display:grid; gap:clamp(8px,5cqw,80px); margin-top:8px; grid-template-columns:var(--L-xpCols)">
@@ -319,7 +317,7 @@ const showProjects = false;
 
 <section id="contacto" data-screen-label="05 Contacto" style="position:relative; z-index:1; overflow:hidden; background:var(--bg); border-top:1px solid var(--line-strong); padding:clamp(72px,10cqw,140px) 0">
 <div style="box-sizing:border-box; max-width:1480px; margin:0 auto; padding:0 var(--g)">
-  <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)"><span>( Contacto )</span><span>Escríbeme, te respondo</span></div>
+  <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)"><span data-node="contacto">( Contacto )</span><span>Escríbeme, te respondo</span></div>
   <div style="position:relative; display:flex; justify-content:space-between; gap:24px; margin-top:clamp(24px,4cqw,56px); flex-direction:var(--L-cHeroDir); align-items:var(--L-cHeroAlign)">
     <h2 style="margin:0; font-family:'Barlow Condensed','Arial Narrow',sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(54px,11.5cqw,190px); line-height:.84; letter-spacing:-.03em">¿Tienes una<br>idea? <em style="font-family:'Instrument Serif',Georgia,serif; font-weight:400; text-transform:none; letter-spacing:-.04em; color:var(--accent); font-size:1.08em">Hablemos.</em></h2>
     <div data-if="mailNote" data-note="1" aria-hidden="true" style="position:absolute; z-index:3; right:calc(clamp(130px,14cqw,200px) * .55); top:-64px; display:flex; align-items:flex-end; gap:6px; font-family:'Reenie Beanie',cursive; color:var(--accent); font-size:clamp(24px,2.8cqw,38px); line-height:.9; transform:rotate(-3deg); pointer-events:none">
@@ -398,10 +396,8 @@ const showProjects = false;
   <button type="button" data-k="menu" class="kd-menu" aria-expanded="false" aria-controls="kd-nav"><span class="kd-burger" aria-hidden="true"></span><span data-k="menu-label">Menú</span></button>
   <nav id="kd-nav" data-if="nav" class="kd-nav" aria-label="Secciones"><a href="#top" data-nav="inicio">Inicio</a><a href="#sobre" data-nav="sobre">Sobre mí</a><a href="#proyectos" data-nav="proyectos">Proyectos</a><a href="#experiencia" data-nav="experiencia">Experiencia</a><a href="#contacto" data-nav="contacto">Contacto</a></nav>
   <div class="kd-right">
+    <span data-k="trace" class="kd-trace" aria-live="polite"></span>
     <span data-if="clock" class="kd-clock">BAQ <span data-time>--:--</span></span>
-    <button data-k="theme" type="button" aria-label="Cambiar a modo oscuro" style="width:34px; height:34px; border-radius:50%; display:grid; place-items:center; color:var(--fg); border:1px solid var(--line-strong); transition:background .3s, transform .4s cubic-bezier(.34,1.5,.5,1)" class="hv1">
-    <svg data-icon="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" style="width:16px; height:16px"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg><svg data-icon="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" style="width:16px; height:16px"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"></path></svg>
-  </button>
   </div>
 </header>
 <div data-k="toast" role="status" aria-live="polite" style="position:fixed; left:50%; bottom:24px; z-index:70; padding:11px 20px; border-radius:999px; background:var(--fg); color:var(--bg); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; pointer-events:none; transition:opacity .3s, transform .4s cubic-bezier(.7,0,.2,1); opacity:0; transform:translate(-50%, 24px)">Correo copiado</div>

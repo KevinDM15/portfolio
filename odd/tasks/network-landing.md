@@ -1,0 +1,19 @@
+# Network landing (the portfolio as a living network map)
+Objective: reorganize the landing page itself as a game where the visitor is a data packet travelling a living network map; sections are nodes; the real content stays readable. Branch `feat/network-landing` from main. Delivery: ask-on-risk, vertical slice first. Test runner: none (no unit framework); checks are `pnpm build` plus Playwright at 1440 and 390.
+
+## Specs
+- S1 Game as the landing, not a separate route: "la idea es que haga parte del proyecto en la landing page reorganizando todo en ese juego pero que parezca un portafolio unico". The /juego route of the debugger slice is not part of this branch.
+- S2 Theme and style: "todo relacionado a la tecnologia y programacion con un estilo unico, colores vivos y sin nada generico"; the network packet concept replaces the debugger ("no me gusta, hagamos la del paquete de red mejor"). No numbering in UI, no emojis, neutral Spanish copy.
+- S3 Concept (proposed, accepted with "si"): full-page living network map in Pixi behind the content; the dot portrait is the central node; scroll moves the packet along the route retrato → sobre mí → proyectos → experiencia → contacto, nodes light up on arrival and each section's content sits anchored to its node; short one-finger challenges between nodes (choose the link without firewall, etc.), the header counts hops and ms like a traceroute; scrolling without playing lets the packet route itself so the content is always readable.
+- S4 Look (accepted): near-black navy ink background with coral, lime, electric cyan and violet; dark theme only, theme toggle removed; chatbot, typography and CV content kept.
+- S5 First delivery: hero with the portrait as node, route to sobre mí with the scroll-driven packet and the first playable hop; the other sections as unlit nodes.
+
+## Tasks
+- [x] T1 (S4) Dark-only theme with the new palette; toggle removed; map canvas behind the content. Route: inline.
+- [x] T2 (S3, S5) Network scene: ambient nodes and traffic, route through section anchors, packet driven by scroll, nodes lit on arrival. Route: inline.
+- [x] T3 (S3, S5) First hop challenge between hero and sobre mí (pick the open link, firewalls drop the packet, auto-route on scroll) and traceroute status in the header. Route: inline.
+- [x] T4 (S5) Checks at 1440 and 390, reduced motion, build. Route: inline.
+
+## Log
+- L2 (2026-11-15): Slice built inline. Dark-only palette (ink #070A14, coral #FF5A2B, lime #B8FF3A, cyan #2BE4FF, violet #8B5CFF) in portfolio.ts and the server-painted root; toggle removed; boot copy reworded (connect, red, ruta). `src/features/network/scene.ts`: fixed WebGL canvas behind the content (ambient nodes, links and traffic with a mild scroll drift), route anchored to the portrait bottom (hero section end on phones) and the `data-node` labels of sobre mí, proyectos, experiencia and contacto; packet driven by scroll with smoothing and trail; nodes light on arrival and the header `.kd-trace` counts hops and ms. First hop: three cables fan out (centred on screen, narrower on phones) with two firewall markers and one open gate; tap resolves it, scrolling past 62% of the segment routes automatically; sobre mí gets 70vh of extra top padding so the hop has room. Generation log removed from the header. Verified at 1440: hop opens, tapping the open gate gives `enlace abierto · en camino`, reaching the label gives `1 salto · 31 ms sobre mí alcanzado`; at 390: no overflow, route and gates on screen. Reduced motion not verified in the browser. Build passes. Risk: none.
+- L1 (2026-11-15): "no me gusta, hagamos la del paquete de red mejor" → "esta muy generico y nadie va a visualizar eso, la idea es que haga parte del proyecto en la landing page reorganizando todo en ese juego pero que parezca un portafolio unico" → proposal (map as landing, scroll = journey, hops as challenges, dark only) → "si".

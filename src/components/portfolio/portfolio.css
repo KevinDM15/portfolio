@@ -37,6 +37,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .kd-nav a.on{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:8px;text-decoration-color:var(--accent)}
 .kd-right{margin-left:auto;display:flex;align-items:center;gap:18px}
 .kd-clock{color:var(--muted);font-variant-numeric:tabular-nums}
+.kd-trace{max-width:52ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 11px/1 'DM Mono',monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--c3)}
+.kd-trace b{font-weight:500;color:var(--muted)}
+.kd-net{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
 section[id]{scroll-margin-top:60px}
 .kd-menu{display:none}
 @media (max-width:759px){
