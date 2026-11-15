@@ -1,5 +1,5 @@
 /* Chatbot UI. Uses the portfolio design tokens (--bg, --surface, --fg, --muted, --line, --line-strong, --accent) from [data-kd]. */
-.kc-root { --kc-display: 'Chakra Petch',system-ui,sans-serif; --kc-serif: 'IBM Plex Sans',system-ui,sans-serif; --kc-mono: 'DM Mono',ui-monospace,Menlo,monospace; font-family: var(--kc-serif); }
+.kc-root { --kc-display: 'Geist',system-ui,sans-serif; --kc-serif: 'Geist',system-ui,sans-serif; --kc-mono: 'Geist Mono',ui-monospace,Menlo,monospace; font-family: var(--kc-serif); }
 .kc-root *, .kc-root *::before, .kc-root *::after { box-sizing: border-box; }
 
 .kc-fab { position: fixed; right: 24px; bottom: 24px; z-index: 60; width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center;

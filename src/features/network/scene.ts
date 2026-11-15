@@ -12,7 +12,7 @@ export type Status = { hops: number; ms: number; text: string };
 export type NetworkOptions = { canvas: HTMLCanvasElement; nodes: NodeDef[]; reduce: boolean; onStatus: (s: Status) => void };
 
 type Pt = { x: number; y: number };
-const CYAN = 0x2ee6ff, AMBER = 0xffc247, MAGENTA = 0xff3d9a, VIOLET = 0x6d4cff, MUTED = 0x96a0c8, FG = 0xeef2ff, BG = 0x060a16;
+const CYAN = 0x5ad3f3, AMBER = 0xf5b544, MAGENTA = 0xf0548f, VIOLET = 0x6d4cff, MUTED = 0x96a0c8, FG = 0xeef2ff, BG = 0x060a16;
 
 /*
  * an angular cable between two nodes: a 45° diagonal, a vertical middle segment and another 45°
@@ -56,7 +56,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	const glowLayer = new Container();
 	glowLayer.addChild(glow);
 	glowLayer.filters = [new BlurFilter({ strength: 16, quality: 3 })];
-	glowLayer.alpha = 0.85;
+	glowLayer.alpha = 0.4;
 	const world = new Container();
 	app.stage.addChild(world, glowLayer, route, gates, packet);
 
@@ -66,9 +66,9 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	type Car = { l: number; t: number; v: number; c: number; s: number };
 	type Layer = { par: number; alpha: number; size: number; density: number; g: Graphics; tr: Graphics; nodes: ANode[]; links: ALink[]; cars: Car[] };
 	const layers: Layer[] = [
-		{ par: 0.02, alpha: 0.28, size: 0.6, density: 1 / 52000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
-		{ par: 0.06, alpha: 0.55, size: 1, density: 1 / 44000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
-		{ par: 0.14, alpha: 0.95, size: 1.9, density: 1 / 170000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
+		{ par: 0.02, alpha: 0.16, size: 0.6, density: 1 / 52000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
+		{ par: 0.06, alpha: 0.32, size: 1, density: 1 / 44000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
+		{ par: 0.14, alpha: 0.55, size: 1.9, density: 1 / 170000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
 	];
 	layers.forEach((l) => world.addChild(l.g, l.tr));
 	function buildAmbient() {
