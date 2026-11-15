@@ -79,8 +79,15 @@ export function initPortfolio() {
 			if (i < idx) a.dataset.lit = '1'; else delete a.dataset.lit;
 		});
 	}
-	addEventListener('scroll', route, { passive: true });
+	const bar = $<HTMLElement>('[data-k="bar"]'), paper = $<HTMLElement>('.kd-paper');
+	function tone() {
+		if (!bar || !paper) return;
+		const onPaper = paper.getBoundingClientRect().top < 40;
+		if (onPaper) bar.dataset.paper = '1'; else delete bar.dataset.paper;
+	}
+	addEventListener('scroll', () => { route(); tone(); }, { passive: true });
 	route();
+	tone();
 
 	/* ---------- the living network ---------- */
 	const net = $<HTMLCanvasElement>('[data-k="net"]');

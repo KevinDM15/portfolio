@@ -32,6 +32,13 @@ body{margin:0;background:#060A16}
 /* ---------- top: the mark, the route, the traceroute ---------- */
 .kd-top{position:fixed;left:0;right:0;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px var(--gx) 26px;pointer-events:none;background:linear-gradient(180deg,rgba(6,10,22,.92) 30%,rgba(6,10,22,0))}
 .kd-top>*{pointer-events:auto}
+.kd-top[data-paper]{background:linear-gradient(180deg,rgba(238,242,255,.94) 30%,rgba(238,242,255,0));color:#0B1020}
+.kd-top[data-paper] .kd-route a i{background:#EEF2FF}
+.kd-top[data-paper] .kd-route a span{color:#4C5578}
+.kd-top[data-paper] .kd-route a[aria-current] span{color:#0B1020}
+.kd-top[data-paper] .kd-trace{color:#1B6F93}
+.kd-top[data-paper] .kd-trace b{color:#4C5578}
+.kd-top[data-paper] .kd-route::before{background:linear-gradient(90deg,rgba(76,85,120,.6),rgba(76,85,120,.25))}
 .kd-mark{font:600 16px/1 var(--display);letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
 .kd-route{position:relative;display:flex;align-items:center;gap:34px;padding:10px 0}
 .kd-route::before{content:'';position:absolute;left:6px;right:6px;top:50%;height:1px;background:linear-gradient(90deg,rgba(150,160,200,.5),rgba(150,160,200,.2))}
@@ -145,6 +152,24 @@ body{margin:0;background:#060A16}
 .kd-list b{font:500 15px/1.3 var(--text)}
 .kd-list span{display:block;font:400 12px/1.4 var(--mono);color:var(--muted)}
 
+/* ---------- paper: contact and footer close the page on light, behind rolling waves ---------- */
+.kd-paper{position:relative;margin-top:clamp(120px,16vw,220px);--bg:#EEF2FF;--surface:#DCE3F7;--fg:#0B1020;--muted:#4C5578;--cyan:#1B6F93;--line:rgba(11,16,32,.10);--line-strong:rgba(11,16,32,.22);background:var(--bg);color:var(--fg)}
+.kd-waves{position:absolute;left:0;right:0;bottom:100%;height:clamp(70px,10vw,140px);overflow:hidden;pointer-events:none}
+.kd-waves svg{position:absolute;left:0;bottom:0;width:200%;height:100%}
+.kd-waves .w1{fill:rgba(238,242,255,.10);animation:kd-wave 30s linear infinite}
+.kd-waves path{transform-box:fill-box}
+.kd-waves .w2{fill:rgba(238,242,255,.28);animation:kd-wave 21s linear infinite reverse}
+.kd-waves .w3{fill:#EEF2FF;animation:kd-wave 15s linear infinite}
+@keyframes kd-wave{to{transform:translateX(-50%)}}
+.kd-waves .kd-anchor{position:absolute;left:calc(var(--gx) + 1px);top:18%;background:#5AD3F3;box-shadow:0 0 10px rgba(90,211,243,.5)}
+.kd-paper .kd-sec{padding-top:clamp(60px,8vw,110px);padding-bottom:clamp(40px,6vw,80px)}
+.kd-paper .kd-anchor{background:var(--fg);box-shadow:none}
+.kd-paper .kd-top-fade{display:none}
+.kd-paper .kd-list li::before,.kd-paper .kd-links a::before{background:var(--cyan)}
+.kd-paper .kd-clock{color:var(--cyan)}
+.kd-paper .kd-up{background:var(--surface);box-shadow:none;color:var(--fg);margin-right:84px}
+.kd-paper .kd-foot small{color:var(--muted)}
+
 /* ---------- contacto ---------- */
 .kd-contact{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,80px);align-items:start}
 .kd-contact h2{font-size:clamp(36px,4.6vw,68px);line-height:1.02;text-wrap:balance}
@@ -197,6 +222,6 @@ body{margin:0;background:#060A16}
 }
 @media (prefers-reduced-motion:reduce){
 	[data-reveal]{transform:none;opacity:1;transition:none}
-	.kd-band ul,.kd-avail i,.kd-soon .pending i{animation:none}
+	.kd-band ul,.kd-avail i,.kd-soon .pending i,.kd-waves path{animation:none}
 	.kd-portrait-w{transition:none}
 }
