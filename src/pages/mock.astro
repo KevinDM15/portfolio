@@ -1,0 +1,170 @@
+---
+// Design mock for the redesign: static, CSS only, not linked from the site. Delete once the real build lands.
+const title = 'Maqueta · Kevin Díaz';
+---
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>{title}</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
+	<style>
+		@font-face{font-family:'Instrument Serif';src:url('/fonts/instrument-serif-latin-400-italic.woff2') format('woff2');font-style:italic;font-weight:400}
+		@font-face{font-family:'Instrument Serif';src:url('/fonts/instrument-serif-latin-400-normal.woff2') format('woff2');font-weight:400}
+		@font-face{font-family:'DM Mono';src:url('/fonts/dm-mono-latin-400-normal.woff2') format('woff2');font-weight:400}
+		:root{--ink:#070A14;--paper:#F2F4FF;--mute:#9AA0C2;--lime:#B8FF3A;--cyan:#2BE4FF;--coral:#FF5A2B;--violet:#8B5CFF}
+		*{box-sizing:border-box}
+		html{overflow-x:clip}
+		html,body{margin:0;background:var(--ink);color:var(--paper);font:400 18px/1.5 'Instrument Serif',Georgia,serif}
+		body{overflow-x:clip;position:relative;min-height:100vh}
+		/* fog and the far map */
+		.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+			radial-gradient(60% 50% at 12% 10%,rgba(139,92,255,.32),transparent 60%),
+			radial-gradient(45% 40% at 90% 30%,rgba(43,228,255,.18),transparent 60%),
+			radial-gradient(50% 40% at 70% 95%,rgba(255,90,43,.14),transparent 60%)}
+		.bg svg{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+		/* the cable that runs the page */
+		.cable{position:absolute;left:0;top:0;width:100%;height:2300px;z-index:1;pointer-events:none;overflow:visible}
+		.cable path{fill:none;stroke-linecap:round}
+		.cable .glow{stroke:var(--lime);stroke-width:14;opacity:.35;filter:blur(10px)}
+		.cable .core{stroke:var(--lime);stroke-width:2.5}
+		.cable .dim{stroke:var(--mute);stroke-width:1.2;opacity:.45;stroke-dasharray:2 10}
+		.cable .packet{fill:var(--coral);filter:drop-shadow(0 0 14px var(--coral))}
+		.cable .node{fill:var(--ink);stroke:var(--lime);stroke-width:2;filter:drop-shadow(0 0 10px var(--lime))}
+		.cable .node.off{stroke:var(--mute);filter:none;opacity:.6}
+
+		/* top: just a mark and the route you are on */
+		.top{position:fixed;left:0;right:0;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(20px,4vw,60px);pointer-events:none}
+		.top>*{pointer-events:auto}
+		.mark{font:800 20px/1 'Syne',sans-serif;letter-spacing:-.02em;color:var(--paper);text-decoration:none;white-space:nowrap}
+		.route{display:flex;align-items:center;gap:14px;font:400 15px/1 'Instrument Serif',serif;font-style:italic;color:var(--mute)}
+		.route svg{width:190px;height:34px;overflow:visible}
+		.route .p{fill:none;stroke:rgba(154,160,194,.5);stroke-width:1.5}
+		.route circle{fill:var(--ink);stroke:var(--mute);stroke-width:1.5}
+		.route circle.on{fill:var(--lime);stroke:var(--lime);filter:drop-shadow(0 0 8px var(--lime))}
+		.route b{font-weight:400;color:var(--paper)}
+
+		/* cells: the organic shapes that hold content */
+		.cell{position:relative;background:linear-gradient(150deg,rgba(32,38,72,.72),rgba(10,14,30,.35));-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);
+			box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 60px 160px -70px rgba(43,228,255,.45),0 40px 100px -40px rgba(0,0,0,.9)}
+
+		main{position:relative;z-index:2}
+		.hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:clamp(24px,4vw,64px);padding:120px clamp(20px,4vw,60px) 60px;max-width:1500px;margin:0 auto}
+		.hero h1{margin:0;font:800 clamp(40px,5vw,78px)/.98 'Syne',sans-serif;letter-spacing:-.045em;color:var(--paper);text-wrap:balance}
+		.hero h1 span{display:block;font:400 clamp(36px,4.4vw,68px)/1.02 'Instrument Serif',serif;font-style:italic;letter-spacing:-.02em;color:var(--cyan);margin-top:.08em}
+		.hero p{max-width:34ch;margin:28px 0 36px;font-size:clamp(19px,1.5vw,23px);color:var(--mute)}
+		.orb{display:inline-grid;place-items:center;width:150px;height:150px;border-radius:50%;text-decoration:none;color:var(--ink);font:700 19px/1.1 'Syne',sans-serif;text-align:center;letter-spacing:-.01em;
+			background:radial-gradient(circle at 32% 28%,#fff6 0,transparent 42%),var(--coral);box-shadow:0 0 0 10px rgba(255,90,43,.12),0 30px 80px -20px var(--coral);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+		.orb:hover{transform:scale(1.06) rotate(-4deg)}
+		.where{display:flex;align-items:center;gap:14px;margin-top:44px;color:var(--mute);font-size:17px}
+		.where i{width:10px;height:10px;border-radius:50%;background:var(--lime);box-shadow:0 0 14px var(--lime);animation:pulse 2.4s ease-in-out infinite}
+		@keyframes pulse{50%{transform:scale(.6);opacity:.6}}
+
+		/* the portrait: a luminous cell with the halftone face, the cable plugs into it */
+		.portrait{justify-self:end;width:min(100%,560px);aspect-ratio:.92;border-radius:52% 48% 44% 56% / 46% 54% 46% 54%;transform:rotate(-3deg);overflow:hidden;isolation:isolate;
+			box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 0 0 1px rgba(242,244,255,.14),0 80px 200px -60px rgba(139,92,255,.7),0 40px 120px -40px rgba(0,0,0,.9)}
+		.portrait img{position:absolute;inset:-6% -4% 0;width:108%;height:106%;object-fit:cover;object-position:50% 12%;filter:grayscale(1) contrast(1.35) brightness(1.08)}
+		.portrait::before{content:'';position:absolute;inset:0;z-index:1;background:radial-gradient(circle,var(--ink) 1.15px,transparent 1.5px) 0 0/6px 6px;mix-blend-mode:multiply;opacity:.9}
+		.portrait::after{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(139,92,255,.0) 55%,rgba(139,92,255,.55)),radial-gradient(70% 60% at 50% 40%,transparent 60%,rgba(7,10,20,.55));mix-blend-mode:normal}
+		.portrait .note{position:absolute;z-index:3;right:8%;bottom:8%;font:400 22px/1.1 'Instrument Serif',serif;font-style:italic;color:var(--paper);text-shadow:0 2px 24px rgba(0,0,0,.8)}
+
+		/* about: the first cell on the route */
+		.about{position:relative;padding:160px clamp(20px,4vw,60px) 220px;max-width:1500px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:60px;align-items:start}
+		.about .cell{min-width:0;padding:clamp(40px,5vw,88px) clamp(28px,5vw,80px);border-radius:46% 54% 42% 58% / 40% 38% 62% 60%;transform:rotate(1.5deg)}
+		.about .cell>*{transform:rotate(-1.5deg)}
+		.about h2{margin:0 0 28px;font:800 clamp(28px,4vw,62px)/1 'Syne',sans-serif;letter-spacing:-.04em;text-wrap:balance}
+		.about h2 em{font:400 1.05em/1 'Instrument Serif',serif;font-style:italic;color:var(--lime)}
+		.about p{margin:0 0 18px;max-width:48ch;color:var(--mute);font-size:19px}
+		.ring{position:sticky;top:140px;justify-self:center;width:min(100%,460px);aspect-ratio:1}
+		.ring svg{width:100%;height:100%;overflow:visible}
+		.ring .o{fill:none;stroke:rgba(43,228,255,.35);stroke-width:1.5;stroke-dasharray:3 9}
+		.ring .i{fill:none;stroke:rgba(242,244,255,.4);stroke-width:1.5}
+		.ring .me{fill:var(--lime);filter:drop-shadow(0 0 30px rgba(184,255,58,.8))}
+		.ring .me-t{font:800 44px 'Syne',sans-serif;fill:var(--ink);text-anchor:middle;letter-spacing:-.04em}
+		.ring .st{fill:var(--cyan);filter:drop-shadow(0 0 10px var(--cyan))}
+		.ring .lb{font:400 20px 'Instrument Serif',serif;font-style:italic;fill:var(--paper);text-anchor:middle}
+		.ring .cap{font:400 17px 'Instrument Serif',serif;font-style:italic;fill:var(--mute);text-anchor:middle}
+
+		@media (max-width:860px){
+			.hero{grid-template-columns:1fr;padding-top:110px}
+			.portrait{justify-self:start;width:min(78vw,420px);order:-1}
+			.about{grid-template-columns:minmax(0,1fr);padding-top:60px}
+			.ring{position:static;width:min(100%,360px)}
+			.route span{display:none}
+		}
+	</style>
+</head>
+<body>
+	<div class="bg" aria-hidden="true">
+		<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+			<g stroke="#8B5CFF" stroke-opacity=".35" fill="none" stroke-width="1">
+				<path d="M60 120L180 210L300 160L420 300L520 240M180 210L250 420L420 300M900 80L1040 180L1180 120L1300 260L1400 220M1040 180L1100 380L1300 260M120 700L260 640L380 760L560 700L640 820M260 640L330 520L380 760M980 640L1120 720L1260 660L1380 780M1120 720L1180 860"/>
+			</g>
+			<g fill="#2BE4FF" fill-opacity=".8">
+				<circle cx="180" cy="210" r="2.5"/><circle cx="300" cy="160" r="2"/><circle cx="420" cy="300" r="3"/><circle cx="250" cy="420" r="2"/><circle cx="1040" cy="180" r="3"/><circle cx="1180" cy="120" r="2"/><circle cx="1300" cy="260" r="2.5"/><circle cx="1100" cy="380" r="2"/><circle cx="260" cy="640" r="2.5"/><circle cx="380" cy="760" r="3"/><circle cx="560" cy="700" r="2"/><circle cx="330" cy="520" r="2"/><circle cx="1120" cy="720" r="3"/><circle cx="1260" cy="660" r="2"/><circle cx="1380" cy="780" r="2.5"/>
+			</g>
+		</svg>
+	</div>
+
+	<svg class="cable" viewBox="0 0 1440 2300" preserveAspectRatio="none" aria-hidden="true">
+		<path class="glow" d="M1010 760C1010 900 420 880 420 1060C420 1240 980 1240 980 1420"/>
+		<path class="core" d="M1010 760C1010 900 420 880 420 1060C420 1240 980 1240 980 1420"/>
+		<path class="dim" d="M980 1420C980 1620 300 1640 300 1900"/>
+		<circle class="node" cx="1010" cy="760" r="7"/>
+		<circle class="node" cx="420" cy="1060" r="7"/>
+		<circle class="node off" cx="980" cy="1420" r="7"/>
+		<circle class="packet" cx="700" cy="930" r="7"/>
+	</svg>
+
+	<header class="top">
+		<a class="mark" href="#">Kevin Díaz</a>
+		<div class="route" aria-label="Dónde estás en el recorrido">
+			<svg viewBox="0 0 190 34" aria-hidden="true">
+				<path class="p" d="M8 24C40 24 40 8 72 8S104 24 136 24 168 8 182 8"/>
+				<circle class="on" cx="8" cy="24" r="4.5"/><circle cx="72" cy="8" r="4"/><circle cx="118" cy="20" r="4"/><circle cx="150" cy="18" r="4"/><circle cx="182" cy="8" r="4"/>
+			</svg>
+			<span>estás en <b>inicio</b></span>
+		</div>
+	</header>
+
+	<main>
+		<section class="hero">
+			<div>
+				<h1>Hago software que el equipo puede mantener.<span>Hoy lo construyo con agentes de IA.</span></h1>
+				<p>Desarrollador full-stack en Barranquilla. APIs, apps web y móviles, con una arquitectura que aguanta el paso del tiempo.</p>
+				<a class="orb" href="#contacto">Escríbeme</a>
+				<div class="where"><i></i>Disponible para nuevos proyectos</div>
+			</div>
+			<div class="cell portrait">
+				<img src="/img/retrato.jpg" alt="Retrato de Kevin Díaz" />
+				<span class="note">este soy yo, sin filtro</span>
+			</div>
+		</section>
+
+		<section class="about" id="sobre">
+			<div class="cell">
+				<h2>Llevo más de seis años construyendo productos digitales, <em>y hoy decido el rumbo mientras los agentes ejecutan.</em></h2>
+				<p>Hoy casi nada lo resuelvo solo. Trabajo con agentes de IA como con un equipo: cada uno recibe una tarea pequeña, un alcance claro y un criterio para saber cuándo terminó.</p>
+				<p>Todo empieza por entender el problema y escribir qué se espera, con criterios que se puedan comprobar. Esa especificación es la fuente de verdad: los agentes la leen y yo la defiendo.</p>
+				<p>Desde 2018, cinco empresas y clientes, del backend al frontend. Koombea, Wawandco, Rocket Code y ahora por mi cuenta.</p>
+			</div>
+			<div class="orbit" aria-label="Cómo trabajo: yo al centro, los agentes alrededor">
+				<svg viewBox="0 0 460 460">
+					<circle class="o" cx="230" cy="230" r="200"/>
+					<circle class="i" cx="230" cy="230" r="120"/>
+					<circle class="me" cx="230" cy="230" r="66"/>
+					<text class="me-t" x="230" y="246">yo</text>
+					<circle class="st" cx="230" cy="30" r="7"/><circle class="st" cx="430" cy="230" r="7"/><circle class="st" cx="230" cy="430" r="7"/><circle class="st" cx="30" cy="230" r="7"/>
+					<text class="lb" x="230" y="8">entender</text>
+					<text class="lb" x="430" y="262">delegar</text>
+					<text class="lb" x="230" y="466">verificar</text>
+					<text class="lb" x="30" y="262">entregar</text>
+					<text class="cap" x="230" y="140">agentes</text>
+				</svg>
+			</div>
+		</section>
+	</main>
+</body>
+</html>
