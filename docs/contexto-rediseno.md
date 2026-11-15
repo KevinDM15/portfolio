@@ -41,7 +41,7 @@ React, Next.js, React Native, TypeScript, NestJS, Go, Python, PostgreSQL, AWS, G
 
 ### Proyectos
 
-Todavía no hay casos de estudio publicados. Mostrar un estado de "próximamente" honesto: "El primer caso de estudio está en camino." Hay un flag `showProjects` en el componente para activar la lista cuando exista.
+Todavía no hay casos de estudio publicados. Mientras tanto se muestra una lista "Construyendo" con repositorios reales (este portafolio, KevDots, el tap de Homebrew) y una fila pendiente: "El primer caso de estudio está en camino." Los datos viven en el array `building` del componente.
 
 ### Experiencia (2018 — hoy)
 

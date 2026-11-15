@@ -54,6 +54,35 @@ export function initPortfolio() {
 		try { navigator.clipboard.writeText(EMAIL).then(ok, fail); } catch { fail(); }
 	}));
 
+	/* ---------- HUD: the viewport the page is being read in ---------- */
+	const vp = $<HTMLElement>('[data-k="vp"]');
+	const viewport = () => { if (vp) vp.textContent = `${innerWidth}×${innerHeight}`; };
+	viewport();
+	addEventListener('resize', viewport, { passive: true });
+
+	/* ---------- bio length ---------- */
+	const bio = $<HTMLElement>('[data-k="bio"]');
+	$$<HTMLButtonElement>('[data-bio-set]').forEach((btn) => btn.addEventListener('click', () => {
+		if (!bio) return;
+		bio.dataset.bio = btn.dataset.bioSet;
+		$$<HTMLButtonElement>('[data-bio-set]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+	}));
+
+	/* ---------- job descriptions: two lines, then "ver más" ---------- */
+	$$<HTMLElement>('[data-k="clamp"]').forEach((box) => {
+		const p = box.querySelector('p'), more = box.querySelector<HTMLButtonElement>('[data-more]');
+		if (!p || !more) return;
+		const fits = () => { if (box.dataset.open) return; if (p.scrollHeight <= p.clientHeight + 2) box.dataset.fits = '1'; else delete box.dataset.fits; };
+		fits();
+		addEventListener('resize', fits, { passive: true });
+		more.addEventListener('click', () => {
+			const open = !box.dataset.open;
+			if (open) box.dataset.open = '1'; else delete box.dataset.open;
+			more.textContent = open ? 'ver menos' : 'ver más';
+			more.setAttribute('aria-expanded', String(open));
+		});
+	});
+
 	/* ---------- plates settle flat when they come into view ---------- */
 	const rio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.in = '1'; rio.unobserve(e.target); } }), { rootMargin: '0px 0px -14% 0px' });
 	$$<HTMLElement>('[data-reveal]').forEach((el) => rio.observe(el));

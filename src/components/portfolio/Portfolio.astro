@@ -1,9 +1,26 @@
 ---
 import './portfolio.css';
 import { ChatBot } from '../islands/ChatBot';
+import { execSync } from 'node:child_process';
 
-// Set to true when the first real project is published.
-const showProjects = false;
+// build facts for the HUD and the footer: the deployed commit (Vercel exposes it, git answers locally) and the build date
+const sha = (process.env.VERCEL_GIT_COMMIT_SHA ?? (() => { try { return execSync('git rev-parse HEAD').toString().trim(); } catch { return ''; } })()).slice(0, 7);
+const built = (() => { const p = new Intl.DateTimeFormat('es-CO', { timeZone: 'America/Bogota', day: 'numeric', month: 'short', year: 'numeric' }).formatToParts(new Date()); const g = (t: string) => p.find((x) => x.type === t)?.value.replace('.', '') ?? ''; return `${g('day')} ${g('month')} ${g('year')}`; })();
+const repo = 'https://github.com/KevinDM15/portfolio';
+// where Kevin has worked, with the initials shown on the tiles
+const companies = {
+	cuc: { name: 'Universidad de la Costa', short: 'CUC', url: 'https://www.cuc.edu.co' },
+	elsol: { name: 'El Sol Neighborhood Educational Center', short: 'El Sol', url: 'https://elsolnec.org' },
+	rocket: { name: 'The Rocket Code', short: 'RC', url: 'https://therocketcode.com' },
+	wawandco: { name: 'Wawandco', short: 'W', url: 'https://wawand.co' },
+	koombea: { name: 'Koombea', short: 'K', url: 'https://www.koombea.com' },
+};
+// what is being built right now, while the first case study is on its way
+const building = [
+	{ name: 'Este portafolio', text: 'La landing como mapa de red con PixiJS sobre Astro, y un asistente que responde con el CV como contexto.', url: repo, meta: 'TypeScript · Astro' },
+	{ name: 'KevDots', text: 'Mi entorno de terminal: Alacritty, Zellij, LazyVim, Starship y Zsh, instalable con un script.', url: 'https://github.com/KevinDM15/KevDots', meta: 'Python · Lua' },
+	{ name: 'homebrew-kevdots', text: 'Tap de Homebrew para instalar KevDots con un solo comando.', url: 'https://github.com/KevinDM15/homebrew-kevdots', meta: 'Ruby' },
+];
 // the stack as network modules: name, where it lives in my work, a short interface-like id and its mark
 const tech = [
 	{ name: 'React', kind: 'frontend', id: 'ui0', icon: 'react' }, { name: 'Next.js', kind: 'frontend', id: 'ui1', icon: 'nextdotjs' }, { name: 'React Native', kind: 'móvil', id: 'mb0', icon: 'react' }, { name: 'TypeScript', kind: 'lenguaje', id: 'ts0', icon: 'typescript' },
@@ -11,11 +28,11 @@ const tech = [
 	{ name: 'AWS', kind: 'cloud', id: 'cl0', icon: 'amazonwebservices' }, { name: 'GCP', kind: 'cloud', id: 'cl1', icon: 'googlecloud' }, { name: 'LLMs', kind: 'IA', id: 'ai0', icon: 'llm' }, { name: 'Arquitectura hexagonal', kind: 'diseño', id: 'arq', icon: 'hexagonal' },
 ];
 const jobs = [
-	{ when: 'Jun 2026 — hoy', span: '4 meses y contando', name: 'Universidad de la Costa', role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web con Vite y React y diseño arquitecturas y planes técnicos para nuevas funcionalidades. Migro de forma progresiva módulos legacy (PHP, JavaScript y jQuery) hacia una arquitectura moderna, con React en el frontend y Python serverless en el backend.', tags: ['React', 'Vite', 'Python', 'Serverless'] },
-	{ when: 'Ene 2026 — hoy', span: '9 meses y contando', name: 'El Sol Neighborhood Educational Center', role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web y móviles con Next.js, React y React Native, con interfaces multiplataforma que priorizan rendimiento, usabilidad y consistencia visual. Diseño arquitecturas y planes técnicos, y trabajo en equipos ágiles con Scrum.', tags: ['Next.js', 'React', 'React Native'] },
-	{ when: 'Oct 2023 — Jul 2026', span: '2 años, 9 meses', name: 'The Rocket Code', role: 'Desarrollador full-stack · Freelance', text: 'Optimicé aplicaciones del lado del cliente para escalar y responder más rápido. Creé APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, integré modelos de lenguaje (LLMs) por API para automatizar procesos y construí componentes reutilizables con React, MaterialUI, Redux y Next.js.', tags: ['Next.js', 'React', 'NestJS', 'PostgreSQL', 'AWS', 'LLMs'] },
-	{ when: 'Ago 2020 — Abr 2023', span: '2 años, 8 meses', name: 'Wawandco', role: 'Desarrollador full-stack', text: 'Mejoré código nativo en Go aplicando SOLID, Clean Code y MVC. Implementé servicios backend y funciones serverless en GCP, reduje la deuda técnica y migré librerías a versiones actuales.', tags: ['Go', 'GCP', 'Cloud Functions', 'Firestore'] },
-	{ when: 'Ago — Dic 2018', span: '5 meses', name: 'Koombea', role: 'Desarrollador full-stack', text: 'Desarrollo de aplicaciones web con JavaScript, HTML y CSS.', tags: ['JavaScript'] },
+	{ when: 'Jun 2026 — hoy', span: '4 meses y contando', name: 'Universidad de la Costa', url: companies.cuc.url, role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web con Vite y React y diseño arquitecturas y planes técnicos para nuevas funcionalidades. Migro de forma progresiva módulos legacy (PHP, JavaScript y jQuery) hacia una arquitectura moderna, con React en el frontend y Python serverless en el backend.', tags: ['React', 'Vite', 'Python', 'Serverless'] },
+	{ when: 'Ene 2026 — hoy', span: '9 meses y contando', name: 'El Sol Neighborhood Educational Center', url: companies.elsol.url, role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web y móviles con Next.js, React y React Native, con interfaces multiplataforma que priorizan rendimiento, usabilidad y consistencia visual. Diseño arquitecturas y planes técnicos, y trabajo en equipos ágiles con Scrum.', tags: ['Next.js', 'React', 'React Native'] },
+	{ when: 'Oct 2023 — Jul 2026', span: '2 años, 9 meses', name: 'The Rocket Code', url: companies.rocket.url, role: 'Desarrollador full-stack · Freelance', text: 'Optimicé aplicaciones del lado del cliente para escalar y responder más rápido. Creé APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, integré modelos de lenguaje (LLMs) por API para automatizar procesos y construí componentes reutilizables con React, MaterialUI, Redux y Next.js.', tags: ['Next.js', 'React', 'NestJS', 'PostgreSQL', 'AWS', 'LLMs'] },
+	{ when: 'Ago 2020 — Abr 2023', span: '2 años, 8 meses', name: 'Wawandco', url: companies.wawandco.url, role: 'Desarrollador full-stack', text: 'Mejoré código nativo en Go aplicando SOLID, Clean Code y MVC. Implementé servicios backend y funciones serverless en GCP, reduje la deuda técnica y migré librerías a versiones actuales.', tags: ['Go', 'GCP', 'Cloud Functions', 'Firestore'] },
+	{ when: 'Ago — Dic 2018', span: '5 meses', name: 'Koombea', url: companies.koombea.url, role: 'Desarrollador full-stack', text: 'Desarrollo de aplicaciones web con JavaScript, HTML y CSS.', tags: ['JavaScript'] },
 ];
 // timeline lanes: months since Jan 2018 over a 108-month axis (2018 to 2026)
 const lanes = [
@@ -50,13 +67,21 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 		<p class="kd-kicker"><i aria-hidden="true"></i>Desarrollador full-stack · Barranquilla</p>
 		<h1>Kevin<br>Díaz</h1>
 		<p class="kd-claim">Software que el equipo puede mantener. Hoy, con agentes de IA.</p>
-		<span class="kd-btnw"><a class="kd-btn" href="#contacto">Escríbeme</a></span>
+		<div class="kd-actions">
+			<span class="kd-btnw"><a class="kd-btn" href="#contacto">Escríbeme</a></span>
+			<a class="kd-btn-ghost" href="/CV_KEVIN_ES.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Ver CV</a>
+		</div>
 		<div class="kd-avail"><i></i>Disponible para nuevos proyectos</div>
 	</div>
 	<div class="kd-pw kd-portrait-w" data-tilt data-node="inicio">
 		<div class="kd-plate kd-portrait">
 			<canvas data-k="cv" role="img" aria-label="Retrato de Kevin Díaz hecho de puntos que se apartan del cursor"></canvas>
-			<div class="tag" aria-hidden="true"><i></i>kevin.local</div>
+			<div class="hud" aria-hidden="true">
+				<span class="tl">rev {sha}<br>deploy {built}</span>
+				<span class="tr" data-k="vp"></span>
+				<span class="bl"><i></i>kevin.local</span>
+				<span class="br"><b data-time>--:--</b> UTC−5</span>
+			</div>
 		</div>
 	</div>
 </section>
@@ -70,9 +95,29 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 	<div class="kd-about">
 		<div class="kd-pw" data-reveal>
 			<div class="kd-plate">
+				<p class="kd-now"><i></i><span><b>Ahora</b> migrando módulos legacy a React y Python serverless en la Universidad de la Costa</span><small>nov 2026</small></p>
 				<p class="kd-statement">Seis años construyendo productos digitales. <b>Hoy decido el rumbo y los agentes ejecutan.</b></p>
-				<div class="kd-copy">
-					<p>Especificación clara, tareas pequeñas y criterios comprobables. Yo reviso y defiendo el resultado.</p>
+				<div class="kd-copy" data-k="bio" data-bio="corta">
+					<div class="kd-bio-switch" role="group" aria-label="Longitud de la presentación">
+						<button type="button" data-bio-set="corta" aria-pressed="true">corta</button>
+						<button type="button" data-bio-set="larga" aria-pressed="false">larga</button>
+					</div>
+					<p class="short">Especificación clara, tareas pequeñas y criterios comprobables. Yo reviso y defiendo el resultado.</p>
+					<div class="long">
+						<p>Casi nada lo resuelvo solo. Trabajo con agentes de IA como con un equipo: cada uno recibe una tarea pequeña, un alcance claro y un criterio para saber cuándo terminó.</p>
+						<p>Todo empieza por entender el problema y escribir qué se espera, con criterios que se puedan comprobar. Esa especificación es la fuente de verdad: los agentes la leen y yo la defiendo.</p>
+					</div>
+				</div>
+				<div class="kd-facts">
+					<div class="row"><span class="k">Ahora con</span><div class="v">
+						{[companies.cuc, companies.elsol].map((c) => <a href={c.url} target="_blank" rel="noopener"><i>{c.short}</i>{c.name}</a>)}
+					</div></div>
+					<div class="row"><span class="k">Antes en</span><div class="v">
+						{[companies.rocket, companies.wawandco, companies.koombea].map((c) => <a href={c.url} target="_blank" rel="noopener"><i>{c.short}</i>{c.name}</a>)}
+					</div></div>
+					<div class="row"><span class="k">Stack</span><div class="v">
+						{tech.filter((t) => !['llm', 'hexagonal'].includes(t.icon)).map((t) => <span><i><img src={`/svg/tech/${t.icon}.svg`} alt="" width="16" height="16" /></i>{t.name}</span>)}
+					</div></div>
 				</div>
 				<div class="kd-readouts">
 					<div><b>2018</b><span>Primer empleo como desarrollador</span></div>
@@ -99,14 +144,14 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 </section>
 
 <section id="proyectos" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Proyectos</h2><small>{showProjects ? 'casos de estudio' : 'próximamente'}</small><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i></div>
-	<div class="kd-pw kd-soon" data-reveal>
+	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Proyectos</h2><small>construyendo</small><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i></div>
+	<div class="kd-pw kd-building" data-reveal>
 		<div class="kd-plate">
-			<div>
-				<h3>El primer caso de estudio <b>está en camino.</b></h3>
-				<p>Estoy preparando el primer proyecto publicado con su contexto, decisiones y resultados. Cuando esté listo aparecerá aquí, conectado a esta ruta.</p>
-			</div>
-			<div class="pending" aria-hidden="true"><i></i>en construcción</div>
+			<p class="kd-building-lede">Lo que tengo abierto ahora, con su código a la vista. El primer caso de estudio con contexto, decisiones y resultados está en camino.</p>
+			<ul>
+				{building.map((b) => <li><a href={b.url} target="_blank" rel="noopener"><span class="txt"><b>{b.name}</b><p>{b.text}</p><small>{b.meta}</small></span><i class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></i></a></li>)}
+				<li class="pending"><div><span class="txt"><b>Primer caso de estudio</b><p>Un proyecto publicado con su contexto, decisiones y resultados. Aparecerá aquí, conectado a esta ruta.</p><small>en construcción</small></span><i class="wait" aria-hidden="true"></i></div></li>
+			</ul>
 		</div>
 	</div>
 </section>
@@ -128,9 +173,9 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 					<div class="kd-pw" data-reveal>
 						<article class="kd-plate kd-job">
 							<div class="when"><span>{j.when}</span><span>{j.span}</span></div>
-							<h3>{j.name}</h3>
+							<h3><a href={j.url} target="_blank" rel="noopener">{j.name}<i class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></i></a></h3>
 							<div class="role">{j.role}</div>
-							<p>{j.text}</p>
+							<div class="desc" data-k="clamp"><p>{j.text}</p><button type="button" class="more" data-more aria-expanded="false">ver más</button></div>
 							<div class="kd-tags">{j.tags.map((t) => <span>{t}</span>)}</div>
 						</article>
 					</div>
@@ -138,14 +183,14 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 			</div>
 			<div class="kd-extra">
 				<div><h3>Formación</h3><ul class="kd-list">
-					<li><b>Técnico en Programación de Software</b><span>SENA · 2017 — 2018</span></li>
-					<li><b>Técnico en Mantenimiento de Sistemas Informáticos</b><span>UniBarranquilla · 2019 — 2021</span></li>
-					<li><b>Tecnólogo en Gestión de Sistemas Informáticos</b><span>UniBarranquilla · 2022 — hoy</span></li>
-					<li><b>Scrum Developer</b><span>Kleer · 2023</span></li>
+					<li><b>Técnico en Programación de Software<small>SENA</small></b><i></i><span>2017 — 2018</span></li>
+					<li><b>Técnico en Mantenimiento de Sistemas Informáticos<small>UniBarranquilla</small></b><i></i><span>2019 — 2021</span></li>
+					<li><b>Tecnólogo en Gestión de Sistemas Informáticos<small>UniBarranquilla</small></b><i></i><span>2022 — hoy</span></li>
+					<li><b>Scrum Developer<small>Kleer</small></b><i></i><span>2023</span></li>
 				</ul></div>
 				<div><h3>Idiomas</h3><ul class="kd-list">
-					<li><b>Español</b><span>Nativo</span></li>
-					<li><b>Inglés</b><span>Básico</span></li>
+					<li><b>Español</b><i></i><span>Nativo</span></li>
+					<li><b>Inglés</b><i></i><span>Básico</span></li>
 				</ul></div>
 			</div>
 		</div>
@@ -197,6 +242,7 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 	<div>
 		<p>Gracias por <b>la visita.</b></p>
 		<small>Kevin Díaz · Desarrollador full-stack · Barranquilla, CO<br>© 2026 · hecho con código y café</small>
+		<p class="kd-build">kevindev.co v3<i></i><a href={`${repo}/commit/${sha}`} target="_blank" rel="noopener">rev {sha}</a><i></i>desplegado {built}</p>
 	</div>
 	<a href="#top" class="kd-up" aria-label="Volver arriba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
 </footer>
