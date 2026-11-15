@@ -189,9 +189,22 @@ body{margin:0;background:#060A16}
 .kd-contact{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,80px);align-items:start}
 .kd-contact h2{font-size:clamp(36px,4.6vw,68px);line-height:1.02;text-wrap:balance}
 .kd-contact h2 b{display:block;font-weight:400;color:var(--muted)}
-.kd-mail,[data-kd] .kd-mail{display:inline-grid;gap:6px;margin-top:34px;padding:22px 30px;clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);background:var(--amber);color:var(--on-accent);text-align:left;font:600 clamp(17px,1.6vw,22px)/1 var(--display);letter-spacing:-.01em;transition:transform .3s}
-.kd-mail small{font:400 12px/1 var(--mono);opacity:.75}
+.kd-contact-lede{margin:22px 0 0;max-width:44ch;color:var(--muted);font-size:17px}
+.kd-mail,[data-kd] .kd-mail{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;width:min(100%,520px);margin-top:30px;padding:14px 18px 14px 14px;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);background:var(--amber);color:var(--on-accent);text-align:left;transition:transform .3s}
+.kd-mail .ic{display:grid;place-items:center;width:52px;height:52px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:var(--on-accent);color:var(--amber)}
+.kd-mail .ic svg{width:24px;height:24px}
+.kd-mail span{min-width:0}
+.kd-mail b{display:block;font:600 clamp(16px,1.5vw,21px)/1.15 var(--display);letter-spacing:-.015em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kd-mail small{display:block;margin-top:4px;font:400 12px/1 var(--mono);opacity:.75}
+.kd-mail .act{display:grid;place-items:center;width:36px;height:36px;color:var(--on-accent);opacity:.8}
+.kd-mail .act svg{width:20px;height:20px;grid-area:1/1;transition:opacity .25s,transform .25s}
+.kd-mail .act .ok{opacity:0;transform:scale(.6)}
+.kd-mail[data-done] .act .cp{opacity:0;transform:scale(.6)}
+.kd-mail[data-done] .act .ok{opacity:1;transform:none}
 .kd-mail:hover{transform:translateY(-2px)}
+.kd-contact-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;font:400 13px/1 var(--mono);color:var(--muted)}
+.kd-contact-meta span{display:inline-flex;align-items:center;gap:10px}
+.kd-contact-meta i{width:7px;height:7px;background:var(--cyan);transform:rotate(45deg)}
 .kd-cols{display:grid;gap:30px}
 .kd-cols h3{font-size:15px;font-weight:500;letter-spacing:0;margin-bottom:12px;color:var(--cyan)}
 .kd-tiles{display:grid;gap:10px}

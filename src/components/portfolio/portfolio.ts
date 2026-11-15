@@ -40,8 +40,16 @@ export function initPortfolio() {
 		clearTimeout(toastTimer);
 		toastTimer = window.setTimeout(() => toast.classList.remove('on'), 1800);
 	}
+	const mailHint = $<HTMLElement>('[data-k="mail-hint"]');
+	let doneTimer: number | undefined;
 	$$<HTMLElement>('[data-copy]').forEach((el) => el.addEventListener('click', () => {
-		const ok = () => say('Correo copiado');
+		const ok = () => {
+			say('Correo copiado');
+			el.dataset.done = '1';
+			if (mailHint) mailHint.textContent = 'copiado, ya puedes pegarlo';
+			clearTimeout(doneTimer);
+			doneTimer = window.setTimeout(() => { delete el.dataset.done; if (mailHint) mailHint.textContent = 'clic para copiar el correo'; }, 2400);
+		};
 		const fail = () => say('Copia: ' + EMAIL);
 		try { navigator.clipboard.writeText(EMAIL).then(ok, fail); } catch { fail(); }
 	}));
