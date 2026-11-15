@@ -86,11 +86,14 @@ body{margin:0;background:#060A16}
 .kd-portrait .tag{position:absolute;z-index:3;left:26px;bottom:22px;display:flex;align-items:center;gap:10px;font:400 12px/1 var(--mono);color:var(--muted)}
 .kd-portrait .tag i{width:7px;height:7px;background:var(--cyan);transform:rotate(45deg)}
 
-/* ---------- tech band ---------- */
-.kd-band{position:relative;overflow:hidden;padding:16px 0;background:linear-gradient(90deg,transparent,rgba(109,76,255,.10) 30%,rgba(90,211,243,.06) 70%,transparent)}
-.kd-band ul{display:flex;width:max-content;animation:kd-marq 48s linear infinite}
-.kd-band li{display:flex;align-items:center;gap:28px;padding-right:28px;font:500 15px/1 var(--mono);color:var(--muted);white-space:nowrap}
-.kd-band li::after{content:'';width:5px;height:5px;background:var(--cyan);transform:rotate(45deg);opacity:.7}
+/* ---------- tech band: a wide, slow slider of the stack ---------- */
+.kd-band{position:relative;overflow:hidden;padding:clamp(22px,3vw,36px) 0;margin-top:-20px;background:linear-gradient(90deg,transparent,rgba(109,76,255,.12) 30%,rgba(90,211,243,.08) 70%,transparent);
+	-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.kd-band ul{display:flex;width:max-content;animation:kd-marq 60s linear infinite}
+.kd-band:hover ul{animation-play-state:paused}
+.kd-band li{display:flex;align-items:center;gap:clamp(22px,2.4vw,40px);padding-right:clamp(22px,2.4vw,40px);font:600 clamp(24px,2.6vw,38px)/1 var(--display);letter-spacing:-.025em;color:var(--fg);white-space:nowrap;opacity:.92}
+.kd-band li::after{content:'';width:9px;height:9px;background:var(--cyan);transform:rotate(45deg);opacity:.9}
+.kd-band li:nth-child(3n)::after{background:var(--amber)}
 @keyframes kd-marq{to{transform:translateX(-50%)}}
 
 /* ---------- sobre mí ---------- */
