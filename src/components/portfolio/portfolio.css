@@ -73,9 +73,13 @@ body{margin:0;background:#060A16}
 
 /* ---------- hero ---------- */
 .kd-hero{position:relative;min-height:100vh;max-width:1500px;margin:0 auto;padding:130px var(--gx) 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);align-items:center;gap:clamp(24px,5vw,90px)}
-.kd-hero h1{font-size:clamp(36px,4.2vw,64px);line-height:1.04;text-wrap:balance}
-.kd-hero h1 b{display:block;font-weight:400;color:var(--muted)}
-.kd-lede{max-width:44ch;margin:26px 0 34px;font-size:clamp(17px,1.25vw,20px);color:var(--muted)}
+.kd-kicker{display:flex;align-items:center;gap:10px;margin:0 0 18px;font:400 13px/1 var(--mono);color:var(--cyan)}
+.kd-kicker i{width:7px;height:7px;background:currentColor;transform:rotate(45deg)}
+.kd-hero h1{font-size:clamp(68px,9vw,136px);font-weight:700;line-height:.92;letter-spacing:-.045em}
+.kd-claim{max-width:30ch;margin:28px 0 36px;font:400 clamp(18px,1.5vw,23px)/1.4 var(--text);color:var(--muted);text-wrap:balance}
+/* the name is already the hero: the bar shows it only once the page scrolls */
+.kd-top .kd-mark{opacity:0;transition:opacity .35s}
+.kd-top[data-scrolled] .kd-mark{opacity:1}
 .kd-btn{display:inline-block;padding:15px 28px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:var(--amber);color:var(--on-accent);font:600 16px/1 var(--display);letter-spacing:-.01em;text-decoration:none;transition:transform .3s}
 .kd-btn:hover{transform:translateY(-2px)}
 .kd-btnw{display:inline-block;filter:drop-shadow(0 10px 24px rgba(245,181,68,.25))}
@@ -235,6 +239,7 @@ body{margin:0;background:#060A16}
 @media (max-width:1080px){.kd-trace{display:none}}
 @media (max-width:900px){
 	.kd-hero{grid-template-columns:minmax(0,1fr);padding-top:110px;gap:36px}
+	.kd-hero h1{font-size:clamp(60px,18vw,88px)}
 	.kd-portrait-w{order:-1;justify-self:start;width:min(82vw,420px);transform:none}
 	.kd-about,.kd-exp,.kd-contact{grid-template-columns:minmax(0,1fr)}
 	.kd-about .kd-pw,.kd-about .kd-pw[data-in]{transform:none}
