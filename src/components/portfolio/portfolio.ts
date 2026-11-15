@@ -182,25 +182,6 @@ export function initPortfolio() {
 		navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === st.nav));
 	}
 
-	// the statement is split into word spans so the generation pass can decode it word by word
-	if (stEl) {
-		const wrapWords = (node: Node) => {
-			Array.from(node.childNodes).forEach((c) => {
-				if (c.nodeType === Node.ELEMENT_NODE) return wrapWords(c);
-				if (c.nodeType !== Node.TEXT_NODE || !c.textContent?.trim()) return;
-				const frag = document.createDocumentFragment();
-				c.textContent.split(/(\s+)/).forEach((part) => {
-					if (!part) return;
-					if (/^\s+$/.test(part)) return frag.append(part);
-					const span = document.createElement('span');
-					span.textContent = part;
-					frag.append(span);
-				});
-				c.replaceWith(frag);
-			});
-		};
-		wrapWords(stEl);
-	}
 
 	/* ---------- clock ---------- */
 	function tick() {
