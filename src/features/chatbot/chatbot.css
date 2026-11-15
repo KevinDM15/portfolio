@@ -52,8 +52,9 @@
 .kc-row[data-role="user"] .kc-msg em { color: inherit; font-weight: 600; }
 .kc-msg a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .kc-msg ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; }
-.kc-msg li { display: grid; grid-template-columns: 12px minmax(0,1fr); gap: 6px; align-items: baseline; }
-.kc-msg li::before { content: ''; width: 5px; height: 5px; margin-top: 2px; background: var(--kc-cyan); transform: rotate(45deg); align-self: center; }
+/* the marker is positioned, not a grid cell: list items mix text nodes and inline tags */
+.kc-msg li { position: relative; padding-left: 14px; }
+.kc-msg li::before { content: ''; position: absolute; left: 1px; top: .6em; width: 5px; height: 5px; background: var(--kc-cyan); transform: rotate(45deg); }
 .kc-dots { display: flex; align-items: center; gap: 5px; height: 20px; }
 .kc-dots i { width: 6px; height: 6px; background: var(--kc-cyan); transform: rotate(45deg); animation: kc-fade 1.2s ease-in-out infinite; }
 .kc-dots i:nth-child(2) { animation-delay: .2s; }
