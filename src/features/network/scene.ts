@@ -12,7 +12,13 @@ export type Status = { hops: number; ms: number; text: string };
 export type NetworkOptions = { canvas: HTMLCanvasElement; nodes: NodeDef[]; reduce: boolean; onStatus: (s: Status) => void };
 
 type Pt = { x: number; y: number };
-const CYAN = 0x5ad3f3, AMBER = 0xf5b544, MAGENTA = 0xf0548f, VIOLET = 0x6d4cff, MUTED = 0x96a0c8, FG = 0xeef2ff, BG = 0x060a16;
+/* colours come from the page palette (CSS tokens on :root), so a palette swap recolours the map too */
+const tok = (name: string, fallback: number) => {
+	if (typeof document === 'undefined') return fallback;
+	const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+	return /^#[0-9a-f]{6}$/i.test(v) ? parseInt(v.slice(1), 16) : fallback;
+};
+const CYAN = tok('--cyan', 0x5ad3f3), AMBER = tok('--amber', 0xf5b544), MAGENTA = tok('--hot', 0xf0548f), VIOLET = tok('--violet', 0x6d4cff), MUTED = tok('--muted', 0x96a0c8), FG = tok('--fg', 0xeef2ff), BG = tok('--bg', 0x060a16);
 
 /*
  * an angular cable between two nodes: a 45° diagonal, a vertical middle segment and another 45°

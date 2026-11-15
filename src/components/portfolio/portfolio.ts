@@ -13,6 +13,11 @@ export function initPortfolio() {
 	const $$ = <T extends Element>(sel: string) => Array.from(root.querySelectorAll<T>(sel));
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+	/* ---------- palette under test: ?paleta=grafito|pizarra|ciruela|hielo (tokens live on :root) ---------- */
+	const paleta = new URLSearchParams(location.search).get('paleta');
+	if (paleta) document.documentElement.dataset.palette = paleta;
+	const tok = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
 	/* ---------- clock (Bogotá) ---------- */
 	const timeEls = $$<HTMLElement>('[data-time]');
 	const hh = $<SVGLineElement>('[data-k="hh"]'), mm = $<SVGLineElement>('[data-k="mm"]'), sec = $<SVGGElement>('[data-k="sec"]');
@@ -89,7 +94,7 @@ export function initPortfolio() {
 
 	/* ---------- the dot portrait inside the plate ---------- */
 	const cv = $<HTMLCanvasElement>('[data-k="cv"]');
-	if (cv) import('../../features/portrait/dots').then((m) => m.createDotPortrait({ canvas: cv, src: '/img/retrato.jpg', mask: '/img/retrato-mascara.png', ink: '#EEF2FF', hot: ['#5AD3F3', '#F5B544'], reduce })).catch(() => {});
+	if (cv) import('../../features/portrait/dots').then((m) => m.createDotPortrait({ canvas: cv, src: '/img/retrato.jpg', mask: '/img/retrato-mascara.png', ink: tok('--fg') || '#EEF2FF', hot: [tok('--cyan') || '#5AD3F3', tok('--amber') || '#F5B544'], reduce })).catch(() => {});
 
 	/* ---------- the portrait plate tilts toward the cursor ---------- */
 	const tilt = $<HTMLElement>('[data-tilt]');
@@ -124,7 +129,7 @@ export function initPortfolio() {
 	function tone() {
 		if (!bar || !paper) return;
 		const onPaper = paper.getBoundingClientRect().top < 40;
-		if (onPaper) bar.dataset.paper = '1'; else delete bar.dataset.paper;
+		if (onPaper) { bar.dataset.paper = '1'; root!.dataset.paper = '1'; } else { delete bar.dataset.paper; delete root!.dataset.paper; }
 		if (scrollY > 24) bar.dataset.scrolled = '1'; else delete bar.dataset.scrolled;
 	}
 	addEventListener('scroll', () => { route(); tone(); }, { passive: true });
