@@ -19,8 +19,8 @@ const CYAN = 0x5ad3f3, AMBER = 0xf5b544, MAGENTA = 0xf0548f, VIOLET = 0x6d4cff, 
  * diagonal; `bend` pushes the vertical segment sideways. When the nodes are too close vertically
  * for both diagonals the cable degrades to a single elbow at mid-height.
  */
-const angular = (p0: Pt, p1: Pt, bend: number): Pt[] => {
-	const X = (p0.x + p1.x) / 2 + bend;
+const angular = (p0: Pt, p1: Pt, bend: number, xAt?: number): Pt[] => {
+	const X = xAt ?? (p0.x + p1.x) / 2 + bend;
 	const d1 = Math.abs(X - p0.x), d2 = Math.abs(p1.x - X);
 	if (p0.y + d1 >= p1.y - d2) return [p0, { x: X, y: (p0.y + p1.y) / 2 }, p1];
 	return [p0, { x: X, y: p0.y + d1 }, { x: X, y: p1.y - d2 }, p1];
@@ -114,6 +114,8 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	};
 	let hops = 0, ms = 0;
 	const status = (text: string) => onStatus({ hops, ms, text });
+	// after the first hop the cable runs down the left gutter, beside the plates and always on screen
+	const gutterX = () => Math.max(10, (rNodes[1]?.doc.x ?? 40) - 34);
 
 	function markers(): Pt[] {
 		const a = rNodes[0], b = rNodes[1];
@@ -154,8 +156,8 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 			if (hop.state === 'open' && segT >= 0.62) resolve(hop.open, 'ruta automática');
 			if (hop.state !== 'done') return { x: a.doc.x, y: a.doc.y - scrollY };
 		}
-		const bend = seg === 0 ? hopBends()[hop.chosen] : seg % 2 ? -120 : 120;
-		const p = along(angular(a.doc, b.doc, bend), ease(segT));
+		const pts = seg === 0 ? angular(a.doc, b.doc, hopBends()[hop.chosen]) : angular(a.doc, b.doc, 0, gutterX());
+		const p = along(pts, ease(segT));
 		return { x: p.x, y: p.y - scrollY };
 	}
 
@@ -185,9 +187,9 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 			const a = rNodes[i], b = rNodes[i + 1];
 			const p0 = { x: a.doc.x, y: a.doc.y - scrollY }, p1 = { x: b.doc.x, y: b.doc.y - scrollY };
 			if (p1.y < -600 || p0.y > innerHeight + 600) continue;
-			const bends = i === 0 && hop.state !== 'done' ? hopBends() : [i === 0 ? hopBends()[hop.chosen] : i % 2 ? -120 : 120];
+			const bends = i === 0 && hop.state !== 'done' ? hopBends() : [i === 0 ? hopBends()[hop.chosen] : 0];
 			bends.forEach((bend) => {
-				const pts = angular(p0, p1, bend);
+				const pts = i === 0 ? angular(p0, p1, bend) : angular(p0, p1, 0, gutterX());
 				const live = b.lit || (i === seg && hop.state === 'done');
 				path(route, pts).stroke({ color: live ? CYAN : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.95 : 0.4, width: live ? 2.5 : 1.2 });
 				if (live) path(glow, pts).stroke({ color: CYAN, alpha: 0.7, width: 9 });
