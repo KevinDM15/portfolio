@@ -96,12 +96,21 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	/* ---------- route nodes anchored to the page ---------- */
 	type RNode = { def: NodeDef; doc: Pt; lit: boolean };
 	let rNodes: RNode[] = [];
+	const narrow = () => innerWidth < 760;
+	// document box of an element ignoring CSS transforms, so a section mid-reveal (rotated and shifted) still anchors where it will settle
+	function box(el: HTMLElement) {
+		let x = 0, y = 0;
+		for (let e: HTMLElement | null = el; e; e = e.offsetParent as HTMLElement | null) { x += e.offsetLeft; y += e.offsetTop; }
+		return { left: x, top: y, width: el.offsetWidth, height: el.offsetHeight };
+	}
 	function layout() {
 		rNodes = nodes.map((def, i) => {
-			const r = (innerWidth < 760 && def.narrow ? def.narrow : def.el).getBoundingClientRect();
+			const useNarrow = narrow() && !!def.narrow;
+			const r = box(useNarrow ? def.narrow! : def.el);
+			// on phones the first node sits in the hero's bottom padding, clear of the band that follows
 			const doc = def.anchor === 'bottom' || i === 0
-				? { x: r.left + r.width / 2, y: r.bottom + scrollY + 6 }
-				: { x: r.left + r.width / 2, y: r.top + scrollY + r.height / 2 };
+				? { x: r.left + r.width / 2, y: r.top + r.height + (useNarrow ? -44 : 6) }
+				: { x: r.left + r.width / 2, y: r.top + r.height / 2 };
 			return { def, doc, lit: rNodes[i]?.lit ?? false };
 		});
 	}
@@ -115,14 +124,22 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		const shift = a && b ? Math.max(-200, Math.min(200, (innerWidth / 2 - (a.doc.x + b.doc.x) / 2) / 0.75)) : 0;
 		return [-230, 0, 230].map((v) => v * k + shift);
 	};
+	// one candidate link of the first hop; on phones every link drops to a shared row of markers under the band of modules, then converges on the next node
+	const hopPath = (bend: number): Pt[] => {
+		const a = rNodes[0].doc, b = rNodes[1].doc;
+		if (!narrow()) return angular(a, b, bend);
+		const X = (a.x + b.x) / 2 + bend, row = a.y + (b.y - a.y) * 0.72;
+		return [a, { x: X, y: a.y + Math.abs(X - a.x) }, { x: X, y: row + 36 }, b];
+	};
+	const hopMarker = (pts: Pt[]): Pt => (narrow() ? { x: pts[2].x, y: pts[2].y - 36 } : mid(pts));
 	let hops = 0, ms = 0;
 	const status = (text: string) => onStatus({ hops, ms, text });
 	// after the first hop the cable runs in the gutters beside the plates, switching sides between sections:
 	// odd nodes (sobre mí, experiencia) anchor on the left, even ones (proyectos, contacto) on the right
 	const side = (i: number) => (i % 2 ? 'left' : 'right');
 	const gutter = (s: 'left' | 'right') => s === 'left'
-		? Math.max(10, (rNodes[1]?.doc.x ?? 40) - 34)
-		: Math.min(innerWidth - 10, (rNodes[2]?.doc.x ?? innerWidth - 40) + 34);
+		? Math.max(14, (rNodes[1]?.doc.x ?? 40) - 34)
+		: Math.min(innerWidth - 14, (rNodes[2]?.doc.x ?? innerWidth - 40) + 34);
 	function cable(i: number): Pt[] {
 		const a = rNodes[i].doc, b = rNodes[i + 1].doc;
 		const ga = gutter(side(i)), gb = gutter(side(i + 1));
@@ -134,7 +151,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	function markers(): Pt[] {
 		const a = rNodes[0], b = rNodes[1];
 		if (!a || !b) return [];
-		return hopBends().map((bend) => { const p = mid(angular(a.doc, b.doc, bend)); return { x: p.x, y: p.y - scrollY }; });
+		return hopBends().map((bend) => { const p = hopMarker(hopPath(bend)); return { x: p.x, y: p.y - scrollY }; });
 	}
 	addEventListener('pointerdown', (e) => {
 		if (hop.state !== 'open') return;
@@ -167,10 +184,11 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		// first hop: the packet waits at the node while the link is being chosen
 		if (seg === 0) {
 			if (hop.state === 'idle' && segT > 0.03) { hop.state = 'open'; status('elige el enlace abierto'); }
-			if (hop.state === 'open' && segT >= 0.62) resolve(hop.open, 'ruta automática');
+			// phones have only a short stretch between the hero and the next heading, so the link stays open almost until it
+			if (hop.state === 'open' && segT >= (narrow() ? 0.96 : 0.62)) resolve(hop.open, 'ruta automática');
 			if (hop.state !== 'done') return { x: a.doc.x, y: a.doc.y - scrollY };
 		}
-		const pts = seg === 0 ? angular(a.doc, b.doc, hopBends()[hop.chosen]) : cable(seg);
+		const pts = seg === 0 ? hopPath(hopBends()[hop.chosen]) : cable(seg);
 		const p = along(pts, ease(segT));
 		return { x: p.x, y: p.y - scrollY };
 	}
@@ -203,7 +221,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 			if (p1.y < -600 || p0.y > innerHeight + 600) continue;
 			const bends = i === 0 && hop.state !== 'done' ? hopBends() : [i === 0 ? hopBends()[hop.chosen] : 0];
 			bends.forEach((bend) => {
-				const pts = i === 0 ? angular(p0, p1, bend) : cable(i).map((p) => ({ x: p.x, y: p.y - scrollY }));
+				const pts = (i === 0 ? hopPath(bend) : cable(i)).map((p) => ({ x: p.x, y: p.y - scrollY }));
 				const live = b.lit || (i === seg && hop.state === 'done');
 				path(route, pts).stroke({ color: live ? CYAN : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.5 : 0.28, width: live ? 1.6 : 1 });
 				if (live) path(glow, pts).stroke({ color: CYAN, alpha: 0.4, width: 7 });
@@ -248,8 +266,11 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 
 	buildAmbient();
 	layout();
-	app.renderer.on('resize', () => { buildAmbient(); layout(); });
-	setInterval(layout, 1000);
+	// phone browsers fire resize whenever the address bar collapses: only a width change rebuilds the ambient net
+	let lastW = app.screen.width;
+	app.renderer.on('resize', () => { if (app.screen.width !== lastW) { lastW = app.screen.width; buildAmbient(); } layout(); });
+	// anchors move as fonts, images and reveals settle: re-measure every frame (five offset reads, no transform maths)
+	app.ticker.add(layout);
 	status('paquete listo · haz scroll');
 	app.ticker.add((tk) => draw(Math.min(0.05, tk.deltaMS / 1000)));
 	return { relayout: layout };
