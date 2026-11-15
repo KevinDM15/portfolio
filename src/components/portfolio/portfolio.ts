@@ -58,6 +58,10 @@ export function initPortfolio() {
 	const rio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.in = '1'; rio.unobserve(e.target); } }), { rootMargin: '0px 0px -14% 0px' });
 	$$<HTMLElement>('[data-reveal]').forEach((el) => rio.observe(el));
 
+	/* ---------- the dot portrait inside the plate ---------- */
+	const cv = $<HTMLCanvasElement>('[data-k="cv"]');
+	if (cv) import('../../features/portrait/dots').then((m) => m.createDotPortrait({ canvas: cv, src: '/img/retrato.jpg', mask: '/img/retrato-mascara.png', ink: '#EEF2FF', hot: ['#5AD3F3', '#F5B544'], reduce })).catch(() => {});
+
 	/* ---------- the portrait plate tilts toward the cursor ---------- */
 	const tilt = $<HTMLElement>('[data-tilt]');
 	if (tilt && !reduce && matchMedia('(hover: hover)').matches) {
