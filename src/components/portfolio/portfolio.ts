@@ -149,6 +149,13 @@ export function initPortfolio() {
 			canvas: net, reduce,
 			nodes: waypoints.map((el) => ({ id: el.dataset.node!, label: NODE_LABELS[el.dataset.node!] ?? el.dataset.node!, el })),
 			onStatus: (s) => { if (trace) trace.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${s.hops} ${s.hops === 1 ? 'salto' : 'saltos'} · ${s.ms} ms` }), ` ${s.text}`); },
+			// a spotlight switches on behind the section the star is reading from
+			onActive: (id) => {
+				const sel: Record<string, string> = { inicio: '.kd-hero', 'sobre-mi': '#sobre', proyectos: '#proyectos', experiencia: '#experiencia', contacto: '#contacto' };
+				$$<HTMLElement>('[data-foco]').forEach((el) => delete el.dataset.foco);
+				const el = sel[id] && $<HTMLElement>(sel[id]);
+				if (el) el.dataset.foco = '1';
+			},
 		})).catch(() => {});
 	}
 }

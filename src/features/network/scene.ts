@@ -9,7 +9,7 @@ import { Application, BlurFilter, Container, Graphics } from 'pixi.js';
 
 export type NodeDef = { id: string; label: string; el: HTMLElement };
 export type Status = { hops: number; ms: number; text: string };
-export type NetworkOptions = { canvas: HTMLCanvasElement; nodes: NodeDef[]; reduce: boolean; onStatus: (s: Status) => void };
+export type NetworkOptions = { canvas: HTMLCanvasElement; nodes: NodeDef[]; reduce: boolean; onStatus: (s: Status) => void; /** the waypoint the star is currently reading from */ onActive?: (id: string) => void };
 
 type Pt = { x: number; y: number };
 /* colours come from the page palette (CSS tokens on :root), so a palette swap recolours the map too */
@@ -23,7 +23,7 @@ const CYAN = tok('--cyan', 0x5ad3f3), AMBER = tok('--amber', 0xf5b544), VIOLET =
 /* a square rotated 45°, `h` is the half-diagonal */
 const diamond = (x: number, y: number, h: number): Pt[] => [{ x, y: y - h }, { x: x + h, y }, { x, y: y + h }, { x: x - h, y }];
 
-export async function createNetwork({ canvas, nodes, reduce, onStatus }: NetworkOptions) {
+export async function createNetwork({ canvas, nodes, reduce, onStatus, onActive }: NetworkOptions) {
 	const app = new Application();
 	await app.init({ canvas, resizeTo: window, backgroundAlpha: 0, antialias: true, resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true });
 
@@ -91,7 +91,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 
 	/* ---------- the star ---------- */
 	const pos: Pt = { x: 0, y: 0 };
-	let seg = 0, segT = 0, first = true, landed = 0;
+	let seg = 0, segT = 0, first = true, landed = 0, active = -1;
 	const trail: Pt[] = [];
 	let clock = 0;
 	const small = () => innerWidth < 760;
@@ -135,6 +135,11 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		const t = target();
 		if (first || reduce) { pos.x = t.x; pos.y = t.y; first = false; }
 		else { pos.x += (t.x - pos.x) * Math.min(1, dt * 7); pos.y += (t.y - pos.y) * Math.min(1, dt * 7); }
+		// the section being read: the waypoint the star left last, or the destination once it lands
+		if (rNodes.length > 1) {
+			const a = seg === rNodes.length - 2 && segT >= 0.985 ? rNodes.length - 1 : seg;
+			if (a !== active) { active = a; onActive?.(rNodes[a].def.id); }
+		}
 
 		route.clear();
 		glow.clear();
