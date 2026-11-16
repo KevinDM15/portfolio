@@ -41,7 +41,7 @@ React, Next.js, React Native, TypeScript, NestJS, Go, Python, PostgreSQL, AWS, G
 
 ### Proyectos
 
-Todavía no hay casos de estudio publicados. Mientras tanto se muestra una lista "Construyendo" con repositorios reales (por ahora, este portafolio) y una fila pendiente: "El primer caso de estudio está en camino." Los datos viven en el array `building` del componente.
+Todavía no hay casos de estudio publicados. La sección es un libro mayor de trabajo entregado: cinco filas (proyecto, para quién, stack, año) que se despliegan con lo que hizo Kevin, cuatro de sus empleos y este portafolio en código abierto. Los datos viven en el array `work` de `data.ts`.
 
 ### Experiencia (2018 — hoy)
 

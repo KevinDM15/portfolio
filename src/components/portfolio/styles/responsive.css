@@ -51,8 +51,32 @@
 	.kd-tl {
 		margin-right: 24px;
 	}
-	.kd-building ul {
-		grid-template-columns: minmax(0, 1fr);
+	/* the work ledger stacks each row: title, client, stack, year, with the chevron beside the title */
+	.kd-work-cols {
+		display: none;
+	}
+	[data-kd] .kd-work-head {
+		grid-template-columns: minmax(0, 1fr) 24px;
+		gap: 6px 12px;
+	}
+	.kd-work-head .title,
+	.kd-work-head .client,
+	.kd-work-head .stack,
+	.kd-work-head .when {
+		grid-column: 1;
+	}
+	.kd-work-head .chev {
+		grid-row: 1;
+		grid-column: 2;
+	}
+	[data-kd] .kd-work-head:hover,
+	[data-kd] .kd-work-head[aria-expanded="true"] {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.kd-work-body {
+		padding-left: 0;
+		padding-right: 0;
 	}
 	.kd-extra {
 		grid-template-columns: minmax(0, 1fr);
@@ -219,6 +243,15 @@
 }
 
 @media (max-width:600px) {
+	/* section heads wrap: the readout drops under the title */
+	.kd-head {
+		flex-wrap: wrap;
+		row-gap: 10px;
+	}
+	.kd-head small {
+		flex-basis: 100%;
+		margin-left: 0;
+	}
 	.kd-readouts {
 		grid-template-columns: minmax(0, 1fr);
 		gap: 14px;
@@ -251,7 +284,7 @@
 		opacity: 1;
 		transition: none;
 	}
-	.kd-orbit .halo,.kd-band ul,.kd-band .meta i,.kd-building .wait,.kd-waves path {
+	.kd-orbit .halo,.kd-band ul,.kd-band .meta i,.kd-waves path {
 		animation: none;
 	}
 	.kd-portrait-w {

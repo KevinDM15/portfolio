@@ -55,9 +55,13 @@ export const readouts = [
 	{ figure: 'Yo + IA', text: 'Personas deciden, agentes ejecutan' },
 ];
 
-/** what is being built right now, while the first case study is on its way */
-export const building = [
-	{ name: 'Este portafolio', text: 'La landing como mapa de red con PixiJS sobre Astro, y un asistente que responde con el CV como contexto.', url: REPO, meta: 'TypeScript · Astro' },
+/** the work ledger: what was built, for whom, with what and when; each row opens into what I did */
+export const work = [
+	{ title: 'Migración de módulos legacy a React y Python serverless', client: companies.cuc, stack: ['React', 'Vite', 'Python'], when: '2026', text: 'Aplicaciones web con Vite y React sobre una plataforma universitaria en producción. Diseño la arquitectura y el plan técnico de cada módulo y migro de forma progresiva código en PHP, JavaScript y jQuery a React en el frontend y Python serverless en el backend, sin detener el servicio.' },
+	{ title: 'Aplicaciones web y móviles multiplataforma', client: companies.elsol, stack: ['Next.js', 'React', 'React Native'], when: '2026', text: 'Interfaces para web y móvil que comparten lógica y priorizan rendimiento, usabilidad y consistencia visual. Arquitecturas y planes técnicos definidos antes de construir, en un equipo que trabaja con Scrum.' },
+	{ title: 'APIs con arquitectura hexagonal e integración de LLMs', client: companies.rocket, stack: ['NestJS', 'PostgreSQL', 'AWS', 'LLMs'], when: '2023 — 2026', text: 'APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, modelos de lenguaje integrados por API para automatizar procesos, y componentes reutilizables con React, MaterialUI, Redux y Next.js que hicieron escalar las aplicaciones del cliente.' },
+	{ title: 'Servicios backend y funciones serverless en Go', client: companies.wawandco, stack: ['Go', 'GCP', 'Firestore'], when: '2020 — 2023', text: 'Servicios en Go con SOLID, Clean Code y MVC, funciones serverless en GCP y una reducción sostenida de deuda técnica, con librerías migradas a versiones actuales.' },
+	{ title: 'Este portafolio, en código abierto', client: { name: 'kevindev.co', short: 'KD', url: REPO }, stack: ['Astro', 'PixiJS', 'TypeScript'], when: '2026', text: 'La landing como mapa de red con PixiJS sobre Astro, con un asistente que responde con el CV como contexto. Diseñado y construido junto a agentes de IA bajo especificaciones con criterios comprobables.', repo: REPO },
 ];
 
 export const jobs = [

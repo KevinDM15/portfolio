@@ -1,30 +1,31 @@
 ---
-/* proyectos: what is being built, with its code in the open, and the first case study waiting at the end */
+/* proyectos: the work as a ledger of rows (what, for whom, with what, when); each row opens into what I did */
 import ArrowUpRight from '../../icons/ArrowUpRight.astro';
-import { building } from '../data';
+import { work } from '../data';
 ---
 
 <section id="proyectos" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>construyendo</small></div>
-	<div class="kd-pw kd-building" data-reveal>
-		<div class="kd-plate">
-			<p class="kd-building-lede">Lo que tengo abierto ahora, con su código a la vista. El primer caso de estudio con contexto, decisiones y resultados está en camino.</p>
-			<ul>
-				{building.map((b) => (
-					<li>
-						<a href={b.url} target="_blank" rel="noopener">
-							<span class="txt"><b>{b.name}</b><p>{b.text}</p><small>{b.meta}</small></span>
-							<i class="ext"><ArrowUpRight /></i>
-						</a>
-					</li>
-				))}
-				<li class="pending">
-					<div>
-						<span class="txt"><b>Primer caso de estudio</b><p>Un proyecto publicado con su contexto, decisiones y resultados. Aparecerá aquí, conectado a esta ruta.</p><small>en construcción</small></span>
-						<i class="wait" aria-hidden="true"></i>
+	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>trabajo entregado</small></div>
+	<p class="kd-work-lede">Lo que he construido para empresas y clientes, y lo que mantengo en código abierto. Los casos de estudio detallados están en camino.</p>
+	<div class="kd-work" data-k="work">
+		<div class="kd-work-cols" aria-hidden="true"><span>Proyecto</span><span>Para</span><span>Stack</span><span>Año</span></div>
+		{work.map((w, i) => (
+			<article class="kd-work-row">
+				<button type="button" class="kd-work-head" data-work aria-expanded="false" aria-controls={`kd-work-${i}`}>
+					<span class="title">{w.title}</span>
+					<span class="client">{w.client.name}</span>
+					<span class="stack">{w.stack.join(' · ')}</span>
+					<span class="when">{w.when}</span>
+					<i class="chev" aria-hidden="true"></i>
+				</button>
+				<div class="kd-work-body" id={`kd-work-${i}`} hidden>
+					<p>{w.text}</p>
+					<div class="links">
+						<a href={w.client.url} target="_blank" rel="noopener">{w.client.name}<i class="ext"><ArrowUpRight /></i></a>
+						{w.repo && <a href={w.repo} target="_blank" rel="noopener">Código en GitHub<i class="ext"><ArrowUpRight /></i></a>}
 					</div>
-				</li>
-			</ul>
-		</div>
+				</div>
+			</article>
+		))}
 	</div>
 </section>

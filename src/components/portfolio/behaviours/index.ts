@@ -6,13 +6,14 @@ import { copyEmail } from './copy-email';
 import { contactForm } from './contact-form';
 import { hud } from './hud';
 import { clamp } from './clamp';
+import { work } from './work';
 import { orbit } from './orbit';
 import { reveal } from './reveal';
 import { portrait } from './portrait';
 import { header } from './header';
 import { network } from './network';
 
-const behaviours: Behaviour[] = [clock, copyEmail, contactForm, hud, clamp, orbit, reveal, portrait, header, network];
+const behaviours: Behaviour[] = [clock, copyEmail, contactForm, hud, clamp, work, orbit, reveal, portrait, header, network];
 
 export function initPortfolio() {
 	const root = document.querySelector<HTMLElement>('[data-kd]');
