@@ -1,0 +1,305 @@
+/* ---------- proyectos: the work ledger ---------- */
+.kd-work-lede {
+	margin: 0 0 clamp(28px, 4vw, 48px);
+	max-width: 44ch;
+	font-size: clamp(20px, 2vw, 30px);
+	line-height: 1.3;
+	color: var(--fg);
+}
+
+/* the ledger beside its preview plate */
+.kd-work-wrap {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: start;
+}
+
+.kd-work {
+	border-top: 1px solid var(--line-strong);
+}
+
+/* the shared grid of the column labels and every row: title, client, stack, year, chevron */
+.kd-work-cols,
+[data-kd] .kd-work-head {
+	display: grid;
+	grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) 90px 28px;
+	gap: clamp(16px, 2.5vw, 40px);
+	align-items: center;
+	width: 100%;
+	text-align: left;
+}
+
+.kd-work-cols {
+	padding: 14px 0 12px;
+	font: 400 12px/1 var(--mono);
+	color: var(--muted);
+	border-bottom: 1px solid var(--line);
+}
+
+.kd-work-row {
+	border-bottom: 1px solid var(--line-strong);
+}
+
+[data-kd] .kd-work-head {
+	padding: clamp(22px, 2.6vw, 34px) 0;
+	transition: padding .3s, color .3s;
+}
+
+[data-kd] .kd-work-head:hover,
+[data-kd] .kd-work-head[aria-expanded="true"] {
+	padding-left: 12px;
+	padding-right: 4px;
+}
+
+.kd-work-head .title {
+	font: 600 clamp(20px, 1.9vw, 28px)/1.12 var(--display);
+	letter-spacing: -.025em;
+	color: var(--fg);
+	transition: color .3s;
+}
+
+.kd-work-head:hover .title,
+.kd-work-head[aria-expanded="true"] .title {
+	color: var(--amber);
+}
+
+.kd-work-head .client {
+	font: 400 clamp(15px, 1.2vw, 17px)/1.3 var(--text);
+	color: var(--fg);
+}
+
+.kd-work-head .client small {
+	display: block;
+	margin-top: 4px;
+	font: 400 12px/1.5 var(--mono);
+	color: var(--muted);
+}
+
+.kd-work-head .when {
+	font: 400 13px/1.5 var(--mono);
+	color: var(--muted);
+}
+
+/* the chevron: a diamond edge that turns when the row is open */
+.kd-work-head .chev {
+	justify-self: end;
+	width: 9px;
+	height: 9px;
+	border-right: 1.5px solid var(--muted);
+	border-bottom: 1.5px solid var(--muted);
+	transform: rotate(45deg) translateY(-3px);
+	transition: transform .3s, border-color .3s;
+}
+
+.kd-work-head[aria-expanded="true"] .chev {
+	transform: rotate(225deg) translateY(-2px);
+	border-color: var(--amber);
+}
+
+.kd-work-body {
+	padding: 0 12px clamp(26px, 3vw, 38px);
+	animation: kd-unfold .35s cubic-bezier(.2, .8, .2, 1);
+}
+
+.kd-work-body p {
+	margin: 0 0 18px;
+	max-width: 64ch;
+	font-size: clamp(16px, 1.3vw, 19px);
+	line-height: 1.6;
+	color: var(--muted);
+}
+
+.kd-work-body .links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 28px;
+}
+
+.kd-work-body .links a {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font: 500 15px/1 var(--text);
+	color: var(--fg);
+	text-decoration: none;
+}
+
+.kd-work-body .ext,
+.kd-job .ext {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+	background: color-mix(in srgb, var(--fg) 8%, transparent);
+	color: var(--cyan);
+	transition: background .25s, color .25s;
+}
+
+.kd-work-body .ext svg,
+.kd-job .ext svg {
+	width: 15px;
+	height: 15px;
+}
+
+.kd-work-body .links a:hover .ext,
+.kd-job h3 a:hover .ext {
+	background: var(--cyan);
+	color: var(--bg);
+}
+
+@keyframes kd-unfold {
+	from {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* the schematic: boxes and links drawn from data, in the colours of the map */
+.kd-schematic {
+	margin: 0;
+}
+
+.kd-schematic svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.kd-schematic .node polygon {
+	fill: color-mix(in srgb, var(--fg) 6%, transparent);
+	stroke: color-mix(in srgb, var(--cyan) 55%, transparent);
+	stroke-width: 1.2;
+}
+
+.kd-schematic .node.action polygon {
+	stroke: var(--amber);
+	fill: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+
+.kd-schematic .node.muted polygon {
+	stroke: color-mix(in srgb, var(--muted) 60%, transparent);
+	stroke-dasharray: 4 5;
+}
+
+.kd-schematic .label {
+	font: 500 14px var(--text);
+	fill: var(--fg);
+}
+
+.kd-schematic .sub {
+	font: 400 11px var(--mono);
+	fill: var(--muted);
+}
+
+.kd-schematic .link path {
+	fill: none;
+	stroke: color-mix(in srgb, var(--cyan) 50%, transparent);
+	stroke-width: 1.2;
+}
+
+.kd-schematic .link rect {
+	fill: var(--cyan);
+}
+
+.kd-schematic .link text {
+	font: 400 10px var(--mono);
+	fill: var(--muted);
+	text-anchor: middle;
+}
+
+.kd-schematic figcaption {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 18px;
+	font: 400 12px/1 var(--mono);
+	color: var(--muted);
+}
+
+.kd-schematic figcaption i {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+	background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+
+.kd-schematic figcaption img {
+	width: 16px;
+	height: 16px;
+	filter: brightness(0) invert(1);
+	opacity: .9;
+}
+
+.kd-schematic figcaption span {
+	margin-left: 8px;
+}
+
+/* the preview plate: sticky beside the ledger, one slide per row, the active one visible */
+.kd-work-preview {
+	position: sticky;
+	top: 110px;
+}
+
+.kd-work-preview .kd-plate {
+	padding: clamp(22px, 2.4vw, 32px);
+	display: grid;
+}
+
+.kd-work-slide {
+	grid-area: 1 / 1;
+	opacity: 0;
+	transform: translateY(8px);
+	transition: opacity .35s, transform .35s;
+	pointer-events: none;
+}
+
+.kd-work-slide[data-on] {
+	opacity: 1;
+	transform: none;
+}
+
+/* on desktop the schematic lives on the plate; inside the row it appears only on phones */
+.kd-work-inline {
+	display: none;
+}
+
+/* the pending row: the first case study, not openable yet, with a pulsing diamond in place of the chevron */
+.kd-work-row.pending .kd-work-head {
+	cursor: default;
+}
+
+.kd-work-row.pending .kd-work-head:hover {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.kd-work-row.pending .title {
+	color: var(--muted);
+}
+
+.kd-work-row.pending .kd-work-head:hover .title {
+	color: var(--muted);
+}
+
+.kd-work-row.pending .client {
+	color: var(--amber);
+}
+
+.kd-work-row.pending .wait {
+	justify-self: end;
+	width: 10px;
+	height: 10px;
+	box-shadow: inset 0 0 0 1.5px var(--amber);
+	transform: rotate(45deg);
+	animation: kd-pulse 2.4s ease-in-out infinite;
+}

@@ -1,0 +1,208 @@
+/* ---------- contacto: a statement, a form of lines and the details as plain text ---------- */
+.kd-contact {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+	gap: clamp(32px, 6vw, 96px);
+	align-items: start;
+}
+
+.kd-contact h2 {
+	font-size: clamp(44px, 6.4vw, 100px);
+	line-height: .98;
+	text-wrap: balance;
+}
+
+.kd-contact h2 b {
+	display: block;
+	font-weight: 400;
+	color: var(--muted);
+}
+
+.kd-contact-lede {
+	margin: 26px 0 0;
+	max-width: 40ch;
+	color: var(--muted);
+	font-size: clamp(18px, 1.5vw, 22px);
+}
+
+.kd-form {
+	margin: 0;
+}
+
+.kd-field {
+	display: grid;
+	grid-template-columns: 150px minmax(0, 1fr);
+	gap: 16px;
+	align-items: baseline;
+	padding: 26px 0 18px;
+	border-bottom: 1px solid var(--line-strong);
+	transition: border-color .3s;
+}
+
+.kd-contact-lede+.kd-field {
+	margin-top: 36px;
+	border-top: 1px solid var(--line-strong);
+}
+
+.kd-field span {
+	font: 400 13px/1.4 var(--mono);
+	color: var(--muted);
+}
+
+[data-kd] .kd-field input,[data-kd] .kd-field textarea {
+	width: 100%;
+	border: 0;
+	background: none;
+	padding: 0;
+	margin: 0;
+	font: 400 clamp(20px, 2vw, 28px)/1.35 var(--text);
+	color: var(--fg);
+	resize: none;
+	outline: none;
+	border-radius: 0;
+}
+
+[data-kd] .kd-field ::placeholder {
+	color: color-mix(in srgb, var(--muted) 65%, transparent);
+}
+
+.kd-field:focus-within {
+	border-color: var(--fg);
+}
+
+.kd-form-foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px 24px;
+	margin-top: 30px;
+}
+
+[data-kd] .kd-send {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	padding: 13px 14px 13px 28px;
+}
+
+.kd-send .ext {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+	background: var(--on-accent);
+	color: var(--amber);
+}
+
+.kd-send .ext svg {
+	width: 15px;
+	height: 15px;
+}
+
+.kd-form-foot small {
+	font: 400 12px/1.5 var(--mono);
+	color: var(--muted);
+}
+
+.kd-details {
+	display: grid;
+	gap: 28px;
+	padding-top: 14px;
+}
+
+.kd-details>div {
+	display: grid;
+	gap: 7px;
+	justify-items: start;
+}
+
+.kd-details small {
+	font: 400 12px/1 var(--mono);
+	color: var(--muted);
+}
+
+.kd-details a,.kd-details b,.kd-details .txt {
+	font: 500 clamp(17px, 1.4vw, 20px)/1.3 var(--text);
+	color: var(--fg);
+	text-decoration: none;
+}
+
+.kd-details a:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.kd-details .row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 20px;
+}
+
+[data-kd] .kd-copy {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	text-align: left;
+}
+
+.kd-copy .act {
+	display: grid;
+	place-items: center;
+	width: 22px;
+	height: 22px;
+	color: var(--muted);
+}
+
+.kd-copy .act svg {
+	width: 16px;
+	height: 16px;
+	grid-area: 1/1;
+	transition: opacity .25s, transform .25s;
+}
+
+.kd-copy .act .ok {
+	opacity: 0;
+	transform: scale(.6);
+	color: var(--cyan);
+}
+
+.kd-copy[data-done] .act .cp {
+	opacity: 0;
+	transform: scale(.6);
+}
+
+.kd-copy[data-done] .act .ok {
+	opacity: 1;
+	transform: none;
+}
+
+.kd-details em {
+	font: 400 12px/1 var(--mono);
+	font-style: normal;
+	color: var(--muted);
+}
+
+.kd-clock {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--cyan);
+}
+
+.kd-clock svg {
+	width: 26px;
+	height: 26px;
+	stroke: currentColor;
+	fill: currentColor;
+}
+
+.kd-clock b {
+	font: 500 clamp(17px, 1.4vw, 20px)/1 var(--text);
+	color: var(--fg);
+}
+
+.kd-clock span {
+	font: 400 12px/1 var(--mono);
+	color: var(--muted);
+}

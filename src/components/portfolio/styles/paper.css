@@ -1,0 +1,97 @@
+/* ---------- paper: contact and footer close the page on light, behind rolling waves ---------- */
+.kd-paper {
+	position: relative;
+	margin-top: clamp(120px, 16vw, 220px);
+	--bg: var(--paper-bg);
+	--surface: var(--paper-surface);
+	--fg: var(--paper-fg);
+	--muted: var(--paper-muted);
+	--cyan: var(--paper-accent);
+	--amber: var(--paper-action);
+	--on-accent: var(--paper-on-action);
+	--line: color-mix(in srgb, var(--paper-fg) 10%, transparent);
+	--line-strong: color-mix(in srgb, var(--paper-fg) 22%, transparent);
+	background: var(--bg);
+	color: var(--fg);
+}
+
+.kd-waves {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 100%;
+	height: clamp(70px, 10vw, 140px);
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.kd-waves svg {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 200%;
+	height: 100%;
+}
+
+.kd-waves .w1 {
+	fill: color-mix(in srgb, var(--paper-bg) 10%, transparent);
+	animation: kd-wave 30s linear infinite;
+}
+
+.kd-waves path {
+	transform-box: fill-box;
+}
+
+.kd-waves .w2 {
+	fill: color-mix(in srgb, var(--paper-bg) 28%, transparent);
+	animation: kd-wave 21s linear infinite reverse;
+}
+
+.kd-waves .w3 {
+	fill: var(--paper-bg);
+	animation: kd-wave 15s linear infinite;
+}
+
+@keyframes kd-wave {
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+.kd-paper .kd-sec {
+	padding-top: clamp(60px, 8vw, 110px);
+	padding-bottom: clamp(40px, 6vw, 80px);
+}
+
+.kd-paper .kd-anchor {
+	background: var(--fg);
+	box-shadow: none;
+}
+
+/* the last waypoint sits on the crest of the waves, in the same column, so the landing stays in view above the paper */
+.kd-waves .kd-anchor {
+	left: calc(max(0px, (100% - 1240px) / 2) + var(--gx) + max(-30px, 10px - var(--gx)));
+	top: 18%;
+	margin-top: 0;
+	background: var(--cyan);
+	box-shadow: 0 0 10px color-mix(in srgb, var(--cyan) 50%, transparent);
+}
+
+.kd-paper .kd-top-fade {
+	display: none;
+}
+
+.kd-paper .kd-clock {
+	color: var(--cyan);
+}
+
+.kd-paper .kd-up {
+	background: var(--surface);
+	box-shadow: none;
+	color: var(--fg);
+	margin-right: 84px;
+}
+
+.kd-paper .kd-foot small {
+	color: var(--muted);
+}

@@ -1,0 +1,153 @@
+/* ---------- top: the mark, the route, the traceroute ---------- */
+.kd-top {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 18px var(--gx) 26px;
+	pointer-events: none;
+	background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 92%, transparent) 30%, color-mix(in srgb, var(--bg) 0%, transparent));
+}
+
+.kd-top>* {
+	pointer-events: auto;
+}
+
+/* once the page scrolls the bar becomes a frosted strip so it reads over any content */
+.kd-top {
+	transition: background .35s, padding .35s, box-shadow .35s;
+}
+
+.kd-top[data-scrolled] {
+	padding: 14px var(--gx);
+	background: color-mix(in srgb, var(--bg) 72%, transparent);
+	-webkit-backdrop-filter: blur(16px) saturate(1.3);
+	backdrop-filter: blur(16px) saturate(1.3);
+	box-shadow: 0 1px 0 color-mix(in srgb, var(--fg) 8%, transparent), 0 12px 40px -24px rgba(0, 0, 0, .8);
+}
+
+.kd-top[data-paper] {
+	background: linear-gradient(180deg, color-mix(in srgb, var(--paper-bg) 94%, transparent) 30%, color-mix(in srgb, var(--paper-bg) 0%, transparent));
+	color: var(--paper-fg);
+}
+
+.kd-top[data-paper][data-scrolled] {
+	background: color-mix(in srgb, var(--paper-bg) 80%, transparent);
+	box-shadow: 0 1px 0 color-mix(in srgb, var(--paper-fg) 8%, transparent), 0 12px 40px -28px color-mix(in srgb, var(--paper-fg) 35%, transparent);
+}
+
+.kd-top[data-paper] .kd-route a:not([data-lit]):not([aria-current]) i {
+	background: var(--paper-bg);
+}
+
+.kd-top[data-paper] .kd-route a span {
+	color: var(--paper-muted);
+}
+
+.kd-top[data-paper] .kd-route a[aria-current] span {
+	color: var(--paper-fg);
+}
+
+.kd-top[data-paper] .kd-trace {
+	color: var(--paper-accent);
+}
+
+.kd-top[data-paper] .kd-trace b {
+	color: var(--paper-muted);
+}
+
+.kd-mark {
+	font: 600 16px/1 var(--display);
+	letter-spacing: -.01em;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+/* the route: every section as a label with its waypoint; passed ones lit, the current one amber; a thin progress line runs along the top */
+.kd-route {
+	display: flex;
+	align-items: center;
+	gap: clamp(14px, 2.2vw, 30px);
+	padding: 4px 0;
+	max-width: 100%;
+	overflow-x: auto;
+	scrollbar-width: none;
+}
+
+.kd-route::-webkit-scrollbar {
+	display: none;
+}
+
+.kd-top::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 2px;
+	width: calc(var(--progress, 0) * 100%);
+	background: var(--amber);
+	transition: width .12s linear;
+}
+
+.kd-route a {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	flex: none;
+	text-decoration: none;
+	font: 500 13px/1 var(--text);
+	color: var(--muted);
+	transition: color .25s;
+}
+
+.kd-route a i {
+	display: block;
+	width: 8px;
+	height: 8px;
+	background: var(--bg);
+	box-shadow: inset 0 0 0 1.5px var(--muted);
+	transform: rotate(45deg);
+	transition: background .3s, box-shadow .3s;
+}
+
+.kd-route a span {
+	white-space: nowrap;
+}
+
+.kd-route a:hover,.kd-route a[aria-current] {
+	color: var(--fg);
+}
+
+.kd-route a[data-lit] i {
+	background: var(--cyan);
+	box-shadow: none;
+}
+
+.kd-route a[aria-current] i {
+	background: var(--amber);
+	box-shadow: 0 0 8px color-mix(in srgb, var(--amber) 60%, transparent);
+}
+
+.kd-menu-foot,.kd-burger {
+	display: none;
+}
+
+.kd-trace {
+	min-width: 0;
+	max-width: 46ch;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font: 400 12px/1 var(--mono);
+	color: var(--cyan);
+}
+
+.kd-trace b {
+	font-weight: 400;
+	color: var(--muted);
+}

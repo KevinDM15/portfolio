@@ -1,0 +1,17 @@
+---
+/* the stack as a band of network modules sliding by; the list is doubled so the loop has no seam */
+import { tech } from '../data';
+const loop = [...tech, ...tech];
+---
+
+<div class="kd-band" aria-label="Tecnologías">
+	<ul>
+		{loop.map((x, i) => (
+			<li style={`--d:${(i * 0.37) % 2.4}s`}>
+				<span class="mark"><img src={`/svg/tech/${x.icon}.svg`} alt="" width="36" height="36" /></span>
+				<span class="txt"><b>{x.name}</b><small>{x.kind}</small></span>
+				<span class="meta"><i aria-hidden="true"></i><em aria-hidden="true">{x.id}</em></span>
+			</li>
+		))}
+	</ul>
+</div>

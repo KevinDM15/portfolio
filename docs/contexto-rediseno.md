@@ -23,7 +23,7 @@ Una sola landing que un reclutador o cliente pueda leer en dos minutos y que al 
 - Frase actual: "Construyo software que el equipo puede mantener. Hoy lo hago con agentes de IA." (se puede reescribir).
 - Descripción: "Desarrollador full-stack en Barranquilla. APIs, apps web y móviles, con una arquitectura que aguanta el paso del tiempo."
 - Llamado a la acción: escribirle (lleva a contacto).
-- Estado: disponible para nuevos proyectos.
+- Estado: (la línea "Disponible para nuevos proyectos" se retiró del hero en nov 2026).
 - Retrato: `public/img/retrato.jpg` (busto, fondo de interior). Existe una máscara de la silueta en `public/img/retrato-mascara.png` (blanco = persona) por si se quiere recortar.
 
 ### Tecnologías
@@ -41,7 +41,7 @@ React, Next.js, React Native, TypeScript, NestJS, Go, Python, PostgreSQL, AWS, G
 
 ### Proyectos
 
-Todavía no hay casos de estudio publicados. Mostrar un estado de "próximamente" honesto: "El primer caso de estudio está en camino." Hay un flag `showProjects` en el componente para activar la lista cuando exista.
+Todavía no hay casos de estudio publicados. La sección es un libro mayor con lo que se puede mostrar en público: este portafolio en código abierto (fila desplegable) y una fila pendiente para el primer caso de estudio; el trabajo para empresas es privado y queda contado en Experiencia. Cada proyecto lleva un esquema de arquitectura dibujado desde datos (cajas y enlaces, `Schematic.astro`) en una placa fija junto al libro mayor en escritorio y dentro de la fila en móvil. Los datos viven en el array `work` de `data.ts`.
 
 ### Experiencia (2018 — hoy)
 
@@ -80,11 +80,11 @@ Asistente flotante que responde preguntas sobre Kevin con su CV como contexto. Y
 - Astro 6 (SSG, adaptador Vercel), pnpm obligatorio, TypeScript estricto.
 - React 19 solo como isla para el chatbot (`src/components/islands/ChatBot.tsx`, lógica en `src/features/chatbot/`: hooks, componentes, API, estilos en `chatbot.css`). Lee los tokens de color del contenedor raíz `[data-kd]`: `--bg`, `--surface`, `--fg`, `--muted`, `--line`, `--line-strong`, `--accent`.
 - Endpoint `src/pages/api/chat.ts` contra Groq (modelo `openai/gpt-oss-20b`); la clave vive en `.env` / `.env.local`, nunca en el repo.
-- La landing vive en `src/components/portfolio/` (`Portfolio.astro`, `portfolio.css`, `portfolio.ts`) y se monta desde `src/pages/index.astro`. Es libre de reescribirse por completo.
-- Hay una escena WebGL con PixiJS 8 en `src/features/network/scene.ts` (mapa de red detrás del contenido, cables entre secciones, un paquete que avanza con el scroll y un pequeño reto entre inicio y sobre mí). Se puede reutilizar, reducir o eliminar; no es un requisito del rediseño.
-- GSAP y UnoCSS están instalados. UnoCSS inyecta un reset y utilidades globales: nombres de clase como `ring`, `where` o `row` pueden recibir estilos inesperados; usar nombres con prefijo propio.
-- Fuentes autoalojadas en `public/fonts/` (Geist, Geist Mono, Barlow Condensed, Instrument Serif, DM Mono, Reenie Beanie). Se pueden cambiar; las fuentes de Google se descargan como woff2 latin y se sirven desde ahí.
-- Otros assets: `public/svg/favicon.svg`, `public/svg/textura-grano.svg`.
+- La landing vive en `src/components/portfolio/`: `Portfolio.astro` compone, `data.ts` tiene el contenido, `sections/` una pieza por sección, `behaviours/` un módulo por comportamiento y `styles/` una hoja por sección. Los iconos son componentes en `src/components/icons/`. Se monta desde `src/pages/index.astro`. Es libre de reescribirse por completo.
+- Hay una escena WebGL con PixiJS 8 en `src/features/network/scene.ts` (mapa de red detrás del contenido y una estrella que baja con el scroll por la columna de anclas, del hero al cierre, donde aterriza). Se puede reutilizar, reducir o eliminar; no es un requisito del rediseño.
+- UnoCSS está instalado solo por su reset. Inyecta un reset y utilidades globales: nombres de clase como `ring`, `where` o `row` pueden recibir estilos inesperados; usar nombres con prefijo propio.
+- Fuentes autoalojadas en `public/fonts/` (Geist y Geist Mono). Se pueden cambiar; las fuentes de Google se descargan como woff2 latin y se sirven desde ahí.
+- Otros assets: `public/svg/favicon.svg`, los iconos de tecnologías en `public/svg/tech/` y el CV en `public/CV_KEVIN_ES.pdf`.
 - Verificación habitual: `pnpm build` y revisión con Playwright a 1440 y 390 de ancho. No hay pruebas unitarias.
 
 ## Reglas y preferencias ya decididas
@@ -97,7 +97,7 @@ Estas reglas vienen de decisiones explícitas de Kevin y aplican a cualquier red
 - Nada de emojis; iconos en SVG.
 - Copy en español neutro, sin regionalismos.
 - Profundidad y materia: Kevin ha pedido que no se vea plano ni "todo cuadrado", pero tampoco redondeado por defecto. Las últimas iteraciones que le gustaron tenían contraste fuerte, un cierre de página en claro con olas, iconos en los listados y un registro "profesional de desarrollador".
-- Colores vivos pero contenidos; en el último estado le gustaron el azul noche como base, cian para la red, ámbar para acciones y un bloque claro al final.
+- Colores vivos pero contenidos. Kevin descartó el azul noche con cian por verse como "diseño genérico de IA". Paleta elegida (nov 2026): "hielo", gris casi negro (#101214) de base, blanco hielo (#DDE6EA) para la red y las anclas, amarillo (#FFD166) para acciones, y un bloque claro gris muy suave (#F4F6F7) al final. Todo vive en tokens en `:root` de portfolio.css.
 - Solo tema oscuro de base en la última etapa; un tema claro no es obligatorio.
 - Móvil con un dedo: nada que dependa de teclado o precisión.
 - Reclutadores primero: la información tiene que poder leerse sin jugar ni descubrir nada.

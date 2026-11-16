@@ -1,0 +1,197 @@
+/* ---------- hero ---------- */
+.kd-hero-text {
+	position: relative;
+}
+
+.kd-hero-text>.kd-anchor {
+	top: 10px;
+	margin-top: 0;
+}
+
+.kd-hero {
+	position: relative;
+	min-height: 100vh;
+	max-width: 1240px;
+	margin: 0 auto;
+	padding: 130px var(--gx) 80px;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+	align-items: center;
+	gap: clamp(24px, 4vw, 56px);
+}
+
+.kd-kicker {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 18px;
+	font: 400 13px/1 var(--mono);
+	color: var(--cyan);
+}
+
+.kd-kicker i {
+	width: 7px;
+	height: 7px;
+	background: currentColor;
+	transform: rotate(45deg);
+}
+
+.kd-hero h1 {
+	font-size: clamp(68px, 10vw, 150px);
+	font-weight: 700;
+	line-height: .92;
+	letter-spacing: -.045em;
+}
+
+.kd-claim {
+	max-width: 28ch;
+	margin: 28px 0 36px;
+	font: 400 clamp(20px, 1.9vw, 28px)/1.35 var(--text);
+	color: var(--muted);
+	text-wrap: balance;
+}
+
+/* the name is already the hero: the bar shows it only once the page scrolls */
+.kd-top .kd-mark {
+	opacity: 0;
+	transition: opacity .35s;
+}
+
+.kd-top[data-scrolled] .kd-mark {
+	opacity: 1;
+}
+
+.kd-btn,[data-kd] .kd-btn {
+	display: inline-block;
+	padding: 15px 28px;
+	clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+	background: var(--amber);
+	color: var(--on-accent);
+	font: 600 16px/1 var(--display);
+	letter-spacing: -.01em;
+	text-decoration: none;
+	transition: transform .3s;
+}
+
+.kd-btn:hover {
+	transform: translateY(-2px);
+}
+
+.kd-btnw {
+	display: inline-block;
+	filter: drop-shadow(0 10px 24px color-mix(in srgb, var(--amber) 25%, transparent));
+}
+
+@keyframes kd-pulse {
+	50% {
+		transform: rotate(45deg) scale(.55);
+		opacity: .6;
+	}
+}
+
+.kd-portrait-w {
+	justify-self: end;
+	width: 100%;
+	transform: rotateY(-6deg) rotateX(1deg);
+	transition: transform .6s cubic-bezier(.2, .8, .2, 1);
+	will-change: transform;
+}
+
+.kd-portrait {
+	aspect-ratio: 1;
+	overflow: hidden;
+	isolation: isolate;
+	--cut: 22px;
+	background: linear-gradient(160deg, color-mix(in srgb, var(--plate-hi) 90%, transparent), color-mix(in srgb, var(--plate-lo) 85%, transparent));
+}
+
+.kd-portrait canvas {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* HUD: build and runtime facts pinned to the plate corners, the way a blueprint carries its annotations */
+.kd-portrait .hud {
+	position: absolute;
+	z-index: 3;
+	inset: 0;
+	pointer-events: none;
+	font: 400 11px/1.5 var(--mono);
+	color: var(--muted);
+}
+
+.kd-portrait .hud span {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	white-space: nowrap;
+}
+
+.kd-portrait .hud .tl {
+	left: 30px;
+	top: 24px;
+	align-items: flex-start;
+}
+
+.kd-portrait .hud .tr {
+	right: 30px;
+	top: 24px;
+}
+
+.kd-portrait .hud .bl {
+	left: 26px;
+	bottom: 22px;
+	font-size: 12px;
+}
+
+.kd-portrait .hud .br {
+	right: 30px;
+	bottom: 22px;
+}
+
+.kd-portrait .hud .br b {
+	font-weight: 500;
+	color: var(--fg);
+}
+
+.kd-portrait .hud .bl i {
+	width: 7px;
+	height: 7px;
+	background: var(--cyan);
+	transform: rotate(45deg);
+}
+
+.kd-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px 22px;
+}
+
+.kd-btn-ghost {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 22px;
+	clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+	background: color-mix(in srgb, var(--fg) 6%, transparent);
+	color: var(--fg);
+	font: 500 15px/1 var(--text);
+	text-decoration: none;
+	transition: background .3s, transform .3s;
+}
+
+.kd-btn-ghost svg {
+	width: 18px;
+	height: 18px;
+	color: var(--cyan);
+}
+
+.kd-btn-ghost:hover {
+	background: color-mix(in srgb, var(--fg) 12%, transparent);
+	transform: translateY(-2px);
+}

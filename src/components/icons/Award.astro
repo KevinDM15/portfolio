@@ -1,0 +1,9 @@
+---
+import Icon from './Icon.astro';
+interface Props { class?: string }
+---
+
+<Icon class={Astro.props.class} stroke={1.7}>
+	<circle cx="12" cy="9" r="5" />
+	<path d="m8.6 13.2-1.6 7.3 5-2.8 5 2.8-1.6-7.3" />
+</Icon>

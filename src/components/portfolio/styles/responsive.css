@@ -1,0 +1,303 @@
+/* ---------- responsive ---------- */
+@media (max-width:1080px) {
+	.kd-trace {
+		display: none;
+	}
+}
+
+@media (max-width:1100px) {
+	.kd-about {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+	}
+	.kd-exp {
+		grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+	}
+	.kd-contact {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+	}
+	.kd-hero {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+	}
+}
+
+@media (max-width:900px) {
+	.kd-hero {
+		grid-template-columns: minmax(0, 1fr);
+		padding-top: 110px;
+		gap: 36px;
+	}
+	.kd-hero h1 {
+		font-size: clamp(60px, 18vw, 88px);
+	}
+	.kd-portrait-w {
+		order: -1;
+		justify-self: start;
+		width: min(82vw, 420px);
+		transform: none;
+	}
+	.kd-about,.kd-exp,.kd-contact {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.kd-about .kd-pw,.kd-about .kd-pw[data-in] {
+		transform: none;
+	}
+	.kd-orbit {
+		position: static;
+		width: min(100%, 340px);
+	}
+	.kd-path {
+		position: static;
+	}
+	.kd-tl {
+		margin-right: 24px;
+	}
+	/* the work ledger stacks each row (title, client, year, chevron beside the title) and the schematic moves into the open row */
+	.kd-work-wrap {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.kd-work-preview,
+	.kd-work-cols {
+		display: none;
+	}
+	.kd-work-inline {
+		display: block;
+		margin: 0 0 24px;
+		padding: 18px;
+		clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+		background: color-mix(in srgb, var(--fg) 5%, transparent);
+	}
+	[data-kd] .kd-work-head {
+		grid-template-columns: minmax(0, 1fr) 24px;
+		gap: 6px 12px;
+	}
+	.kd-work-head .title,
+	.kd-work-head .client,
+	.kd-work-head .when {
+		grid-column: 1;
+	}
+	.kd-work-head .chev {
+		grid-row: 1;
+		grid-column: 2;
+	}
+	[data-kd] .kd-work-head:hover,
+	[data-kd] .kd-work-head[aria-expanded="true"] {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.kd-work-body {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.kd-extra {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.kd-portrait .hud .tl,.kd-portrait .hud .tr {
+		top: 18px;
+	}
+	.kd-portrait .hud .tl {
+		left: 22px;
+	}
+	.kd-portrait .hud .tr,.kd-portrait .hud .br {
+		right: 22px;
+	}
+	.kd-portrait .hud .bl {
+		left: 20px;
+	}
+	/* phones: the mark stays, the burger opens the route as a full-screen panel of big links */
+	.kd-top {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+	.kd-top .kd-mark {
+		opacity: 1;
+	}
+	.kd-top .kd-burger {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 5px;
+		width: 44px;
+		height: 44px;
+		clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+		background: color-mix(in srgb, var(--fg) 8%, transparent);
+	}
+	.kd-burger i {
+		display: block;
+		width: 18px;
+		height: 1.5px;
+		background: currentColor;
+		transition: transform .3s;
+	}
+	.kd-top[data-paper] .kd-burger {
+		background: color-mix(in srgb, var(--paper-fg) 8%, transparent);
+		color: var(--paper-fg);
+	}
+	.kd-top[data-open] .kd-burger i:first-child {
+		transform: translateY(3.25px) rotate(45deg);
+	}
+	.kd-top[data-open] .kd-burger i:last-child {
+		transform: translateY(-3.25px) rotate(-45deg);
+	}
+	.kd-route {
+		display: none;
+	}
+	.kd-top[data-open] {
+		bottom: 0;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		background: var(--bg);
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+		box-shadow: none;
+	}
+	.kd-top[data-paper][data-open] {
+		background: var(--paper-bg);
+	}
+	.kd-top[data-open] .kd-route {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		order: 3;
+		width: 100%;
+		height: calc(100dvh - 72px);
+		overflow: visible;
+		padding: 40px 4px 28px;
+		gap: 4px;
+		animation: kd-menu .35s cubic-bezier(.2, .8, .2, 1);
+	}
+	.kd-top[data-open] .kd-route a {
+		font: 600 clamp(34px, 9vw, 44px)/1.15 var(--display);
+		letter-spacing: -.025em;
+		color: var(--fg);
+		padding: 6px 0;
+		justify-content: space-between;
+	}
+	.kd-top[data-open] .kd-route a i {
+		display: none;
+	}
+	.kd-top[data-open] .kd-route a[aria-current]::after {
+		content: \x27\x27;
+		width: 10px;
+		height: 10px;
+		background: var(--amber);
+		transform: rotate(45deg);
+		box-shadow: 0 0 8px color-mix(in srgb, var(--amber) 60%, transparent);
+	}
+	.kd-top[data-paper][data-open] .kd-route a,.kd-top[data-paper][data-open] .kd-route a span {
+		color: var(--paper-fg);
+	}
+	.kd-top[data-open] .kd-menu-foot {
+		display: grid;
+		gap: 22px;
+		margin-top: auto;
+		padding-top: 28px;
+		border-top: 1px solid var(--line-strong);
+	}
+	.kd-top[data-open] .kd-menu-foot .kd-btn {
+		justify-self: start;
+		font-size: 16px;
+		padding: 15px 28px;
+		letter-spacing: -.01em;
+		color: var(--on-accent);
+	}
+	.kd-top[data-open] .kd-menu-foot .row {
+		display: flex;
+		gap: 24px;
+	}
+	.kd-top[data-open] .kd-menu-foot .row a {
+		font: 500 15px/1 var(--text);
+		color: var(--muted);
+		text-decoration: none;
+	}
+	@keyframes kd-menu {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+	.kd-band li {
+		width: 300px;
+		gap: 14px;
+	}
+	.kd-band .mark {
+		width: 52px;
+		height: 52px;
+	}
+	.kd-band b {
+		font-size: 17px;
+	}
+	/* phones have no gutter: the waypoints go back inline before the headings, and the hero one sits on the kicker's diamond */
+	.kd-head .kd-anchor {
+		position: static;
+		margin-top: 0;
+		flex: none;
+	}
+	.kd-hero-text>.kd-anchor {
+		left: -1px;
+		top: 3px;
+	}
+	.kd-waves .kd-anchor {
+		left: var(--gx);
+	}
+	#sobre {
+		padding-top: calc(clamp(90px, 12vw, 160px) + 8vh);
+	}
+	.kd-foot {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (max-width:600px) {
+	/* section heads wrap: the readout drops under the title */
+	.kd-head {
+		flex-wrap: wrap;
+		row-gap: 10px;
+	}
+	.kd-head small {
+		flex-basis: 100%;
+		margin-left: 0;
+	}
+	.kd-readouts {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 14px;
+	}
+	.kd-readouts div {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 14px;
+		align-items: baseline;
+	}
+	.kd-readouts span {
+		margin-top: 0;
+	}
+	.kd-field {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 8px;
+		padding: 20px 0 14px;
+	}
+	.kd-facts .row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.kd-facts .k {
+		padding-top: 0;
+	}
+}
+
+@media (prefers-reduced-motion:reduce) {
+	[data-reveal] {
+		transform: none;
+		opacity: 1;
+		transition: none;
+	}
+	.kd-orbit .halo,.kd-band ul,.kd-band .meta i,.kd-waves path {
+		animation: none;
+	}
+	.kd-portrait-w {
+		transition: none;
+	}
+}

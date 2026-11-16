@@ -1,212 +1,58 @@
 ---
-import './portfolio.css';
+/*
+ * The landing, composed: the map behind everything, the bar, the sections in reading order, the light block that
+ * closes the page, the toast and the chat. Each section owns its markup; data lives in data.ts; behaviours in behaviours/.
+ */
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/header.css';
+import './styles/plates.css';
+import './styles/hero.css';
+import './styles/band.css';
+import './styles/about.css';
+import './styles/projects.css';
+import './styles/experience.css';
+import './styles/paper.css';
+import './styles/contact.css';
+import './styles/footer.css';
+import './styles/toast.css';
+import './styles/responsive.css';
+import Header from './sections/Header.astro';
+import Hero from './sections/Hero.astro';
+import TechBand from './sections/TechBand.astro';
+import About from './sections/About.astro';
+import Projects from './sections/Projects.astro';
+import Experience from './sections/Experience.astro';
+import Waves from './sections/Waves.astro';
+import Contact from './sections/Contact.astro';
+import Footer from './sections/Footer.astro';
 import { ChatBot } from '../islands/ChatBot';
-
-// Set to true when the first real project is published.
-const showProjects = false;
-// the stack as network modules: name, where it lives in my work, a short interface-like id and its mark
-const tech = [
-	{ name: 'React', kind: 'frontend', id: 'ui0', icon: 'react' }, { name: 'Next.js', kind: 'frontend', id: 'ui1', icon: 'nextdotjs' }, { name: 'React Native', kind: 'móvil', id: 'mb0', icon: 'react' }, { name: 'TypeScript', kind: 'lenguaje', id: 'ts0', icon: 'typescript' },
-	{ name: 'NestJS', kind: 'backend', id: 'api0', icon: 'nestjs' }, { name: 'Go', kind: 'backend', id: 'api1', icon: 'go' }, { name: 'Python', kind: 'backend', id: 'api2', icon: 'python' }, { name: 'PostgreSQL', kind: 'datos', id: 'db0', icon: 'postgresql' },
-	{ name: 'AWS', kind: 'cloud', id: 'cl0', icon: 'amazonwebservices' }, { name: 'GCP', kind: 'cloud', id: 'cl1', icon: 'googlecloud' }, { name: 'LLMs', kind: 'IA', id: 'ai0', icon: 'llm' }, { name: 'Arquitectura hexagonal', kind: 'diseño', id: 'arq', icon: 'hexagonal' },
-];
-const jobs = [
-	{ when: 'Jun 2026 — hoy', span: '4 meses y contando', name: 'Universidad de la Costa', role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web con Vite y React y diseño arquitecturas y planes técnicos para nuevas funcionalidades. Migro de forma progresiva módulos legacy (PHP, JavaScript y jQuery) hacia una arquitectura moderna, con React en el frontend y Python serverless en el backend.', tags: ['React', 'Vite', 'Python', 'Serverless'] },
-	{ when: 'Ene 2026 — hoy', span: '9 meses y contando', name: 'El Sol Neighborhood Educational Center', role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web y móviles con Next.js, React y React Native, con interfaces multiplataforma que priorizan rendimiento, usabilidad y consistencia visual. Diseño arquitecturas y planes técnicos, y trabajo en equipos ágiles con Scrum.', tags: ['Next.js', 'React', 'React Native'] },
-	{ when: 'Oct 2023 — Jul 2026', span: '2 años, 9 meses', name: 'The Rocket Code', role: 'Desarrollador full-stack · Freelance', text: 'Optimicé aplicaciones del lado del cliente para escalar y responder más rápido. Creé APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, integré modelos de lenguaje (LLMs) por API para automatizar procesos y construí componentes reutilizables con React, MaterialUI, Redux y Next.js.', tags: ['Next.js', 'React', 'NestJS', 'PostgreSQL', 'AWS', 'LLMs'] },
-	{ when: 'Ago 2020 — Abr 2023', span: '2 años, 8 meses', name: 'Wawandco', role: 'Desarrollador full-stack', text: 'Mejoré código nativo en Go aplicando SOLID, Clean Code y MVC. Implementé servicios backend y funciones serverless en GCP, reduje la deuda técnica y migré librerías a versiones actuales.', tags: ['Go', 'GCP', 'Cloud Functions', 'Firestore'] },
-	{ when: 'Ago — Dic 2018', span: '5 meses', name: 'Koombea', role: 'Desarrollador full-stack', text: 'Desarrollo de aplicaciones web con JavaScript, HTML y CSS.', tags: ['JavaScript'] },
-];
-// timeline lanes: months since Jan 2018 over a 108-month axis (2018 to 2026)
-const lanes = [
-	{ name: 'CUC', when: 'Jun 26 — hoy', l: 101, w: 5 },
-	{ name: 'El Sol', when: 'Ene 26 — hoy', l: 96, w: 10 },
-	{ name: 'Rocket Code', when: 'Oct 23 — Jul 26', l: 69, w: 33 },
-	{ name: 'Wawandco', when: 'Ago 20 — Abr 23', l: 31, w: 32 },
-	{ name: 'Koombea', when: 'Ago — Dic 18', l: 7, w: 5 },
-];
-const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 ---
 
 <div data-kd data-t="dark">
-<div class="kd-fog" aria-hidden="true"></div>
-<canvas data-k="net" class="kd-net" aria-hidden="true"></canvas>
+	<div class="kd-fog" aria-hidden="true"></div>
+	<canvas data-k="net" class="kd-net" aria-hidden="true"></canvas>
 
-<header class="kd-top" data-k="bar">
-	<a class="kd-mark" href="#top">Kevin Díaz</a>
-	<nav class="kd-route" aria-label="Secciones">
-		<a href="#top" data-nav="inicio"><i></i><span>Inicio</span></a>
-		<a href="#sobre" data-nav="sobre"><i></i><span>Sobre mí</span></a>
-		<a href="#proyectos" data-nav="proyectos"><i></i><span>Proyectos</span></a>
-		<a href="#experiencia" data-nav="experiencia"><i></i><span>Experiencia</span></a>
-		<a href="#contacto" data-nav="contacto"><i></i><span>Contacto</span></a>
-	</nav>
-	<span data-k="trace" class="kd-trace" aria-live="polite"></span>
-</header>
+	<Header />
 
-<main id="top">
-<section class="kd-hero" aria-label="Inicio">
-	<div>
-		<p class="kd-kicker"><i aria-hidden="true"></i>Desarrollador full-stack · Barranquilla</p>
-		<h1>Kevin<br>Díaz</h1>
-		<p class="kd-claim">Software que el equipo puede mantener. Hoy, con agentes de IA.</p>
-		<span class="kd-btnw"><a class="kd-btn" href="#contacto">Escríbeme</a></span>
-		<div class="kd-avail"><i></i>Disponible para nuevos proyectos</div>
-	</div>
-	<div class="kd-pw kd-portrait-w" data-tilt data-node="inicio">
-		<div class="kd-plate kd-portrait">
-			<canvas data-k="cv" role="img" aria-label="Retrato de Kevin Díaz hecho de puntos que se apartan del cursor"></canvas>
-			<div class="tag" aria-hidden="true"><i></i>kevin.local</div>
+	<main id="top">
+		<Hero />
+		<TechBand />
+		<About />
+		<Projects />
+		<Experience />
+		<div class="kd-paper">
+			<Waves />
+			<Contact />
+			<Footer />
 		</div>
-	</div>
-</section>
+	</main>
 
-<div class="kd-band" aria-label="Tecnologías">
-	<ul>{[...tech, ...tech].map((x, i) => <li style={`--d:${(i * 0.37) % 2.4}s`}><span class="mark"><img src={`/svg/tech/${x.icon}.svg`} alt="" width="36" height="36" /></span><span class="txt"><b>{x.name}</b><small>{x.kind}</small></span><span class="meta"><i aria-hidden="true"></i><em aria-hidden="true">{x.id}</em></span></li>)}</ul>
+	<div data-k="toast" class="kd-toast" role="status" aria-live="polite">Correo copiado</div>
+	<ChatBot client:load />
 </div>
 
-<section id="sobre" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="sobre-mi" aria-hidden="true"></i><h2>Sobre mí</h2></div>
-	<div class="kd-about">
-		<div class="kd-pw" data-reveal>
-			<div class="kd-plate">
-				<p class="kd-statement">Seis años construyendo productos digitales. <b>Hoy decido el rumbo y los agentes ejecutan.</b></p>
-				<div class="kd-copy">
-					<p>Especificación clara, tareas pequeñas y criterios comprobables. Yo reviso y defiendo el resultado.</p>
-				</div>
-				<div class="kd-readouts">
-					<div><b>2018</b><span>Primer empleo como desarrollador</span></div>
-					<div><b>5</b><span>Empresas y clientes, del backend al frontend</span></div>
-					<div><b>Yo + IA</b><span>Personas deciden, agentes ejecutan</span></div>
-				</div>
-			</div>
-		</div>
-		<div class="kd-orbit" role="img" aria-label="Cómo trabajo: yo al centro decido y reviso; los agentes entienden, delegan, verifican y entregan">
-			<svg viewBox="0 0 460 460" aria-hidden="true">
-				<circle class="o" cx="230" cy="230" r="200"/>
-				<circle class="i" cx="230" cy="230" r="120"/>
-				<circle class="me" cx="230" cy="230" r="64"/>
-				<text class="me-t" x="230" y="241">yo</text>
-				<rect class="st" x="224" y="24" width="12" height="12" transform="rotate(45 230 30)"/><rect class="st" x="424" y="224" width="12" height="12" transform="rotate(45 430 230)"/><rect class="st" x="224" y="424" width="12" height="12" transform="rotate(45 230 430)"/><rect class="st" x="24" y="224" width="12" height="12" transform="rotate(45 30 230)"/>
-				<text class="lb" x="230" y="6">entender</text>
-				<text class="lb" x="436" y="262">delegar</text>
-				<text class="lb" x="230" y="466">verificar</text>
-				<text class="lb" x="24" y="262">entregar</text>
-				<text class="cap" x="230" y="146">agentes</text>
-			</svg>
-		</div>
-	</div>
-</section>
-
-<section id="proyectos" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Proyectos</h2><small>{showProjects ? 'casos de estudio' : 'próximamente'}</small><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i></div>
-	<div class="kd-pw kd-soon" data-reveal>
-		<div class="kd-plate">
-			<div>
-				<h3>El primer caso de estudio <b>está en camino.</b></h3>
-				<p>Estoy preparando el primer proyecto publicado con su contexto, decisiones y resultados. Cuando esté listo aparecerá aquí, conectado a esta ruta.</p>
-			</div>
-			<div class="pending" aria-hidden="true"><i></i>en construcción</div>
-		</div>
-	</div>
-</section>
-
-<section id="experiencia" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="experiencia" aria-hidden="true"></i><h2>Experiencia</h2><small>2018 — hoy</small></div>
-	<div class="kd-exp">
-		<aside class="kd-path">
-			<p>Del JavaScript de 2018 al Next.js, React Native y las integraciones con IA de hoy, pasando por Go, NestJS y AWS. Siempre en equipos que entregan.</p>
-			<div class="kd-tl" aria-hidden="true">
-				<div class="years">{[0, 24, 48, 72, 96].map((m, i) => <i style={`--x:${pct(m)}`}><span>'{18 + i * 2}</span></i>)}</div>
-				{lanes.map((x) => <div class="row" data-end={x.l + x.w >= 88 ? '' : undefined} data-now={x.when.endsWith('hoy') ? '' : undefined} style={`--l:${pct(x.l)};--w:${pct(x.w)}`}><span class="who"><b>{x.name}</b><small>{x.when}</small></span><i class="bar"></i></div>)}
-				<i class="now"><span>hoy</span></i>
-			</div>
-		</aside>
-		<div>
-			<div class="kd-jobs">
-				{jobs.map((j) => (
-					<div class="kd-pw" data-reveal>
-						<article class="kd-plate kd-job">
-							<div class="when"><span>{j.when}</span><span>{j.span}</span></div>
-							<h3>{j.name}</h3>
-							<div class="role">{j.role}</div>
-							<p>{j.text}</p>
-							<div class="kd-tags">{j.tags.map((t) => <span>{t}</span>)}</div>
-						</article>
-					</div>
-				))}
-			</div>
-			<div class="kd-extra">
-				<div><h3>Formación</h3><ul class="kd-list">
-					<li><b>Técnico en Programación de Software</b><span>SENA · 2017 — 2018</span></li>
-					<li><b>Técnico en Mantenimiento de Sistemas Informáticos</b><span>UniBarranquilla · 2019 — 2021</span></li>
-					<li><b>Tecnólogo en Gestión de Sistemas Informáticos</b><span>UniBarranquilla · 2022 — hoy</span></li>
-					<li><b>Scrum Developer</b><span>Kleer · 2023</span></li>
-				</ul></div>
-				<div><h3>Idiomas</h3><ul class="kd-list">
-					<li><b>Español</b><span>Nativo</span></li>
-					<li><b>Inglés</b><span>Básico</span></li>
-				</ul></div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<div class="kd-paper">
-<div class="kd-waves" aria-hidden="true">
-	<i class="kd-anchor" data-node="contacto"></i>
-	<svg viewBox="0 0 2880 140" preserveAspectRatio="none"><path class="w1" d="M0 90C240 150 480 20 720 70S1200 150 1440 90L1440 90C1680 150 1920 20 2160 70S2640 150 2880 90V140H0Z"/><path class="w2" d="M0 110C260 40 520 160 780 90S1240 30 1440 110L1440 110C1700 40 1960 160 2220 90S2680 30 2880 110V140H0Z"/><path class="w3" d="M0 120C300 80 600 130 900 100S1300 70 1440 120L1440 120C1740 80 2040 130 2340 100S2740 70 2880 120V140H0Z"/></svg>
-</div>
-<section id="contacto" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Contacto</h2><small>te respondo</small></div>
-	<div class="kd-contact">
-		<div>
-			<h2>¿Tienes una idea?<b>Hablemos.</b></h2>
-			<p class="kd-contact-lede">Cuéntame qué quieres construir, en qué punto está y para cuándo lo necesitas. Te respondo con una propuesta clara.</p>
-			<button type="button" class="kd-mail" data-copy aria-label="Copiar correo kevindiazm.14@gmail.com">
-				<i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></i>
-				<span><b>kevindiazm.14@gmail.com</b><small data-k="mail-hint">clic para copiar el correo</small></span>
-				<i class="act"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i>
-			</button>
-			<div class="kd-contact-meta"><span><i></i>Freelance y contratos</span><span><i></i>Remoto desde Barranquilla</span></div>
-		</div>
-		<div class="kd-cols">
-			<div><h3>Canales</h3><ul class="kd-tiles">
-				<li><a href="https://github.com/KevinDM15" target="_blank" rel="noopener"><i class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.17c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg></i><span><b>GitHub</b><small>/KevinDM15</small></span></a></li>
-				<li><a href="https://www.linkedin.com/in/kevindm14/" target="_blank" rel="noopener"><i class="ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></i><span><b>LinkedIn</b><small>/in/kevindm14</small></span></a></li>
-				<li><a href="tel:+573002329174"><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg></i><span><b>Teléfono</b><small>+57 300 232 9174</small></span></a></li>
-			</ul></div>
-			<div><h3>Desde Barranquilla</h3>
-				<div class="kd-clock">
-					<svg viewBox="0 0 100 100" aria-hidden="true">
-						<circle cx="50" cy="50" r="49" fill="none" stroke-width="1" opacity=".5"/>
-						<path d="M50 4V14M96 50H86M50 96V86M4 50H14" fill="none" stroke-width="2"/>
-						<line data-k="hh" x1="50" y1="50" x2="50" y2="27" stroke-width="3.4" stroke-linecap="round"/>
-						<line data-k="mm" x1="50" y1="50" x2="50" y2="13" stroke-width="2" stroke-linecap="round"/>
-						<g data-k="sec"><line x1="50" y1="60" x2="50" y2="9" stroke-width="1.2"/><rect x="47.4" y="6.4" width="5.2" height="5.2" transform="rotate(45 50 9)"/></g>
-						<rect x="47" y="47" width="6" height="6" transform="rotate(45 50 50)"/>
-					</svg>
-					<div><b data-time>--:--</b><p>Hora de Colombia · UTC−5</p></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<footer class="kd-foot">
-	<div>
-		<p>Gracias por <b>la visita.</b></p>
-		<small>Kevin Díaz · Desarrollador full-stack · Barranquilla, CO<br>© 2026 · hecho con código y café</small>
-	</div>
-	<a href="#top" class="kd-up" aria-label="Volver arriba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
-</footer>
-</div>
-</main>
-
-<div data-k="toast" class="kd-toast" role="status" aria-live="polite">Correo copiado</div>
-<ChatBot client:load />
-</div>
 <script>
-	import { initPortfolio } from './portfolio';
+	import { initPortfolio } from './behaviours';
 	initPortfolio();
 </script>

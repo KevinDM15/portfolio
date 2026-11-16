@@ -1,0 +1,17 @@
+---
+/* the bar: the mark, the route through the sections, the traceroute readout, and the burger on phones */
+import { SECTIONS, SOCIAL } from '../data';
+---
+
+<header class="kd-top" data-k="bar">
+	<a class="kd-mark" href="#top">Kevin Díaz</a>
+	<nav class="kd-route" id="kd-route" aria-label="Secciones">
+		{SECTIONS.map((s) => <a href={s.href} data-nav={s.id}><i></i><span>{s.label}</span></a>)}
+		<div class="kd-menu-foot">
+			<a class="kd-btn" href="#contacto">Escríbeme</a>
+			<span class="row">{SOCIAL.map((s) => <a href={s.url} target="_blank" rel="noopener">{s.name}</a>)}</span>
+		</div>
+	</nav>
+	<span data-k="trace" class="kd-trace" aria-live="polite"></span>
+	<button type="button" class="kd-burger" data-k="burger" aria-controls="kd-route" aria-expanded="false" aria-label="Abrir el menú"><i></i><i></i></button>
+</header>

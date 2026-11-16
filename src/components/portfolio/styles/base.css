@@ -1,0 +1,24 @@
+/* ---------- depth: fog, perspective floor, the WebGL map ---------- */
+.kd-fog {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background: radial-gradient(60% 50% at 15% 12%, color-mix(in srgb, var(--violet) 18%, transparent), transparent 60%), radial-gradient(45% 40% at 88% 28%, color-mix(in srgb, var(--cyan) 8%, transparent), transparent 60%);
+}
+
+.kd-net {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	pointer-events: none;
+}
+
+[data-kd] main {
+	position: relative;
+	z-index: 1;
+	overflow-x: clip;
+}

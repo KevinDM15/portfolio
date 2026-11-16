@@ -1,0 +1,36 @@
+---
+/* contacto: a statement, a form of lines that opens the visitor's mail app, and the details as plain text */
+import ArrowUpRight from '../../icons/ArrowUpRight.astro';
+import Copy from '../../icons/Copy.astro';
+import Check from '../../icons/Check.astro';
+import Clock from './Clock.astro';
+import { EMAIL, PHONE, SOCIAL } from '../data';
+---
+
+<section id="contacto" class="kd-sec">
+	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Contacto</h2><small>te respondo</small></div>
+	<div class="kd-contact">
+		<form class="kd-form" data-k="form" novalidate>
+			<h2>¿Tienes una idea?<b>Hablemos.</b></h2>
+			<p class="kd-contact-lede">Cuéntame qué quieres construir, en qué punto está y para cuándo lo necesitas. Te respondo con una propuesta clara.</p>
+			<label class="kd-field"><span>Tu nombre</span><input name="nombre" type="text" autocomplete="name" required placeholder="Nombre y apellido" /></label>
+			<label class="kd-field"><span>Tu correo</span><input name="correo" type="email" autocomplete="email" required placeholder="nombre@empresa.com" /></label>
+			<label class="kd-field"><span>Tu idea</span><textarea name="mensaje" rows="3" required placeholder="Qué quieres construir, en qué punto está y para cuándo"></textarea></label>
+			<div class="kd-form-foot">
+				<button type="submit" class="kd-btn kd-send">Enviar mensaje<i class="ext"><ArrowUpRight /></i></button>
+				<small>Se abre en tu aplicación de correo con el mensaje listo para enviar.</small>
+			</div>
+		</form>
+		<aside class="kd-details" aria-label="Datos de contacto">
+			<div>
+				<small>Correo</small>
+				<button type="button" class="kd-copy" data-copy aria-label={`Copiar correo ${EMAIL}`}><b>{EMAIL}</b><i class="act"><Copy class="cp" /><Check class="ok" /></i></button>
+				<em data-k="mail-hint">clic para copiar el correo</em>
+			</div>
+			<div><small>Teléfono</small><a href={PHONE.href}>{PHONE.label}</a></div>
+			<div><small>Redes</small><span class="row">{SOCIAL.map((s) => <a href={s.url} target="_blank" rel="noopener">{s.name}</a>)}</span></div>
+			<div><small>Hora en Barranquilla</small><Clock /></div>
+			<div><small>Modalidad</small><span class="txt">Freelance y contratos · remoto</span></div>
+		</aside>
+	</div>
+</section>

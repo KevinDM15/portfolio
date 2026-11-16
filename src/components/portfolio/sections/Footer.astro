@@ -1,0 +1,15 @@
+---
+/* the close: thanks, the signature line, and the build that is serving this page */
+import ArrowUp from '../../icons/ArrowUp.astro';
+import { REPO } from '../data';
+import { sha, built } from '../build';
+---
+
+<footer class="kd-foot">
+	<div>
+		<p>Gracias por <b>la visita.</b></p>
+		<small>Kevin Díaz · Desarrollador full-stack · Barranquilla, CO<br>© 2026 · hecho con código y café</small>
+		<p class="kd-build">kevindev.co v3<i></i><a href={`${REPO}/commit/${sha}`} target="_blank" rel="noopener">rev {sha}</a><i></i>desplegado {built}</p>
+	</div>
+	<a href="#top" class="kd-up" aria-label="Volver arriba"><ArrowUp /></a>
+</footer>

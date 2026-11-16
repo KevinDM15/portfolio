@@ -1,0 +1,21 @@
+/* ---------- toast ---------- */
+.kd-toast {
+	position: fixed;
+	left: 50%;
+	bottom: 28px;
+	z-index: 60;
+	transform: translate(-50%, 20px);
+	opacity: 0;
+	padding: 12px 22px;
+	clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+	background: var(--amber);
+	color: var(--on-accent);
+	font: 600 14px/1 var(--display);
+	transition: transform .3s, opacity .3s;
+	pointer-events: none;
+}
+
+.kd-toast.on {
+	transform: translate(-50%, 0);
+	opacity: 1;
+}

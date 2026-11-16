@@ -1,0 +1,13 @@
+---
+/**
+ * Base for every line icon: a 24-unit box, stroked with the current colour.
+ * Icons pass their paths through the slot and keep only their own shape.
+ */
+interface Props { class?: string; stroke?: number; title?: string }
+const { class: className, stroke = 1.8, title } = Astro.props;
+---
+
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={stroke} stroke-linecap="round" stroke-linejoin="round" aria-hidden={title ? undefined : 'true'} role={title ? 'img' : undefined}>
+	{title && <title>{title}</title>}
+	<slot />
+</svg>

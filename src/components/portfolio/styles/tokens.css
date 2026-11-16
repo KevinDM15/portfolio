@@ -1,0 +1,135 @@
+/* Kevin Díaz portfolio: the page as a living network, in a developer register. Subtle chamfers, diamond nodes, cables. Tokens live on [data-kd]; the chatbot reads --bg, --surface, --fg, --muted, --line, --line-strong, --accent. */
+@font-face {
+	font-family: 'Geist';
+	src: url('/fonts/geist-latin-400-normal.woff2') format('woff2');
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Geist';
+	src: url('/fonts/geist-latin-500-normal.woff2') format('woff2');
+	font-weight: 500;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Geist';
+	src: url('/fonts/geist-latin-600-normal.woff2') format('woff2');
+	font-weight: 600;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Geist';
+	src: url('/fonts/geist-latin-700-normal.woff2') format('woff2');
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Geist Mono';
+	src: url('/fonts/geist-mono-latin-400-normal.woff2') format('woff2');
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Geist Mono';
+	src: url('/fonts/geist-mono-latin-500-normal.woff2') format('woff2');
+	font-weight: 500;
+	font-display: swap;
+}
+
+/* palette "hielo": near-black grey, ice-white signal, yellow actions. Every colour on the page derives from these tokens (the WebGL scene and the dot portrait read them too). roles: --cyan is the signal (cables, nodes, anchors), --amber the action (buttons, now, toast), --hot the firewall, --violet the fog, --plate-hi/lo the plate gradient, --paper-* the light block that closes the page. */
+:root {
+	--bg: #101214;
+	--surface: #1A1D21;
+	--fg: #F5F7F8;
+	--muted: #8E959C;
+	--cyan: #DDE6EA;
+	--amber: #FFD166;
+	--hot: #FF6B6B;
+	--violet: #2B3440;
+	--on-accent: #101214;
+	--plate-hi: #24282E;
+	--plate-lo: #0B0D0F;
+	--paper-bg: #F4F6F7;
+	--paper-surface: #E3E7EA;
+	--paper-fg: #101214;
+	--paper-muted: #5B6168;
+	--paper-accent: #4A5A66;
+	--paper-action: var(--amber);
+	--paper-on-action: var(--on-accent);
+	--night-bg: var(--bg);
+	--night-surface: var(--surface);
+	--night-fg: var(--fg);
+	--night-muted: var(--muted);
+	--night-cyan: var(--cyan);
+	--night-amber: var(--amber);
+	--night-on: var(--on-accent);
+}
+
+[data-kd] {
+	--accent: var(--cyan);
+	--line: color-mix(in srgb, var(--fg) 10%, transparent);
+	--line-strong: color-mix(in srgb, var(--fg) 24%, transparent);
+	--display: 'Geist', system-ui, sans-serif;
+	--text: 'Geist', system-ui, sans-serif;
+	--mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+	--cut: 14px;
+	--oct: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 var(--cut));
+	--gx: clamp(20px, 4vw, 60px);
+	position: relative;
+	background: var(--bg);
+	color: var(--fg);
+	font: 400 18px/1.6 var(--text);
+	-webkit-font-smoothing: antialiased;
+}
+
+html {
+	overflow-x: clip;
+	scroll-behavior: smooth;
+	background: var(--bg);
+	color-scheme: dark;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+}
+
+[data-kd] * {
+	box-sizing: border-box;
+}
+
+[data-kd] h1,[data-kd] h2,[data-kd] h3 {
+	font-family: var(--display);
+	font-weight: 600;
+	letter-spacing: -.025em;
+	margin: 0;
+}
+
+[data-kd] a {
+	color: inherit;
+}
+
+[data-kd] button:where(:not(.kc-root button)) {
+	font: inherit;
+	color: inherit;
+	background: none;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+}
+
+[data-kd] ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+[data-kd] :focus-visible {
+	outline: 2px solid var(--amber);
+	outline-offset: 4px;
+}
