@@ -88,6 +88,10 @@ export function initPortfolio() {
 		});
 	});
 
+	/* ---------- the orbit diagram animates with SMIL; it stands still for people who asked for less motion ---------- */
+	const orbit = $<SVGSVGElement>('[data-k="orbit"]');
+	if (orbit && reduce) orbit.pauseAnimations();
+
 	/* ---------- plates settle flat when they come into view ---------- */
 	const rio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.in = '1'; rio.unobserve(e.target); } }), { rootMargin: '0px 0px -14% 0px' });
 	$$<HTMLElement>('[data-reveal]').forEach((el) => rio.observe(el));

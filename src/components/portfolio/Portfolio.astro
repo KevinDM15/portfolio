@@ -125,17 +125,29 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 			</div>
 		</div>
 		<div class="kd-orbit" role="img" aria-label="Cómo trabajo: yo al centro decido y reviso; los agentes entienden, delegan, verifican y entregan">
-			<svg viewBox="0 0 460 460" aria-hidden="true">
-				<circle class="o" cx="230" cy="230" r="200"/>
-				<circle class="i" cx="230" cy="230" r="120"/>
-				<circle class="me" cx="230" cy="230" r="64"/>
-				<text class="me-t" x="230" y="241">yo</text>
+			<svg viewBox="0 0 460 460" aria-hidden="true" data-k="orbit">
+				<!-- the cycle: one marker travels the outer orbit through the four stages, clockwise -->
+				<path id="kd-cycle" class="o" d="M230 30A200 200 0 1 1 230 430A200 200 0 1 1 230 30"/>
 				<rect class="st" x="224" y="24" width="12" height="12" transform="rotate(45 230 30)"/><rect class="st" x="424" y="224" width="12" height="12" transform="rotate(45 430 230)"/><rect class="st" x="224" y="424" width="12" height="12" transform="rotate(45 230 430)"/><rect class="st" x="24" y="224" width="12" height="12" transform="rotate(45 30 230)"/>
 				<text class="lb" x="230" y="6">entender</text>
 				<text class="lb" x="436" y="262">delegar</text>
 				<text class="lb" x="230" y="466">verificar</text>
 				<text class="lb" x="24" y="262">entregar</text>
-				<text class="cap" x="230" y="146">agentes</text>
+				<rect class="tr" x="-7" y="-7" width="14" height="14" transform="rotate(45)"><animateMotion dur="26s" repeatCount="indefinite" rotate="0"><mpath href="#kd-cycle"/></animateMotion></rect>
+				<!-- the agents: electrons on two tilted orbits around me -->
+				<g transform="rotate(-28 230 230)">
+					<path id="kd-orb-a" class="e" d="M90 230a140 56 0 1 0 280 0a140 56 0 1 0 -280 0"/>
+					<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#kd-orb-a"/></animateMotion></rect>
+					<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite"><mpath href="#kd-orb-a"/></animateMotion></rect>
+				</g>
+				<g transform="rotate(34 230 230)">
+					<path id="kd-orb-b" class="e" d="M90 230a140 56 0 1 0 280 0a140 56 0 1 0 -280 0"/>
+					<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="13s" begin="-3s" repeatCount="indefinite"><mpath href="#kd-orb-b"/></animateMotion></rect>
+				</g>
+				<circle class="halo" cx="230" cy="230" r="64"/>
+				<circle class="me" cx="230" cy="230" r="64"/>
+				<text class="me-t" x="230" y="241">yo</text>
+				<text class="cap" x="230" y="338">agentes</text>
 			</svg>
 		</div>
 	</div>

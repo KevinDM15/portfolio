@@ -178,10 +178,14 @@ body{margin:0;background:var(--bg)}
 .kd-orbit{position:sticky;top:120px;justify-self:end;width:min(100%,440px);aspect-ratio:1}
 .kd-orbit svg{width:100%;height:100%;overflow:visible}
 .kd-orbit .o{fill:none;stroke:color-mix(in srgb,var(--cyan) 40%,transparent);stroke-width:1.2;stroke-dasharray:4 10}
-.kd-orbit .i{fill:none;stroke:color-mix(in srgb,var(--fg) 35%,transparent);stroke-width:1.2}
+.kd-orbit .e{fill:none;stroke:color-mix(in srgb,var(--fg) 22%,transparent);stroke-width:1.1}
+.kd-orbit .ag{fill:var(--cyan);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--cyan) 70%,transparent))}
+.kd-orbit .tr{fill:var(--amber);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--amber) 70%,transparent))}
+.kd-orbit .halo{fill:var(--amber);opacity:.3;transform-box:fill-box;transform-origin:center;animation:kd-halo 3.2s ease-in-out infinite}
+@keyframes kd-halo{0%{transform:scale(1);opacity:.3}100%{transform:scale(1.5);opacity:0}}
 .kd-orbit .me{fill:var(--amber)}
 .kd-orbit .me-t{font:600 30px var(--display);fill:var(--on-accent);text-anchor:middle;letter-spacing:-.02em}
-.kd-orbit .st{fill:var(--cyan)}
+.kd-orbit .st{fill:color-mix(in srgb,var(--fg) 45%,transparent)}
 .kd-orbit .lb{font:500 14px var(--mono);fill:var(--fg);text-anchor:middle}
 .kd-orbit .cap{font:400 14px var(--text);fill:var(--muted);text-anchor:middle}
 
@@ -364,6 +368,6 @@ body{margin:0;background:var(--bg)}
 }
 @media (prefers-reduced-motion:reduce){
 	[data-reveal]{transform:none;opacity:1;transition:none}
-	.kd-band ul,.kd-band .meta i,.kd-now i,.kd-building .wait,.kd-waves path{animation:none}
+	.kd-orbit .halo,.kd-band ul,.kd-band .meta i,.kd-now i,.kd-building .wait,.kd-waves path{animation:none}
 	.kd-portrait-w{transition:none}
 }
