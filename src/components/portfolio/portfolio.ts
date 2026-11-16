@@ -144,6 +144,20 @@ export function initPortfolio() {
 	route();
 	tone();
 
+	/* ---------- phone menu: the burger opens the route as a full-screen panel ---------- */
+	const burger = $<HTMLButtonElement>('[data-k="burger"]');
+	function menu(open: boolean) {
+		if (!bar || !burger) return;
+		if (open) bar.dataset.open = '1'; else delete bar.dataset.open;
+		burger.setAttribute('aria-expanded', String(open));
+		burger.setAttribute('aria-label', open ? 'Cerrar el menú' : 'Abrir el menú');
+		document.documentElement.style.overflow = open ? 'hidden' : '';
+	}
+	burger?.addEventListener('click', () => menu(!bar?.dataset.open));
+	links.forEach((a) => a.addEventListener('click', () => menu(false)));
+	addEventListener('keydown', (e) => { if (e.key === 'Escape') menu(false); });
+	addEventListener('resize', () => { if (innerWidth >= 900) menu(false); }, { passive: true });
+
 	/* ---------- the living network ---------- */
 	const net = $<HTMLCanvasElement>('[data-k="net"]');
 	const trace = $<HTMLElement>('[data-k="trace"]');

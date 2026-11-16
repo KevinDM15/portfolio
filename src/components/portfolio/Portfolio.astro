@@ -61,14 +61,19 @@ const icons: Record<string, string> = {
 
 <header class="kd-top" data-k="bar">
 	<a class="kd-mark" href="#top">Kevin Díaz</a>
-	<nav class="kd-route" aria-label="Secciones">
+	<nav class="kd-route" id="kd-route" aria-label="Secciones">
 		<a href="#top" data-nav="inicio"><i></i><span>Inicio</span></a>
 		<a href="#sobre" data-nav="sobre"><i></i><span>Sobre mí</span></a>
 		<a href="#proyectos" data-nav="proyectos"><i></i><span>Proyectos</span></a>
 		<a href="#experiencia" data-nav="experiencia"><i></i><span>Experiencia</span></a>
 		<a href="#contacto" data-nav="contacto"><i></i><span>Contacto</span></a>
+		<div class="kd-menu-foot">
+			<a class="kd-btn" href="#contacto">Escríbeme</a>
+			<span class="row"><a href="https://github.com/KevinDM15" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/kevindm14/" target="_blank" rel="noopener">LinkedIn</a></span>
+		</div>
 	</nav>
 	<span data-k="trace" class="kd-trace" aria-live="polite"></span>
+	<button type="button" class="kd-burger" data-k="burger" aria-controls="kd-route" aria-expanded="false" aria-label="Abrir el menú"><i></i><i></i></button>
 </header>
 
 <main id="top">
