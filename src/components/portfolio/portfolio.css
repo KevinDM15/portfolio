@@ -11,7 +11,7 @@
    roles: --cyan is the signal (cables, nodes, anchors), --amber the action (buttons, now, toast), --hot the firewall,
    --violet the fog, --plate-hi/lo the plate gradient, --paper-* the light block that closes the page. */
 :root{--bg:#101214;--surface:#1A1D21;--fg:#F5F7F8;--muted:#8E959C;--cyan:#DDE6EA;--amber:#FFD166;--hot:#FF6B6B;--violet:#2B3440;--on-accent:#101214;--plate-hi:#24282E;--plate-lo:#0B0D0F;
-	--paper-bg:#F4F6F7;--paper-surface:#E3E7EA;--paper-fg:#101214;--paper-muted:#5B6168;--paper-accent:#4A5A66;--paper-action:var(--amber);--paper-on-action:var(--on-accent)}
+	--paper-bg:#F4F6F7;--paper-surface:#E3E7EA;--paper-fg:#101214;--paper-muted:#5B6168;--paper-accent:#4A5A66;--paper-action:var(--amber);--paper-on-action:var(--on-accent);--night-bg:var(--bg);--night-surface:var(--surface);--night-fg:var(--fg);--night-muted:var(--muted);--night-cyan:var(--cyan);--night-amber:var(--amber);--night-on:var(--on-accent)}
 [data-kd]{--accent:var(--cyan);--line:color-mix(in srgb,var(--fg) 10%,transparent);--line-strong:color-mix(in srgb,var(--fg) 24%,transparent);
 	--display:'Geist',system-ui,sans-serif;--text:'Geist',system-ui,sans-serif;--mono:'Geist Mono',ui-monospace,Menlo,monospace;
 	--cut:14px;--oct:polygon(var(--cut) 0,calc(100% - var(--cut)) 0,100% var(--cut),100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,var(--cut) 100%,0 calc(100% - var(--cut)),0 var(--cut));
@@ -31,7 +31,7 @@ body{margin:0;background:var(--bg)}
 	radial-gradient(60% 50% at 15% 12%,color-mix(in srgb,var(--violet) 18%,transparent),transparent 60%),
 	radial-gradient(45% 40% at 88% 28%,color-mix(in srgb,var(--cyan) 8%,transparent),transparent 60%)}
 .kd-net{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
-[data-kd] main{position:relative;z-index:1}
+[data-kd] main{position:relative;z-index:1;overflow-x:clip}
 
 /* ---------- top: the mark, the route, the traceroute ---------- */
 .kd-top{position:fixed;left:0;right:0;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px var(--gx) 26px;pointer-events:none;background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 92%,transparent) 30%,color-mix(in srgb,var(--bg) 0%,transparent))}
@@ -232,14 +232,19 @@ body{margin:0;background:var(--bg)}
 [data-kd] .kd-job .desc[data-open] .more::after{transform:rotate(225deg) translateY(-1px)}
 .kd-tags{display:flex;flex-wrap:wrap;align-items:center;font:400 13px/1.6 var(--mono);color:var(--muted)}
 .kd-tags span+span::before{content:'';display:inline-block;width:5px;height:5px;margin:0 12px 2px;background:var(--cyan);transform:rotate(45deg)}
-.kd-extra{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:36px;margin-top:10px}
+/* formación and idiomas in one plate under the jobs: credentials as icon rows, languages with a five-step meter */
+.kd-extra-w{margin-top:22px}
+.kd-extra{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:36px clamp(28px,4vw,56px);padding:clamp(26px,3vw,40px) clamp(24px,3vw,40px)}
 .kd-extra h3{font-size:15px;font-weight:500;letter-spacing:0;margin-bottom:14px;color:var(--cyan)}
-/* index rows: name, dotted leader, detail on the right */
-.kd-list li{display:grid;grid-template-columns:minmax(0,auto) minmax(28px,1fr) auto;align-items:end;gap:10px;padding:9px 0}
-.kd-list b{min-width:0;font:500 15px/1.3 var(--text)}
-.kd-list b small{display:block;margin-top:2px;font:400 12px/1.4 var(--mono);color:var(--muted)}
-.kd-list i{height:1px;margin-bottom:7px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 2px,transparent 2px 6px)}
-.kd-list span{justify-self:end;white-space:nowrap;font:400 12px/1.4 var(--mono);color:var(--muted)}
+.kd-creds li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:center;padding:9px 0}
+.kd-creds .ic{display:grid;place-items:center;width:40px;height:40px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--cyan)}
+.kd-creds .ic svg{width:20px;height:20px}
+.kd-creds b,.kd-langs span>b{display:block;font:500 15px/1.3 var(--text)}
+.kd-creds small,.kd-langs small{display:block;margin-top:3px;font:400 12px/1.4 var(--mono);color:var(--muted)}
+.kd-langs li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+.kd-langs .lvl{display:flex;gap:7px}
+.kd-langs .lvl b{width:9px;height:9px;transform:rotate(45deg);background:color-mix(in srgb,var(--fg) 16%,transparent)}
+.kd-langs .lvl b[data-on]{background:var(--cyan);box-shadow:0 0 8px color-mix(in srgb,var(--cyan) 50%,transparent)}
 
 /* ---------- paper: contact and footer close the page on light, behind rolling waves ---------- */
 .kd-paper{position:relative;margin-top:clamp(120px,16vw,220px);--bg:var(--paper-bg);--surface:var(--paper-surface);--fg:var(--paper-fg);--muted:var(--paper-muted);--cyan:var(--paper-accent);--amber:var(--paper-action);--on-accent:var(--paper-on-action);--line:color-mix(in srgb,var(--paper-fg) 10%,transparent);--line-strong:color-mix(in srgb,var(--paper-fg) 22%,transparent);background:var(--bg);color:var(--fg)}
@@ -279,11 +284,20 @@ body{margin:0;background:var(--bg)}
 .kd-contact-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;font:400 13px/1 var(--mono);color:var(--muted)}
 .kd-contact-meta span{display:inline-flex;align-items:center;gap:10px}
 .kd-contact-meta i{width:7px;height:7px;background:var(--cyan);transform:rotate(45deg)}
-.kd-cols{display:grid;gap:30px}
-.kd-cols h3{font-size:15px;font-weight:500;letter-spacing:0;margin-bottom:12px;color:var(--cyan)}
+/* the contact card: a dark plate standing on the paper, with the channels and the clock */
+.kd-card{--bg:var(--night-bg);--surface:var(--night-surface);--fg:var(--night-fg);--muted:var(--night-muted);--cyan:var(--night-cyan);--amber:var(--night-amber);--on-accent:var(--night-on);--line:color-mix(in srgb,var(--night-fg) 10%,transparent);--line-strong:color-mix(in srgb,var(--night-fg) 24%,transparent);
+	display:grid;gap:30px;padding:clamp(26px,3vw,40px);color:var(--fg);background:linear-gradient(160deg,var(--plate-hi),var(--plate-lo))}
+.kd-card h3{font-size:15px;font-weight:500;letter-spacing:0;margin-bottom:12px;color:var(--cyan)}
+/* what helps me answer: three rows before the mail button */
+.kd-brief{display:grid;gap:10px;margin:22px 0 0}
+.kd-brief li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:center}
+.kd-brief .ic{display:grid;place-items:center;width:40px;height:40px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--fg)}
+.kd-brief .ic svg{width:20px;height:20px}
+.kd-brief b{display:block;font:500 15px/1.3 var(--text)}
+.kd-brief small{display:block;margin-top:2px;font:400 12px/1.4 var(--mono);color:var(--muted)}
 .kd-tiles{display:grid;gap:10px}
 .kd-tiles>li>*{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;padding:10px 14px 10px 10px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:color-mix(in srgb,var(--paper-fg) 4.5%,transparent);text-decoration:none;color:inherit;transition:background .25s,transform .25s}
-.kd-tiles a:hover{background:color-mix(in srgb,var(--paper-accent) 12%,transparent);transform:translateX(4px)}
+.kd-tiles a:hover{background:color-mix(in srgb,var(--cyan) 12%,transparent);transform:translateX(4px)}
 .kd-tiles .ic{display:grid;place-items:center;width:44px;height:44px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:var(--fg);color:var(--bg)}
 .kd-tiles .ic svg{width:21px;height:21px}
 .kd-tiles a:hover .ic{background:var(--cyan)}
@@ -353,8 +367,6 @@ body{margin:0;background:var(--bg)}
 	.kd-readouts span{margin-top:0}
 	.kd-facts .row{grid-template-columns:minmax(0,1fr)}
 	.kd-facts .k{padding-top:0}
-	.kd-list li{grid-template-columns:minmax(28px,1fr) auto}
-	.kd-list b{grid-column:1/-1}
 }
 @media (prefers-reduced-motion:reduce){
 	[data-reveal]{transform:none;opacity:1;transition:none}
