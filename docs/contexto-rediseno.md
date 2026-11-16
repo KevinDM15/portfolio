@@ -41,7 +41,7 @@ React, Next.js, React Native, TypeScript, NestJS, Go, Python, PostgreSQL, AWS, G
 
 ### Proyectos
 
-Todavía no hay casos de estudio publicados. Mientras tanto se muestra una lista "Construyendo" con repositorios reales (este portafolio, KevDots, el tap de Homebrew) y una fila pendiente: "El primer caso de estudio está en camino." Los datos viven en el array `building` del componente.
+Todavía no hay casos de estudio publicados. Mientras tanto se muestra una lista "Construyendo" con repositorios reales (por ahora, este portafolio) y una fila pendiente: "El primer caso de estudio está en camino." Los datos viven en el array `building` del componente.
 
 ### Experiencia (2018 — hoy)
 
