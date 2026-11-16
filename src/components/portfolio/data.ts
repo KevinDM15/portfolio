@@ -118,9 +118,9 @@ export const upcoming = {
 	when: 'en camino',
 	schematic: {
 		nodes: [
-			{ id: 'ctx', label: 'contexto', sub: 'el problema y el equipo', x: 20, y: 110, w: 130, tone: 'muted' },
-			{ id: 'dec', label: 'decisiones', sub: 'qué y por qué', x: 175, y: 110, w: 130, tone: 'muted' },
-			{ id: 'res', label: 'resultados', sub: 'con cifras', x: 330, y: 110, w: 130, tone: 'muted' },
+			{ id: 'ctx', label: 'contexto', sub: 'problema y equipo', x: 10, y: 110, w: 140, tone: 'muted' },
+			{ id: 'dec', label: 'decisiones', sub: 'qué y por qué', x: 170, y: 110, w: 140, tone: 'muted' },
+			{ id: 'res', label: 'resultados', sub: 'con cifras', x: 330, y: 110, w: 140, tone: 'muted' },
 		],
 		links: [{ from: 'ctx', to: 'dec' }, { from: 'dec', to: 'res' }],
 		icons: [],
