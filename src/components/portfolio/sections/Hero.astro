@@ -1,0 +1,30 @@
+---
+/* inicio: the name as the hero, one claim, two actions, and the dot portrait with its HUD of build facts */
+import Document from '../../icons/Document.astro';
+import { CV } from '../data';
+import { sha, built } from '../build';
+---
+
+<section class="kd-hero" aria-label="Inicio">
+	<div class="kd-hero-text">
+		<i class="kd-anchor" data-node="inicio" aria-hidden="true"></i>
+		<p class="kd-kicker"><i aria-hidden="true"></i>Desarrollador full-stack · Barranquilla</p>
+		<h1>Kevin<br>Díaz</h1>
+		<p class="kd-claim">Software que el equipo puede mantener. Hoy, con agentes de IA.</p>
+		<div class="kd-actions">
+			<span class="kd-btnw"><a class="kd-btn" href="#contacto">Escríbeme</a></span>
+			<a class="kd-btn-ghost" href={CV} target="_blank" rel="noopener"><Document />Ver CV</a>
+		</div>
+	</div>
+	<div class="kd-pw kd-portrait-w" data-tilt>
+		<div class="kd-plate kd-portrait">
+			<canvas data-k="cv" role="img" aria-label="Retrato de Kevin Díaz hecho de puntos que se apartan del cursor"></canvas>
+			<div class="hud" aria-hidden="true">
+				<span class="tl">rev {sha}<br>deploy {built}</span>
+				<span class="tr" data-k="vp"></span>
+				<span class="bl"><i></i>kevin.local</span>
+				<span class="br"><b data-time>--:--</b> UTC−5</span>
+			</div>
+		</div>
+	</div>
+</section>

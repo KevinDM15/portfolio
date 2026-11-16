@@ -1,0 +1,19 @@
+---
+/* one chart: a year grid behind, each job a bar on its own row with its name sitting on the bar, and a dashed "hoy" */
+import { lanes, TIMELINE_MONTHS } from '../data';
+const pct = (months: number) => `${((months / TIMELINE_MONTHS) * 100).toFixed(1)}%`;
+const years = [0, 24, 48, 72, 96].map((m, i) => ({ x: pct(m), label: `'${18 + i * 2}` }));
+/** a lane that ends near the right edge anchors its label on the right so it never overflows */
+const endsLate = (start: number, length: number) => start + length >= 88;
+---
+
+<div class="kd-tl" aria-hidden="true">
+	<div class="years">{years.map((y) => <i style={`--x:${y.x}`}><span>{y.label}</span></i>)}</div>
+	{lanes.map((x) => (
+		<div class="row" data-end={endsLate(x.start, x.length) ? '' : undefined} data-now={x.when.endsWith('hoy') ? '' : undefined} style={`--l:${pct(x.start)};--w:${pct(x.length)}`}>
+			<span class="who"><b>{x.name}</b><small>{x.when}</small></span>
+			<i class="bar"></i>
+		</div>
+	))}
+	<i class="now"><span>hoy</span></i>
+</div>

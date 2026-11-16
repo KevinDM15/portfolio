@@ -1,0 +1,42 @@
+---
+/*
+ * How I work, as an atom: me at the centre, the agents as electrons on two tilted orbits, and one marker travelling
+ * the outer orbit through entender, delegar, verificar and entregar. Native SVG motion; behaviours/orbit pauses it
+ * for people who asked for less motion.
+ */
+const stages = [
+	{ label: 'entender', x: 230, y: 6, station: { x: 230, y: 30 } },
+	{ label: 'delegar', x: 436, y: 262, station: { x: 430, y: 230 } },
+	{ label: 'verificar', x: 230, y: 466, station: { x: 230, y: 430 } },
+	{ label: 'entregar', x: 24, y: 262, station: { x: 30, y: 230 } },
+];
+const ELLIPSE = 'M90 230a140 56 0 1 0 280 0a140 56 0 1 0 -280 0';
+---
+
+<div class="kd-orbit" role="img" aria-label="Cómo trabajo: yo al centro decido y reviso; los agentes entienden, delegan, verifican y entregan">
+	<svg viewBox="0 0 460 460" aria-hidden="true" data-k="orbit">
+		<path id="kd-cycle" class="o" d="M230 30A200 200 0 1 1 230 430A200 200 0 1 1 230 30" />
+		{stages.map((s) => (
+			<>
+				<rect class="st" x={s.station.x - 6} y={s.station.y - 6} width="12" height="12" transform={`rotate(45 ${s.station.x} ${s.station.y})`} />
+				<text class="lb" x={s.x} y={s.y}>{s.label}</text>
+			</>
+		))}
+		<rect class="tr" x="-7" y="-7" width="14" height="14" transform="rotate(45)">
+			<animateMotion dur="26s" repeatCount="indefinite" rotate="0"><mpath href="#kd-cycle" /></animateMotion>
+		</rect>
+		<g transform="rotate(-28 230 230)">
+			<path id="kd-orb-a" class="e" d={ELLIPSE} />
+			<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#kd-orb-a" /></animateMotion></rect>
+			<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite"><mpath href="#kd-orb-a" /></animateMotion></rect>
+		</g>
+		<g transform="rotate(34 230 230)">
+			<path id="kd-orb-b" class="e" d={ELLIPSE} />
+			<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="13s" begin="-3s" repeatCount="indefinite"><mpath href="#kd-orb-b" /></animateMotion></rect>
+		</g>
+		<circle class="halo" cx="230" cy="230" r="64" />
+		<circle class="me" cx="230" cy="230" r="64" />
+		<text class="me-t" x="230" y="241">yo</text>
+		<text class="cap" x="230" y="338">agentes</text>
+	</svg>
+</div>

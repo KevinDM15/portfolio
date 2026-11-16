@@ -1,0 +1,9 @@
+---
+import Icon from './Icon.astro';
+interface Props { class?: string }
+---
+
+<Icon class={Astro.props.class}>
+	<path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8z" />
+	<path d="M14 3v5h5M9 13h6M9 17h6" />
+</Icon>

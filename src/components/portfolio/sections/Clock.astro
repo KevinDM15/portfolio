@@ -1,0 +1,13 @@
+---
+/* a small analogue clock; behaviours/clock turns the hands and writes the time next to it */
+---
+
+<span class="kd-clock">
+	<svg viewBox="0 0 100 100" aria-hidden="true">
+		<circle cx="50" cy="50" r="46" fill="none" stroke-width="4" opacity=".5" />
+		<line data-k="hh" x1="50" y1="50" x2="50" y2="27" stroke-width="7" stroke-linecap="round" />
+		<line data-k="mm" x1="50" y1="50" x2="50" y2="14" stroke-width="5" stroke-linecap="round" />
+		<g data-k="sec"><line x1="50" y1="58" x2="50" y2="10" stroke-width="2.5" /></g>
+	</svg>
+	<b data-time>--:--</b><span>UTC−5</span>
+</span>

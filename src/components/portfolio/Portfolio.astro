@@ -1,262 +1,58 @@
 ---
-import './portfolio.css';
+/*
+ * The landing, composed: the map behind everything, the bar, the sections in reading order, the light block that
+ * closes the page, the toast and the chat. Each section owns its markup; data lives in data.ts; behaviours in behaviours/.
+ */
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/header.css';
+import './styles/plates.css';
+import './styles/hero.css';
+import './styles/band.css';
+import './styles/about.css';
+import './styles/projects.css';
+import './styles/experience.css';
+import './styles/paper.css';
+import './styles/contact.css';
+import './styles/footer.css';
+import './styles/toast.css';
+import './styles/responsive.css';
+import Header from './sections/Header.astro';
+import Hero from './sections/Hero.astro';
+import TechBand from './sections/TechBand.astro';
+import About from './sections/About.astro';
+import Projects from './sections/Projects.astro';
+import Experience from './sections/Experience.astro';
+import Waves from './sections/Waves.astro';
+import Contact from './sections/Contact.astro';
+import Footer from './sections/Footer.astro';
 import { ChatBot } from '../islands/ChatBot';
-import { execSync } from 'node:child_process';
-
-// build facts for the HUD and the footer: the deployed commit (Vercel exposes it, git answers locally) and the build date
-const sha = (process.env.VERCEL_GIT_COMMIT_SHA ?? (() => { try { return execSync('git rev-parse HEAD').toString().trim(); } catch { return ''; } })()).slice(0, 7);
-const built = (() => { const p = new Intl.DateTimeFormat('es-CO', { timeZone: 'America/Bogota', day: 'numeric', month: 'short', year: 'numeric' }).formatToParts(new Date()); const g = (t: string) => p.find((x) => x.type === t)?.value.replace('.', '') ?? ''; return `${g('day')} ${g('month')} ${g('year')}`; })();
-const repo = 'https://github.com/KevinDM15/portfolio';
-// where Kevin has worked, with the initials shown on the tiles
-const companies = {
-	cuc: { name: 'Universidad de la Costa', short: 'CUC', url: 'https://www.cuc.edu.co' },
-	elsol: { name: 'El Sol Neighborhood Educational Center', short: 'El Sol', url: 'https://elsolnec.org' },
-	rocket: { name: 'The Rocket Code', short: 'RC', url: 'https://therocketcode.com' },
-	wawandco: { name: 'Wawandco', short: 'W', url: 'https://wawand.co' },
-	koombea: { name: 'Koombea', short: 'K', url: 'https://www.koombea.com' },
-};
-// what is being built right now, while the first case study is on its way
-const building = [
-	{ name: 'Este portafolio', text: 'La landing como mapa de red con PixiJS sobre Astro, y un asistente que responde con el CV como contexto.', url: repo, meta: 'TypeScript · Astro' },
-];
-// the stack as network modules: name, where it lives in my work, a short interface-like id and its mark
-const tech = [
-	{ name: 'React', kind: 'frontend', id: 'ui0', icon: 'react' }, { name: 'Next.js', kind: 'frontend', id: 'ui1', icon: 'nextdotjs' }, { name: 'React Native', kind: 'móvil', id: 'mb0', icon: 'react' }, { name: 'TypeScript', kind: 'lenguaje', id: 'ts0', icon: 'typescript' },
-	{ name: 'NestJS', kind: 'backend', id: 'api0', icon: 'nestjs' }, { name: 'Go', kind: 'backend', id: 'api1', icon: 'go' }, { name: 'Python', kind: 'backend', id: 'api2', icon: 'python' }, { name: 'PostgreSQL', kind: 'datos', id: 'db0', icon: 'postgresql' },
-	{ name: 'AWS', kind: 'cloud', id: 'cl0', icon: 'amazonwebservices' }, { name: 'GCP', kind: 'cloud', id: 'cl1', icon: 'googlecloud' }, { name: 'LLMs', kind: 'IA', id: 'ai0', icon: 'llm' }, { name: 'Arquitectura hexagonal', kind: 'diseño', id: 'arq', icon: 'hexagonal' },
-];
-const jobs = [
-	{ when: 'Jun 2026 — hoy', span: '4 meses y contando', name: 'Universidad de la Costa', url: companies.cuc.url, role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web con Vite y React y diseño arquitecturas y planes técnicos para nuevas funcionalidades. Migro de forma progresiva módulos legacy (PHP, JavaScript y jQuery) hacia una arquitectura moderna, con React en el frontend y Python serverless en el backend.', tags: ['React', 'Vite', 'Python', 'Serverless'] },
-	{ when: 'Ene 2026 — hoy', span: '9 meses y contando', name: 'El Sol Neighborhood Educational Center', url: companies.elsol.url, role: 'Desarrollador full-stack · Freelance', text: 'Desarrollo aplicaciones web y móviles con Next.js, React y React Native, con interfaces multiplataforma que priorizan rendimiento, usabilidad y consistencia visual. Diseño arquitecturas y planes técnicos, y trabajo en equipos ágiles con Scrum.', tags: ['Next.js', 'React', 'React Native'] },
-	{ when: 'Oct 2023 — Jul 2026', span: '2 años, 9 meses', name: 'The Rocket Code', url: companies.rocket.url, role: 'Desarrollador full-stack · Freelance', text: 'Optimicé aplicaciones del lado del cliente para escalar y responder más rápido. Creé APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, integré modelos de lenguaje (LLMs) por API para automatizar procesos y construí componentes reutilizables con React, MaterialUI, Redux y Next.js.', tags: ['Next.js', 'React', 'NestJS', 'PostgreSQL', 'AWS', 'LLMs'] },
-	{ when: 'Ago 2020 — Abr 2023', span: '2 años, 8 meses', name: 'Wawandco', url: companies.wawandco.url, role: 'Desarrollador full-stack', text: 'Mejoré código nativo en Go aplicando SOLID, Clean Code y MVC. Implementé servicios backend y funciones serverless en GCP, reduje la deuda técnica y migré librerías a versiones actuales.', tags: ['Go', 'GCP', 'Cloud Functions', 'Firestore'] },
-	{ when: 'Ago — Dic 2018', span: '5 meses', name: 'Koombea', url: companies.koombea.url, role: 'Desarrollador full-stack', text: 'Desarrollo de aplicaciones web con JavaScript, HTML y CSS.', tags: ['JavaScript'] },
-];
-// timeline lanes: months since Jan 2018 over a 108-month axis (2018 to 2026)
-const lanes = [
-	{ name: 'CUC', when: 'Jun 26 — hoy', l: 101, w: 5 },
-	{ name: 'El Sol', when: 'Ene 26 — hoy', l: 96, w: 10 },
-	{ name: 'Rocket Code', when: 'Oct 23 — Jul 26', l: 69, w: 33 },
-	{ name: 'Wawandco', when: 'Ago 20 — Abr 23', l: 31, w: 32 },
-	{ name: 'Koombea', when: 'Ago — Dic 18', l: 7, w: 5 },
-];
-const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
-// credentials and languages; `lvl` is a five-step meter, not a score
-const creds = [
-	{ t: 'Técnico en Programación de Software', w: 'SENA · 2017 — 2018', k: 'cap' },
-	{ t: 'Técnico en Mantenimiento de Sistemas Informáticos', w: 'UniBarranquilla · 2019 — 2021', k: 'cap' },
-	{ t: 'Tecnólogo en Gestión de Sistemas Informáticos', w: 'UniBarranquilla · 2022 — hoy', k: 'cap' },
-	{ t: 'Scrum Developer', w: 'Kleer · 2023', k: 'award' },
-];
-const langs = [{ t: 'Español', w: 'Nativo', lvl: 5 }, { t: 'Inglés', w: 'Básico', lvl: 2 }];
-const icons: Record<string, string> = {
-	cap: '<path d="M3 9.5 12 5l9 4.5-9 4.5z"/><path d="M7 11.5V16c0 1.5 2.3 3 5 3s5-1.5 5-3v-4.5"/><path d="M21 9.5V15"/>',
-	award: '<circle cx="12" cy="9" r="5"/><path d="m8.6 13.2-1.6 7.3 5-2.8 5 2.8-1.6-7.3"/>',
-};
 ---
 
 <div data-kd data-t="dark">
-<div class="kd-fog" aria-hidden="true"></div>
-<canvas data-k="net" class="kd-net" aria-hidden="true"></canvas>
+	<div class="kd-fog" aria-hidden="true"></div>
+	<canvas data-k="net" class="kd-net" aria-hidden="true"></canvas>
 
-<header class="kd-top" data-k="bar">
-	<a class="kd-mark" href="#top">Kevin Díaz</a>
-	<nav class="kd-route" id="kd-route" aria-label="Secciones">
-		<a href="#top" data-nav="inicio"><i></i><span>Inicio</span></a>
-		<a href="#sobre" data-nav="sobre"><i></i><span>Sobre mí</span></a>
-		<a href="#proyectos" data-nav="proyectos"><i></i><span>Proyectos</span></a>
-		<a href="#experiencia" data-nav="experiencia"><i></i><span>Experiencia</span></a>
-		<a href="#contacto" data-nav="contacto"><i></i><span>Contacto</span></a>
-		<div class="kd-menu-foot">
-			<a class="kd-btn" href="#contacto">Escríbeme</a>
-			<span class="row"><a href="https://github.com/KevinDM15" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/kevindm14/" target="_blank" rel="noopener">LinkedIn</a></span>
-		</div>
-	</nav>
-	<span data-k="trace" class="kd-trace" aria-live="polite"></span>
-	<button type="button" class="kd-burger" data-k="burger" aria-controls="kd-route" aria-expanded="false" aria-label="Abrir el menú"><i></i><i></i></button>
-</header>
+	<Header />
 
-<main id="top">
-<section class="kd-hero" aria-label="Inicio">
-	<div class="kd-hero-text">
-		<i class="kd-anchor" data-node="inicio" aria-hidden="true"></i>
-		<p class="kd-kicker"><i aria-hidden="true"></i>Desarrollador full-stack · Barranquilla</p>
-		<h1>Kevin<br>Díaz</h1>
-		<p class="kd-claim">Software que el equipo puede mantener. Hoy, con agentes de IA.</p>
-		<div class="kd-actions">
-			<span class="kd-btnw"><a class="kd-btn" href="#contacto">Escríbeme</a></span>
-			<a class="kd-btn-ghost" href="/CV_KEVIN_ES.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Ver CV</a>
+	<main id="top">
+		<Hero />
+		<TechBand />
+		<About />
+		<Projects />
+		<Experience />
+		<div class="kd-paper">
+			<Waves />
+			<Contact />
+			<Footer />
 		</div>
-	</div>
-	<div class="kd-pw kd-portrait-w" data-tilt>
-		<div class="kd-plate kd-portrait">
-			<canvas data-k="cv" role="img" aria-label="Retrato de Kevin Díaz hecho de puntos que se apartan del cursor"></canvas>
-			<div class="hud" aria-hidden="true">
-				<span class="tl">rev {sha}<br>deploy {built}</span>
-				<span class="tr" data-k="vp"></span>
-				<span class="bl"><i></i>kevin.local</span>
-				<span class="br"><b data-time>--:--</b> UTC−5</span>
-			</div>
-		</div>
-	</div>
-</section>
+	</main>
 
-<div class="kd-band" aria-label="Tecnologías">
-	<ul>{[...tech, ...tech].map((x, i) => <li style={`--d:${(i * 0.37) % 2.4}s`}><span class="mark"><img src={`/svg/tech/${x.icon}.svg`} alt="" width="36" height="36" /></span><span class="txt"><b>{x.name}</b><small>{x.kind}</small></span><span class="meta"><i aria-hidden="true"></i><em aria-hidden="true">{x.id}</em></span></li>)}</ul>
+	<div data-k="toast" class="kd-toast" role="status" aria-live="polite">Correo copiado</div>
+	<ChatBot client:load />
 </div>
 
-<section id="sobre" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="sobre-mi" aria-hidden="true"></i><h2>Sobre mí</h2></div>
-	<div class="kd-about">
-		<div class="kd-pw" data-reveal>
-			<div class="kd-plate">
-				<p class="kd-statement">Seis años construyendo productos digitales. <b>Hoy decido el rumbo y los agentes ejecutan.</b></p>
-				<div class="kd-copy">
-					<p>Especificación clara, tareas pequeñas y criterios comprobables. Yo reviso y defiendo el resultado.</p>
-				</div>
-				<div class="kd-facts">
-					<div class="row"><span class="k">Ahora con</span><div class="v">
-						{[companies.cuc, companies.elsol].map((c) => <a href={c.url} target="_blank" rel="noopener"><i>{c.short}</i>{c.name}</a>)}
-					</div></div>
-					<div class="row"><span class="k">Antes en</span><div class="v">
-						{[companies.rocket, companies.wawandco, companies.koombea].map((c) => <a href={c.url} target="_blank" rel="noopener"><i>{c.short}</i>{c.name}</a>)}
-					</div></div>
-					<div class="row"><span class="k">Stack</span><div class="v">
-						{tech.filter((t) => !['llm', 'hexagonal'].includes(t.icon)).map((t) => <span><i><img src={`/svg/tech/${t.icon}.svg`} alt="" width="16" height="16" /></i>{t.name}</span>)}
-					</div></div>
-				</div>
-				<div class="kd-readouts">
-					<div><b>2018</b><span>Primer empleo como desarrollador</span></div>
-					<div><b>5</b><span>Empresas y clientes, del backend al frontend</span></div>
-					<div><b>Yo + IA</b><span>Personas deciden, agentes ejecutan</span></div>
-				</div>
-			</div>
-		</div>
-		<div class="kd-orbit" role="img" aria-label="Cómo trabajo: yo al centro decido y reviso; los agentes entienden, delegan, verifican y entregan">
-			<svg viewBox="0 0 460 460" aria-hidden="true" data-k="orbit">
-				<!-- the cycle: one marker travels the outer orbit through the four stages, clockwise -->
-				<path id="kd-cycle" class="o" d="M230 30A200 200 0 1 1 230 430A200 200 0 1 1 230 30"/>
-				<rect class="st" x="224" y="24" width="12" height="12" transform="rotate(45 230 30)"/><rect class="st" x="424" y="224" width="12" height="12" transform="rotate(45 430 230)"/><rect class="st" x="224" y="424" width="12" height="12" transform="rotate(45 230 430)"/><rect class="st" x="24" y="224" width="12" height="12" transform="rotate(45 30 230)"/>
-				<text class="lb" x="230" y="6">entender</text>
-				<text class="lb" x="436" y="262">delegar</text>
-				<text class="lb" x="230" y="466">verificar</text>
-				<text class="lb" x="24" y="262">entregar</text>
-				<rect class="tr" x="-7" y="-7" width="14" height="14" transform="rotate(45)"><animateMotion dur="26s" repeatCount="indefinite" rotate="0"><mpath href="#kd-cycle"/></animateMotion></rect>
-				<!-- the agents: electrons on two tilted orbits around me -->
-				<g transform="rotate(-28 230 230)">
-					<path id="kd-orb-a" class="e" d="M90 230a140 56 0 1 0 280 0a140 56 0 1 0 -280 0"/>
-					<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="9s" repeatCount="indefinite"><mpath href="#kd-orb-a"/></animateMotion></rect>
-					<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite"><mpath href="#kd-orb-a"/></animateMotion></rect>
-				</g>
-				<g transform="rotate(34 230 230)">
-					<path id="kd-orb-b" class="e" d="M90 230a140 56 0 1 0 280 0a140 56 0 1 0 -280 0"/>
-					<rect class="ag" x="-5" y="-5" width="10" height="10" transform="rotate(45)"><animateMotion dur="13s" begin="-3s" repeatCount="indefinite"><mpath href="#kd-orb-b"/></animateMotion></rect>
-				</g>
-				<circle class="halo" cx="230" cy="230" r="64"/>
-				<circle class="me" cx="230" cy="230" r="64"/>
-				<text class="me-t" x="230" y="241">yo</text>
-				<text class="cap" x="230" y="338">agentes</text>
-			</svg>
-		</div>
-	</div>
-</section>
-
-<section id="proyectos" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>construyendo</small></div>
-	<div class="kd-pw kd-building" data-reveal>
-		<div class="kd-plate">
-			<p class="kd-building-lede">Lo que tengo abierto ahora, con su código a la vista. El primer caso de estudio con contexto, decisiones y resultados está en camino.</p>
-			<ul>
-				{building.map((b) => <li><a href={b.url} target="_blank" rel="noopener"><span class="txt"><b>{b.name}</b><p>{b.text}</p><small>{b.meta}</small></span><i class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></i></a></li>)}
-				<li class="pending"><div><span class="txt"><b>Primer caso de estudio</b><p>Un proyecto publicado con su contexto, decisiones y resultados. Aparecerá aquí, conectado a esta ruta.</p><small>en construcción</small></span><i class="wait" aria-hidden="true"></i></div></li>
-			</ul>
-		</div>
-	</div>
-</section>
-
-<section id="experiencia" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="experiencia" aria-hidden="true"></i><h2>Experiencia</h2><small>2018 — hoy</small></div>
-	<div class="kd-exp">
-		<aside class="kd-path">
-			<p>Del JavaScript de 2018 al Next.js, React Native y las integraciones con IA de hoy, pasando por Go, NestJS y AWS. Siempre en equipos que entregan.</p>
-			<div class="kd-tl" aria-hidden="true">
-				<div class="years">{[0, 24, 48, 72, 96].map((m, i) => <i style={`--x:${pct(m)}`}><span>'{18 + i * 2}</span></i>)}</div>
-				{lanes.map((x) => <div class="row" data-end={x.l + x.w >= 88 ? '' : undefined} data-now={x.when.endsWith('hoy') ? '' : undefined} style={`--l:${pct(x.l)};--w:${pct(x.w)}`}><span class="who"><b>{x.name}</b><small>{x.when}</small></span><i class="bar"></i></div>)}
-				<i class="now"><span>hoy</span></i>
-			</div>
-		</aside>
-		<div>
-			<div class="kd-jobs">
-				{jobs.map((j) => (
-					<div class="kd-pw" data-reveal>
-						<article class="kd-plate kd-job">
-							<div class="when"><span>{j.when}</span><span>{j.span}</span></div>
-							<h3><a href={j.url} target="_blank" rel="noopener">{j.name}<i class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></i></a></h3>
-							<div class="role">{j.role}</div>
-							<div class="desc" data-k="clamp"><p>{j.text}</p><button type="button" class="more" data-more aria-expanded="false">ver más</button></div>
-							<div class="kd-tags">{j.tags.map((t) => <span>{t}</span>)}</div>
-						</article>
-					</div>
-				))}
-			</div>
-			<div class="kd-pw kd-extra-w" data-reveal>
-				<div class="kd-plate kd-extra">
-					<div><h3>Formación</h3><ul class="kd-creds">
-						{creds.map((c) => <li><i class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[c.k]} /></i><span><b>{c.t}</b><small>{c.w}</small></span></li>)}
-					</ul></div>
-					<div><h3>Idiomas</h3><ul class="kd-langs">
-						{langs.map((l) => <li><span><b>{l.t}</b><small>{l.w}</small></span><i class="lvl" aria-hidden="true">{[1, 2, 3, 4, 5].map((n) => <b data-on={n <= l.lvl ? '' : undefined}></b>)}</i></li>)}
-					</ul></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<div class="kd-paper">
-<div class="kd-waves" aria-hidden="true">
-	<i class="kd-anchor" data-node="contacto"></i>
-	<svg viewBox="0 0 2880 140" preserveAspectRatio="none"><path class="w1" d="M0 90C240 150 480 20 720 70S1200 150 1440 90L1440 90C1680 150 1920 20 2160 70S2640 150 2880 90V140H0Z"/><path class="w2" d="M0 110C260 40 520 160 780 90S1240 30 1440 110L1440 110C1700 40 1960 160 2220 90S2680 30 2880 110V140H0Z"/><path class="w3" d="M0 120C300 80 600 130 900 100S1300 70 1440 120L1440 120C1740 80 2040 130 2340 100S2740 70 2880 120V140H0Z"/></svg>
-</div>
-<section id="contacto" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Contacto</h2><small>te respondo</small></div>
-	<div class="kd-contact">
-		<form class="kd-form" data-k="form" novalidate>
-			<h2>¿Tienes una idea?<b>Hablemos.</b></h2>
-			<p class="kd-contact-lede">Cuéntame qué quieres construir, en qué punto está y para cuándo lo necesitas. Te respondo con una propuesta clara.</p>
-			<label class="kd-field"><span>Tu nombre</span><input name="nombre" type="text" autocomplete="name" required placeholder="Nombre y apellido" /></label>
-			<label class="kd-field"><span>Tu correo</span><input name="correo" type="email" autocomplete="email" required placeholder="nombre@empresa.com" /></label>
-			<label class="kd-field"><span>Tu idea</span><textarea name="mensaje" rows="3" required placeholder="Qué quieres construir, en qué punto está y para cuándo"></textarea></label>
-			<div class="kd-form-foot">
-				<button type="submit" class="kd-btn kd-send">Enviar mensaje<i class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></i></button>
-				<small>Se abre en tu aplicación de correo con el mensaje listo para enviar.</small>
-			</div>
-		</form>
-		<aside class="kd-details" aria-label="Datos de contacto">
-			<div><small>Correo</small><button type="button" class="kd-copy" data-copy aria-label="Copiar correo kevindiazm.14@gmail.com"><b>kevindiazm.14@gmail.com</b><i class="act"><svg class="cp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i></button><em data-k="mail-hint">clic para copiar el correo</em></div>
-			<div><small>Teléfono</small><a href="tel:+573002329174">+57 300 232 9174</a></div>
-			<div><small>Redes</small><span class="row"><a href="https://github.com/KevinDM15" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/kevindm14/" target="_blank" rel="noopener">LinkedIn</a></span></div>
-			<div><small>Hora en Barranquilla</small><span class="kd-clock"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke-width="4" opacity=".5"/><line data-k="hh" x1="50" y1="50" x2="50" y2="27" stroke-width="7" stroke-linecap="round"/><line data-k="mm" x1="50" y1="50" x2="50" y2="14" stroke-width="5" stroke-linecap="round"/><g data-k="sec"><line x1="50" y1="58" x2="50" y2="10" stroke-width="2.5"/></g></svg><b data-time>--:--</b><span>UTC−5</span></span></div>
-			<div><small>Modalidad</small><span class="txt">Freelance y contratos · remoto</span></div>
-		</aside>
-	</div>
-</section>
-
-<footer class="kd-foot">
-	<div>
-		<p>Gracias por <b>la visita.</b></p>
-		<small>Kevin Díaz · Desarrollador full-stack · Barranquilla, CO<br>© 2026 · hecho con código y café</small>
-		<p class="kd-build">kevindev.co v3<i></i><a href={`${repo}/commit/${sha}`} target="_blank" rel="noopener">rev {sha}</a><i></i>desplegado {built}</p>
-	</div>
-	<a href="#top" class="kd-up" aria-label="Volver arriba"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
-</footer>
-</div>
-</main>
-
-<div data-k="toast" class="kd-toast" role="status" aria-live="polite">Correo copiado</div>
-<ChatBot client:load />
-</div>
 <script>
-	import { initPortfolio } from './portfolio';
+	import { initPortfolio } from './behaviours';
 	initPortfolio();
 </script>

@@ -1,0 +1,80 @@
+/* ---------- footer ---------- */
+.kd-foot {
+	position: relative;
+	z-index: 1;
+	max-width: 1240px;
+	margin: 0 auto;
+	padding: 60px var(--gx) 40px;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 30px;
+	align-items: end;
+}
+
+.kd-foot p {
+	margin: 0;
+	font: 600 clamp(36px, 5vw, 80px)/.98 var(--display);
+	letter-spacing: -.02em;
+}
+
+.kd-foot p b {
+	font-weight: 400;
+	color: var(--muted);
+}
+
+.kd-foot small {
+	display: block;
+	margin-top: 14px;
+	font: 400 12px/1.6 var(--mono);
+	color: var(--muted);
+}
+
+/* the build that is serving this page */
+.kd-foot .kd-build {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 10px;
+	margin: 18px 0 0;
+	font: 400 12px/1 var(--mono);
+	letter-spacing: 0;
+	color: var(--muted);
+}
+
+.kd-foot .kd-build i {
+	width: 5px;
+	height: 5px;
+	background: var(--cyan);
+	transform: rotate(45deg);
+}
+
+.kd-foot .kd-build a {
+	color: var(--cyan);
+	text-decoration: none;
+}
+
+.kd-foot .kd-build a:hover {
+	text-decoration: underline;
+}
+
+.kd-up {
+	display: grid;
+	place-items: center;
+	width: 64px;
+	height: 64px;
+	clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+	background: var(--surface);
+	box-shadow: inset 0 0 0 1px var(--line-strong);
+	text-decoration: none;
+	color: var(--cyan);
+	transition: transform .3s;
+}
+
+.kd-up:hover {
+	transform: translateY(-4px);
+}
+
+.kd-up svg {
+	width: 18px;
+	height: 18px;
+}

@@ -1,0 +1,13 @@
+---
+/* three rolling waves over the dark map; the last waypoint sits on the crest, so the star lands in view above the paper */
+const WAVES = [
+	{ cls: 'w1', d: 'M0 90C240 150 480 20 720 70S1200 150 1440 90L1440 90C1680 150 1920 20 2160 70S2640 150 2880 90V140H0Z' },
+	{ cls: 'w2', d: 'M0 110C260 40 520 160 780 90S1240 30 1440 110L1440 110C1700 40 1960 160 2220 90S2680 30 2880 110V140H0Z' },
+	{ cls: 'w3', d: 'M0 120C300 80 600 130 900 100S1300 70 1440 120L1440 120C1740 80 2040 130 2340 100S2740 70 2880 120V140H0Z' },
+];
+---
+
+<div class="kd-waves" aria-hidden="true">
+	<i class="kd-anchor" data-node="contacto"></i>
+	<svg viewBox="0 0 2880 140" preserveAspectRatio="none">{WAVES.map((w) => <path class={w.cls} d={w.d} />)}</svg>
+</div>

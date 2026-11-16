@@ -1,0 +1,230 @@
+/* ---------- sobre mí ---------- */
+#sobre {
+	padding-top: calc(clamp(90px, 12vw, 160px) + 16vh);
+}
+
+.kd-about {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+	gap: clamp(24px, 4vw, 56px);
+	align-items: center;
+}
+
+.kd-about .kd-pw {
+	transform: perspective(1600px) rotateY(5deg);
+}
+
+.kd-about .kd-pw[data-in] {
+	transform: perspective(1600px) rotateY(5deg);
+}
+
+.kd-about .kd-plate {
+	padding: clamp(36px, 5vw, 76px) clamp(30px, 5vw, 72px);
+}
+
+.kd-statement {
+	font-family: var(--display);
+	font-weight: 600;
+	letter-spacing: -.025em;
+	font-size: clamp(32px, 4.2vw, 62px);
+	line-height: 1.04;
+	text-wrap: balance;
+	margin-bottom: 26px;
+}
+
+.kd-statement b {
+	font-weight: 400;
+	color: var(--muted);
+}
+
+.kd-copy p {
+	margin: 0 0 16px;
+	max-width: 52ch;
+	font-size: clamp(17px, 1.35vw, 20px);
+	color: var(--muted);
+}
+
+/* fact rows: who I work with and what I use, scannable in a glance */
+.kd-facts {
+	display: grid;
+	gap: 12px;
+	margin-top: 8px;
+}
+
+.kd-facts .row {
+	display: grid;
+	grid-template-columns: 84px minmax(0, 1fr);
+	gap: 12px;
+	align-items: start;
+}
+
+.kd-facts .k {
+	padding-top: 5px;
+	font: 400 12px/1.5 var(--mono);
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+.kd-facts .v {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.kd-facts .v>* {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 10px 4px 4px;
+	clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+	background: color-mix(in srgb, var(--fg) 7%, transparent);
+	font: 500 13px/1 var(--text);
+	color: var(--fg);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background .25s;
+}
+
+.kd-facts a:hover {
+	background: color-mix(in srgb, var(--cyan) 18%, transparent);
+}
+
+.kd-facts .v i {
+	display: grid;
+	place-items: center;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 5px;
+	clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+	background: var(--fg);
+	color: var(--bg);
+	font: 600 10px/1 var(--mono);
+	letter-spacing: .02em;
+	font-style: normal;
+}
+
+.kd-facts .v img {
+	width: 14px;
+	height: 14px;
+	filter: brightness(0);
+	opacity: .9;
+}
+
+.kd-readouts {
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	justify-content: space-between;
+	gap: 24px clamp(16px, 2.5vw, 36px);
+	margin-top: 40px;
+	padding-top: 28px;
+	position: relative;
+}
+
+.kd-readouts::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 1px;
+	background: linear-gradient(90deg, color-mix(in srgb, var(--cyan) 50%, transparent), transparent);
+}
+
+.kd-readouts b {
+	display: block;
+	font: 700 clamp(38px, 4vw, 64px)/1 var(--display);
+	letter-spacing: -.045em;
+	color: var(--fg);
+	white-space: nowrap;
+}
+
+.kd-readouts span {
+	display: block;
+	margin-top: 10px;
+	max-width: 16ch;
+	font-size: 15px;
+	color: var(--muted);
+}
+
+.kd-orbit {
+	position: sticky;
+	top: 120px;
+	justify-self: end;
+	width: min(100%, 440px);
+	aspect-ratio: 1;
+}
+
+.kd-orbit svg {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.kd-orbit .o {
+	fill: none;
+	stroke: color-mix(in srgb, var(--cyan) 40%, transparent);
+	stroke-width: 1.2;
+	stroke-dasharray: 4 10;
+}
+
+.kd-orbit .e {
+	fill: none;
+	stroke: color-mix(in srgb, var(--fg) 22%, transparent);
+	stroke-width: 1.1;
+}
+
+.kd-orbit .ag {
+	fill: var(--cyan);
+	filter: drop-shadow(0 0 4px color-mix(in srgb, var(--cyan) 70%, transparent));
+}
+
+.kd-orbit .tr {
+	fill: var(--amber);
+	filter: drop-shadow(0 0 6px color-mix(in srgb, var(--amber) 70%, transparent));
+}
+
+.kd-orbit .halo {
+	fill: var(--amber);
+	opacity: .3;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: kd-halo 3.2s ease-in-out infinite;
+}
+
+@keyframes kd-halo {
+	0% {
+		transform: scale(1);
+		opacity: .3;
+	}
+	100% {
+		transform: scale(1.5);
+		opacity: 0;
+	}
+}
+
+.kd-orbit .me {
+	fill: var(--amber);
+}
+
+.kd-orbit .me-t {
+	font: 600 30px var(--display);
+	fill: var(--on-accent);
+	text-anchor: middle;
+	letter-spacing: -.02em;
+}
+
+.kd-orbit .st {
+	fill: color-mix(in srgb, var(--fg) 45%, transparent);
+}
+
+.kd-orbit .lb {
+	font: 500 14px var(--mono);
+	fill: var(--fg);
+	text-anchor: middle;
+}
+
+.kd-orbit .cap {
+	font: 400 14px var(--text);
+	fill: var(--muted);
+	text-anchor: middle;
+}

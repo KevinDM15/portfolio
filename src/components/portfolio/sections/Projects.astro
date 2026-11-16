@@ -1,0 +1,30 @@
+---
+/* proyectos: what is being built, with its code in the open, and the first case study waiting at the end */
+import ArrowUpRight from '../../icons/ArrowUpRight.astro';
+import { building } from '../data';
+---
+
+<section id="proyectos" class="kd-sec">
+	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>construyendo</small></div>
+	<div class="kd-pw kd-building" data-reveal>
+		<div class="kd-plate">
+			<p class="kd-building-lede">Lo que tengo abierto ahora, con su código a la vista. El primer caso de estudio con contexto, decisiones y resultados está en camino.</p>
+			<ul>
+				{building.map((b) => (
+					<li>
+						<a href={b.url} target="_blank" rel="noopener">
+							<span class="txt"><b>{b.name}</b><p>{b.text}</p><small>{b.meta}</small></span>
+							<i class="ext"><ArrowUpRight /></i>
+						</a>
+					</li>
+				))}
+				<li class="pending">
+					<div>
+						<span class="txt"><b>Primer caso de estudio</b><p>Un proyecto publicado con su contexto, decisiones y resultados. Aparecerá aquí, conectado a esta ruta.</p><small>en construcción</small></span>
+						<i class="wait" aria-hidden="true"></i>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>

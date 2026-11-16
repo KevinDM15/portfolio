@@ -1,0 +1,33 @@
+---
+/* experiencia: the timeline on the left, one plate per job on the right, and formación under them */
+import ArrowUpRight from '../../icons/ArrowUpRight.astro';
+import Timeline from './Timeline.astro';
+import Credentials from './Credentials.astro';
+import { jobs } from '../data';
+---
+
+<section id="experiencia" class="kd-sec">
+	<div class="kd-head"><i class="kd-anchor" data-node="experiencia" aria-hidden="true"></i><h2>Experiencia</h2><small>2018 — hoy</small></div>
+	<div class="kd-exp">
+		<aside class="kd-path">
+			<p>Del JavaScript de 2018 al Next.js, React Native y las integraciones con IA de hoy, pasando por Go, NestJS y AWS. Siempre en equipos que entregan.</p>
+			<Timeline />
+		</aside>
+		<div>
+			<div class="kd-jobs">
+				{jobs.map((j) => (
+					<div class="kd-pw" data-reveal>
+						<article class="kd-plate kd-job">
+							<div class="when"><span>{j.when}</span><span>{j.span}</span></div>
+							<h3><a href={j.url} target="_blank" rel="noopener">{j.name}<i class="ext"><ArrowUpRight /></i></a></h3>
+							<div class="role">{j.role}</div>
+							<div class="desc" data-k="clamp"><p>{j.text}</p><button type="button" class="more" data-more aria-expanded="false">ver más</button></div>
+							<div class="kd-tags">{j.tags.map((t) => <span>{t}</span>)}</div>
+						</article>
+					</div>
+				))}
+			</div>
+			<Credentials />
+		</div>
+	</div>
+</section>
