@@ -7,26 +7,11 @@
 @font-face{font-family:'Geist Mono';src:url('/fonts/geist-mono-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Geist Mono';src:url('/fonts/geist-mono-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
 
-/* palettes: every colour on the page derives from these tokens (the WebGL scene and the dot portrait read them too).
+/* palette "hielo": near-black grey, ice-white signal, yellow actions. Every colour on the page derives from these tokens (the WebGL scene and the dot portrait read them too).
    roles: --cyan is the signal (cables, nodes, anchors), --amber the action (buttons, now, toast), --hot the firewall,
    --violet the fog, --plate-hi/lo the plate gradient, --paper-* the light block that closes the page. */
-:root{--bg:#060A16;--surface:#0D1328;--fg:#EEF2FF;--muted:#96A0C8;--cyan:#5AD3F3;--amber:#F5B544;--hot:#F0548F;--violet:#6D4CFF;--on-accent:#060A16;--plate-hi:#1A203E;--plate-lo:#090C1A;
-	--paper-bg:#EEF2FF;--paper-surface:#DCE3F7;--paper-fg:#0B1020;--paper-muted:#4C5578;--paper-accent:#1B6F93;--paper-action:var(--amber);--paper-on-action:var(--on-accent)}
-/* ochenta: black with a purple cast, purple signal, yellow actions, and a yellow block to close the page */
-:root[data-palette="ochenta"]{--bg:#0B0810;--surface:#171221;--fg:#F4EFE6;--muted:#9D93A8;--cyan:#B48CFF;--amber:#FFD23F;--hot:#FF5C5C;--violet:#4A1E8C;--on-accent:#0B0810;--plate-hi:#231A36;--plate-lo:#0E0A16;
-	--paper-bg:#F3CB45;--paper-surface:#E4BB2E;--paper-fg:#14101C;--paper-muted:#5A4A1C;--paper-accent:#5B2DA8;--paper-action:#14101C;--paper-on-action:#F3CB45}
-/* grafito: warm graphite, bone cables like pencil lines, ochre actions */
-:root[data-palette="grafito"]{--bg:#141311;--surface:#1E1C18;--fg:#F1ECE2;--muted:#9A948A;--cyan:#E8DCC0;--amber:#D9A441;--hot:#D9534F;--violet:#4A3A22;--on-accent:#141311;--plate-hi:#282419;--plate-lo:#0F0E0C;
-	--paper-bg:#F1ECE2;--paper-surface:#E3DCCB;--paper-fg:#141311;--paper-muted:#6B655B;--paper-accent:#8A6A1F}
-/* pizarra: slate green, coral signal, chalk actions */
-:root[data-palette="pizarra"]{--bg:#0F1412;--surface:#19211D;--fg:#EEF1EA;--muted:#93A096;--cyan:#FF8A65;--amber:#E9E4C8;--hot:#FF4D6D;--violet:#1E4A3E;--on-accent:#0F1412;--plate-hi:#213029;--plate-lo:#0A0F0C;
-	--paper-bg:#F3F0E6;--paper-surface:#E4E0D1;--paper-fg:#10140F;--paper-muted:#5C665E;--paper-accent:#B9533A}
-/* ciruela: plum, lilac signal, gold actions */
-:root[data-palette="ciruela"]{--bg:#150F1C;--surface:#211A2E;--fg:#F4EEF8;--muted:#A89BB8;--cyan:#D4C2FF;--amber:#E9C46A;--hot:#FF5C8A;--violet:#5B2A86;--on-accent:#150F1C;--plate-hi:#2C2144;--plate-lo:#0E0A14;
-	--paper-bg:#F6F1EA;--paper-surface:#EAE2D6;--paper-fg:#1A1324;--paper-muted:#5F5570;--paper-accent:#7A4FB0}
-/* hielo: near-black grey, ice-white signal, yellow actions */
-:root[data-palette="hielo"]{--bg:#101214;--surface:#1A1D21;--fg:#F5F7F8;--muted:#8E959C;--cyan:#DDE6EA;--amber:#FFD166;--hot:#FF6B6B;--violet:#2B3440;--on-accent:#101214;--plate-hi:#24282E;--plate-lo:#0B0D0F;
-	--paper-bg:#F4F6F7;--paper-surface:#E3E7EA;--paper-fg:#101214;--paper-muted:#5B6168;--paper-accent:#4A5A66}
+:root{--bg:#101214;--surface:#1A1D21;--fg:#F5F7F8;--muted:#8E959C;--cyan:#DDE6EA;--amber:#FFD166;--hot:#FF6B6B;--violet:#2B3440;--on-accent:#101214;--plate-hi:#24282E;--plate-lo:#0B0D0F;
+	--paper-bg:#F4F6F7;--paper-surface:#E3E7EA;--paper-fg:#101214;--paper-muted:#5B6168;--paper-accent:#4A5A66;--paper-action:var(--amber);--paper-on-action:var(--on-accent)}
 [data-kd]{--accent:var(--cyan);--line:color-mix(in srgb,var(--fg) 10%,transparent);--line-strong:color-mix(in srgb,var(--fg) 24%,transparent);
 	--display:'Geist',system-ui,sans-serif;--text:'Geist',system-ui,sans-serif;--mono:'Geist Mono',ui-monospace,Menlo,monospace;
 	--cut:14px;--oct:polygon(var(--cut) 0,calc(100% - var(--cut)) 0,100% var(--cut),100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,var(--cut) 100%,0 calc(100% - var(--cut)),0 var(--cut));

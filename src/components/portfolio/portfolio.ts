@@ -13,9 +13,7 @@ export function initPortfolio() {
 	const $$ = <T extends Element>(sel: string) => Array.from(root.querySelectorAll<T>(sel));
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	/* ---------- palette under test: ?paleta=grafito|pizarra|ciruela|hielo (tokens live on :root) ---------- */
-	const paleta = new URLSearchParams(location.search).get('paleta');
-	if (paleta) document.documentElement.dataset.palette = paleta;
+	/* ---------- colour tokens live on :root; the dot portrait reads them from there ---------- */
 	const tok = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 	/* ---------- clock (Bogotá) ---------- */

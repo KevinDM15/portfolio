@@ -97,7 +97,7 @@ Estas reglas vienen de decisiones explícitas de Kevin y aplican a cualquier red
 - Nada de emojis; iconos en SVG.
 - Copy en español neutro, sin regionalismos.
 - Profundidad y materia: Kevin ha pedido que no se vea plano ni "todo cuadrado", pero tampoco redondeado por defecto. Las últimas iteraciones que le gustaron tenían contraste fuerte, un cierre de página en claro con olas, iconos en los listados y un registro "profesional de desarrollador".
-- Colores vivos pero contenidos; en el último estado le gustaron el azul noche como base, cian para la red, ámbar para acciones y un bloque claro al final.
+- Colores vivos pero contenidos. Kevin descartó el azul noche con cian por verse como "diseño genérico de IA". Paleta elegida (nov 2026): "hielo", gris casi negro (#101214) de base, blanco hielo (#DDE6EA) para la red y las anclas, amarillo (#FFD166) para acciones, y un bloque claro gris muy suave (#F4F6F7) al final. Todo vive en tokens en `:root` de portfolio.css.
 - Solo tema oscuro de base en la última etapa; un tema claro no es obligatorio.
 - Móvil con un dedo: nada que dependa de teclado o precisión.
 - Reclutadores primero: la información tiene que poder leerse sin jugar ni descubrir nada.
