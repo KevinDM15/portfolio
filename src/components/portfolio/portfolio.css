@@ -16,7 +16,7 @@
 	--display:'Geist',system-ui,sans-serif;--text:'Geist',system-ui,sans-serif;--mono:'Geist Mono',ui-monospace,Menlo,monospace;
 	--cut:14px;--oct:polygon(var(--cut) 0,calc(100% - var(--cut)) 0,100% var(--cut),100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,var(--cut) 100%,0 calc(100% - var(--cut)),0 var(--cut));
 	--gx:clamp(20px,4vw,60px);
-	position:relative;background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--text);-webkit-font-smoothing:antialiased}
+	position:relative;background:var(--bg);color:var(--fg);font:400 18px/1.6 var(--text);-webkit-font-smoothing:antialiased}
 html{overflow-x:clip;scroll-behavior:smooth;background:var(--bg);color-scheme:dark}
 body{margin:0;background:var(--bg)}
 [data-kd] *{box-sizing:border-box}
@@ -76,10 +76,10 @@ body{margin:0;background:var(--bg)}
 .kd-sec[data-foco]::before,.kd-hero[data-foco]::before{opacity:1}
 .kd-paper .kd-sec::before{display:none}
 /* the waypoint column: every anchor sits in the gutter beside the content, where the star travels */
-.kd-head{position:relative;display:flex;align-items:center;gap:18px;margin-bottom:clamp(28px,4vw,48px)}
+.kd-head{position:relative;display:flex;align-items:center;gap:18px;margin-bottom:clamp(32px,5vw,64px)}
 .kd-anchor{position:absolute;left:max(-30px,calc(10px - var(--gx)));top:50%;margin-top:-5px;display:block;width:10px;height:10px;background:var(--cyan);transform:rotate(45deg);box-shadow:0 0 10px color-mix(in srgb,var(--cyan) 50%,transparent)}
-.kd-head h2{font-size:clamp(28px,3.2vw,46px);line-height:1.05}
-.kd-head small{margin-left:auto;font:400 13px/1 var(--mono);color:var(--muted);white-space:nowrap}
+.kd-head h2{font-size:clamp(40px,6vw,88px);line-height:.98}
+.kd-head small{margin-left:auto;font:400 14px/1 var(--mono);color:var(--muted);white-space:nowrap}
 
 /* ---------- hero ---------- */
 .kd-hero-text{position:relative}
@@ -88,7 +88,7 @@ body{margin:0;background:var(--bg)}
 .kd-kicker{display:flex;align-items:center;gap:10px;margin:0 0 18px;font:400 13px/1 var(--mono);color:var(--cyan)}
 .kd-kicker i{width:7px;height:7px;background:currentColor;transform:rotate(45deg)}
 .kd-hero h1{font-size:clamp(68px,10vw,150px);font-weight:700;line-height:.92;letter-spacing:-.045em}
-.kd-claim{max-width:30ch;margin:28px 0 36px;font:400 clamp(18px,1.5vw,23px)/1.4 var(--text);color:var(--muted);text-wrap:balance}
+.kd-claim{max-width:28ch;margin:28px 0 36px;font:400 clamp(20px,1.9vw,28px)/1.35 var(--text);color:var(--muted);text-wrap:balance}
 /* the name is already the hero: the bar shows it only once the page scrolls */
 .kd-top .kd-mark{opacity:0;transition:opacity .35s}
 .kd-top[data-scrolled] .kd-mark{opacity:1}
@@ -123,7 +123,7 @@ body{margin:0;background:var(--bg)}
 .kd-band .mark{display:grid;place-items:center;width:64px;height:64px;clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);background:color-mix(in srgb,var(--fg) 7%,transparent)}
 .kd-band .mark img{width:34px;height:34px;filter:brightness(0) invert(1);opacity:.92}
 .kd-band .txt{min-width:0}
-.kd-band b{display:block;font:600 20px/1.15 var(--display);letter-spacing:-.02em;color:var(--fg);overflow:hidden;text-overflow:ellipsis}
+.kd-band b{display:block;font:600 22px/1.15 var(--display);letter-spacing:-.02em;color:var(--fg);overflow:hidden;text-overflow:ellipsis}
 .kd-band small{display:block;margin-top:4px;font:400 12px/1 var(--mono);color:var(--muted)}
 .kd-band .meta{display:grid;justify-items:end;gap:8px}
 .kd-band .meta i{width:8px;height:8px;background:var(--cyan);transform:rotate(45deg);animation:kd-blink 2.4s ease-in-out infinite;animation-delay:var(--d)}
@@ -138,15 +138,15 @@ body{margin:0;background:var(--bg)}
 .kd-about .kd-pw{transform:perspective(1600px) rotateY(5deg)}
 .kd-about .kd-pw[data-in]{transform:perspective(1600px) rotateY(5deg)}
 .kd-about .kd-plate{padding:clamp(36px,5vw,76px) clamp(30px,5vw,72px)}
-.kd-statement{font-family:var(--display);font-weight:600;letter-spacing:-.025em;font-size:clamp(26px,3vw,44px);line-height:1.1;text-wrap:balance;margin-bottom:26px}
+.kd-statement{font-family:var(--display);font-weight:600;letter-spacing:-.025em;font-size:clamp(32px,4.2vw,62px);line-height:1.04;text-wrap:balance;margin-bottom:26px}
 .kd-statement b{font-weight:400;color:var(--muted)}
 /* what is happening right now, kept by hand */
-.kd-now{display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px;margin:0 0 26px;font:400 13px/1.5 var(--mono);color:var(--muted)}
+.kd-now{display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px;margin:0 0 26px;font:400 14px/1.5 var(--mono);color:var(--muted)}
 .kd-now i{flex:none;width:8px;height:8px;background:var(--amber);transform:rotate(45deg);animation:kd-pulse 2.4s ease-in-out infinite}
 .kd-now span{flex:1 1 30ch;min-width:0}
 .kd-now b{font-weight:500;color:var(--amber)}
 .kd-now small{font-size:12px;opacity:.7}
-.kd-copy p{margin:0 0 16px;max-width:52ch;color:var(--muted)}
+.kd-copy p{margin:0 0 16px;max-width:52ch;font-size:clamp(17px,1.35vw,20px);color:var(--muted)}
 /* the bio reads short by default; a second length is one tap away */
 .kd-bio-switch{display:inline-flex;gap:2px;margin-bottom:14px;padding:2px;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);background:color-mix(in srgb,var(--fg) 8%,transparent)}
 [data-kd] .kd-bio-switch button{padding:6px 12px;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);font:500 12px/1 var(--mono);color:var(--muted);transition:background .25s,color .25s}
@@ -163,8 +163,8 @@ body{margin:0;background:var(--bg)}
 .kd-facts .v img{width:14px;height:14px;filter:brightness(0);opacity:.9}
 .kd-readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:40px;padding-top:28px;position:relative}
 .kd-readouts::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--cyan) 50%,transparent),transparent)}
-.kd-readouts b{display:block;font:700 clamp(36px,3.6vw,54px)/1 var(--display);letter-spacing:-.045em;color:var(--fg);white-space:nowrap}
-.kd-readouts span{display:block;margin-top:10px;font-size:14px;color:var(--muted)}
+.kd-readouts b{display:block;font:700 clamp(44px,5vw,78px)/1 var(--display);letter-spacing:-.045em;color:var(--fg);white-space:nowrap}
+.kd-readouts span{display:block;margin-top:10px;font-size:15px;color:var(--muted)}
 .kd-orbit{position:sticky;top:120px;justify-self:end;width:min(100%,440px);aspect-ratio:1}
 .kd-orbit svg{width:100%;height:100%;overflow:visible}
 .kd-orbit .o{fill:none;stroke:color-mix(in srgb,var(--cyan) 40%,transparent);stroke-width:1.2;stroke-dasharray:4 10}
@@ -182,12 +182,12 @@ body{margin:0;background:var(--bg)}
 /* ---------- proyectos ---------- */
 /* what is being built: name, one line, the repository; the first case study waits at the end of the list */
 .kd-building .kd-plate{padding:clamp(30px,4vw,56px) clamp(26px,4vw,56px)}
-.kd-building-lede{margin:0 0 26px;max-width:60ch;color:var(--muted)}
+.kd-building-lede{margin:0 0 26px;max-width:40ch;font-size:clamp(20px,2vw,30px);line-height:1.3;color:var(--fg)}
 .kd-building ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .kd-building li>*{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;height:100%;padding:20px 20px 18px 22px;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);background:color-mix(in srgb,var(--fg) 5%,transparent);text-decoration:none;color:inherit;transition:background .25s,transform .25s}
 .kd-building a:hover{background:color-mix(in srgb,var(--cyan) 12%,transparent);transform:translateY(-2px)}
 .kd-building .txt{min-width:0}
-.kd-building b{display:block;font:600 19px/1.2 var(--display);letter-spacing:-.02em}
+.kd-building b{display:block;font:600 clamp(22px,1.9vw,28px)/1.15 var(--display);letter-spacing:-.02em}
 .kd-building .txt p{margin:8px 0 12px;color:var(--muted);font-size:15px;line-height:1.5}
 .kd-building small{display:block;font:400 12px/1 var(--mono);color:var(--muted)}
 .kd-building .ext,.kd-job .ext{display:grid;place-items:center;width:30px;height:30px;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--cyan);transition:background .25s,color .25s}
@@ -200,7 +200,7 @@ body{margin:0;background:var(--bg)}
 /* ---------- experiencia ---------- */
 .kd-exp{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
 .kd-path{position:sticky;top:110px}
-.kd-path>p{margin:0 0 30px;max-width:40ch;color:var(--muted)}
+.kd-path>p{margin:0 0 30px;max-width:30ch;font-size:clamp(20px,2vw,30px);line-height:1.3;color:var(--fg)}
 /* timeline: one chart, a year grid behind, each job a bar on its own row with the name sitting on the bar */
 .kd-tl{position:relative;padding:34px 0 0;margin-right:30px}
 .kd-tl .years{position:absolute;inset:0}
@@ -219,10 +219,10 @@ body{margin:0;background:var(--bg)}
 .kd-jobs{display:grid;gap:22px}
 .kd-job{padding:clamp(26px,3vw,40px) clamp(24px,3vw,40px)}
 .kd-job .when{display:flex;justify-content:space-between;gap:14px;font:400 13px/1 var(--mono);color:var(--muted);margin-bottom:14px}
-.kd-job h3{font-size:clamp(20px,2vw,26px);line-height:1.15}
+.kd-job h3{font-size:clamp(26px,2.8vw,40px);line-height:1.1}
 .kd-job h3 a{display:inline-flex;align-items:center;gap:12px;text-decoration:none}
 .kd-job .role{margin:6px 0 14px;font:400 14px/1.3 var(--mono);color:var(--cyan)}
-.kd-job p{margin:0 0 16px;color:var(--muted);max-width:60ch}
+.kd-job p{margin:0 0 16px;color:var(--muted);max-width:60ch;font-size:clamp(17px,1.3vw,19px)}
 /* descriptions read as two lines; the rest unfolds on request */
 .kd-job .desc p{margin-bottom:8px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .kd-job .desc[data-open] p{display:block;-webkit-line-clamp:unset}
@@ -266,14 +266,14 @@ body{margin:0;background:var(--bg)}
 
 /* ---------- contacto: a statement, a form of lines and the details as plain text ---------- */
 .kd-contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,320px);gap:clamp(32px,6vw,96px);align-items:start}
-.kd-contact h2{font-size:clamp(36px,4.6vw,68px);line-height:1.02;text-wrap:balance}
+.kd-contact h2{font-size:clamp(44px,6.4vw,100px);line-height:.98;text-wrap:balance}
 .kd-contact h2 b{display:block;font-weight:400;color:var(--muted)}
-.kd-contact-lede{margin:22px 0 0;max-width:48ch;color:var(--muted);font-size:17px}
+.kd-contact-lede{margin:26px 0 0;max-width:40ch;color:var(--muted);font-size:clamp(18px,1.5vw,22px)}
 .kd-form{margin:0}
 .kd-field{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:baseline;padding:26px 0 18px;border-bottom:1px solid var(--line-strong);transition:border-color .3s}
 .kd-contact-lede+.kd-field{margin-top:36px;border-top:1px solid var(--line-strong)}
 .kd-field span{font:400 13px/1.4 var(--mono);color:var(--muted)}
-[data-kd] .kd-field input,[data-kd] .kd-field textarea{width:100%;border:0;background:none;padding:0;margin:0;font:400 clamp(18px,1.6vw,22px)/1.4 var(--text);color:var(--fg);resize:none;outline:none;border-radius:0}
+[data-kd] .kd-field input,[data-kd] .kd-field textarea{width:100%;border:0;background:none;padding:0;margin:0;font:400 clamp(20px,2vw,28px)/1.35 var(--text);color:var(--fg);resize:none;outline:none;border-radius:0}
 [data-kd] .kd-field ::placeholder{color:color-mix(in srgb,var(--muted) 65%,transparent)}
 .kd-field:focus-within{border-color:var(--fg)}
 .kd-form-foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-top:30px}
@@ -284,7 +284,7 @@ body{margin:0;background:var(--bg)}
 .kd-details{display:grid;gap:28px;padding-top:14px}
 .kd-details>div{display:grid;gap:7px;justify-items:start}
 .kd-details small{font:400 12px/1 var(--mono);color:var(--muted)}
-.kd-details a,.kd-details b,.kd-details .txt{font:500 17px/1.3 var(--text);color:var(--fg);text-decoration:none}
+.kd-details a,.kd-details b,.kd-details .txt{font:500 clamp(17px,1.4vw,20px)/1.3 var(--text);color:var(--fg);text-decoration:none}
 .kd-details a:hover{text-decoration:underline;text-underline-offset:4px}
 .kd-details .row{display:flex;flex-wrap:wrap;gap:6px 20px}
 [data-kd] .kd-copy{display:inline-flex;align-items:center;gap:10px;text-align:left}
@@ -296,12 +296,12 @@ body{margin:0;background:var(--bg)}
 .kd-details em{font:400 12px/1 var(--mono);font-style:normal;color:var(--muted)}
 .kd-clock{display:inline-flex;align-items:center;gap:10px;color:var(--cyan)}
 .kd-clock svg{width:26px;height:26px;stroke:currentColor;fill:currentColor}
-.kd-clock b{font:500 17px/1 var(--text);color:var(--fg)}
+.kd-clock b{font:500 clamp(17px,1.4vw,20px)/1 var(--text);color:var(--fg)}
 .kd-clock span{font:400 12px/1 var(--mono);color:var(--muted)}
 
 /* ---------- footer ---------- */
 .kd-foot{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px var(--gx) 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end}
-.kd-foot p{margin:0;font:600 clamp(24px,2.6vw,36px)/1.05 var(--display);letter-spacing:-.02em}
+.kd-foot p{margin:0;font:600 clamp(36px,5vw,80px)/.98 var(--display);letter-spacing:-.02em}
 .kd-foot p b{font-weight:400;color:var(--muted)}
 .kd-foot small{display:block;margin-top:14px;font:400 12px/1.6 var(--mono);color:var(--muted)}
 /* the build that is serving this page */
