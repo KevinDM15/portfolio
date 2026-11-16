@@ -1,16 +1,18 @@
 ---
 /*
- * proyectos: the work as a ledger of rows (what, for whom, with what, when). Each row opens into what I did; its
- * schematic shows on the plate beside the ledger (desktop, following the hovered or open row) and inside the row on phones.
+ * proyectos: the work that can be shown in public, as a ledger. The portfolio row opens into what it is; the first
+ * case study waits at the end. Each row's schematic shows on the plate beside the ledger (desktop, following the
+ * hovered or open row) and inside the row on phones.
  */
 import ArrowUpRight from '../../icons/ArrowUpRight.astro';
 import Schematic from './Schematic.astro';
-import { work } from '../data';
+import { work, upcoming } from '../data';
+const pendingIndex = work.length;
 ---
 
 <section id="proyectos" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>trabajo entregado</small></div>
-	<p class="kd-work-lede">Lo que he construido para empresas y clientes, y lo que mantengo en código abierto. Los casos de estudio detallados están en camino.</p>
+	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>en público</small></div>
+	<p class="kd-work-lede">Lo que puedo mostrar con su código a la vista. El trabajo para empresas es privado y está contado en Experiencia; el primer caso de estudio con contexto, decisiones y resultados está en camino.</p>
 	<div class="kd-work-wrap">
 		<div class="kd-work" data-k="work">
 			<div class="kd-work-cols" aria-hidden="true"><span>Proyecto</span><span>Para</span><span>Año</span></div>
@@ -32,10 +34,19 @@ import { work } from '../data';
 					</div>
 				</article>
 			))}
+			<article class="kd-work-row pending">
+				<div class="kd-work-head" data-work={pendingIndex}>
+					<span class="title">{upcoming.title}</span>
+					<span class="client">{upcoming.note}</span>
+					<span class="when">{upcoming.when}</span>
+					<i class="wait" aria-hidden="true"></i>
+				</div>
+			</article>
 		</div>
 		<aside class="kd-work-preview" data-k="work-preview" aria-hidden="true">
 			<div class="kd-pw"><div class="kd-plate">
 				{work.map((w, i) => <div class="kd-work-slide" data-slide={i} data-on={i === 0 ? '' : undefined}><Schematic schematic={w.schematic} title={w.title} /></div>)}
+				<div class="kd-work-slide" data-slide={pendingIndex}><Schematic schematic={upcoming.schematic} title={upcoming.title} /></div>
 			</div></div>
 		</aside>
 	</div>

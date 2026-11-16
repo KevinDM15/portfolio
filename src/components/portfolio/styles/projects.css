@@ -272,3 +272,34 @@
 .kd-work-inline {
 	display: none;
 }
+
+/* the pending row: the first case study, not openable yet, with a pulsing diamond in place of the chevron */
+.kd-work-row.pending .kd-work-head {
+	cursor: default;
+}
+
+.kd-work-row.pending .kd-work-head:hover {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.kd-work-row.pending .title {
+	color: var(--muted);
+}
+
+.kd-work-row.pending .kd-work-head:hover .title {
+	color: var(--muted);
+}
+
+.kd-work-row.pending .client {
+	color: var(--amber);
+}
+
+.kd-work-row.pending .wait {
+	justify-self: end;
+	width: 10px;
+	height: 10px;
+	box-shadow: inset 0 0 0 1.5px var(--amber);
+	transform: rotate(45deg);
+	animation: kd-pulse 2.4s ease-in-out infinite;
+}
