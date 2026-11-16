@@ -46,15 +46,15 @@ body{margin:0;background:var(--bg)}
 .kd-top[data-paper] .kd-route a[aria-current] span{color:var(--paper-fg)}
 .kd-top[data-paper] .kd-trace{color:var(--paper-accent)}
 .kd-top[data-paper] .kd-trace b{color:var(--paper-muted)}
-.kd-top[data-paper] .kd-route::before{background:linear-gradient(90deg,color-mix(in srgb,var(--paper-muted) 60%,transparent),color-mix(in srgb,var(--paper-muted) 25%,transparent))}
 .kd-mark{font:600 16px/1 var(--display);letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
-.kd-route{position:relative;display:flex;align-items:center;gap:34px;padding:10px 0}
-.kd-route::before{content:'';position:absolute;left:6px;right:6px;top:50%;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--muted) 50%,transparent),color-mix(in srgb,var(--muted) 20%,transparent))}
-.kd-route a{position:relative;display:grid;place-items:center;width:16px;height:16px;text-decoration:none}
+/* the route: every section as a label with its waypoint; passed ones lit, the current one amber; a thin progress line runs along the top */
+.kd-route{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px);padding:4px 0;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.kd-route::-webkit-scrollbar{display:none}
+.kd-top::after{content:'';position:absolute;left:0;top:0;height:2px;width:calc(var(--progress,0) * 100%);background:var(--amber);transition:width .12s linear}
+.kd-route a{display:inline-flex;align-items:center;gap:9px;flex:none;text-decoration:none;font:500 13px/1 var(--text);color:var(--muted);transition:color .25s}
 .kd-route a i{display:block;width:8px;height:8px;background:var(--bg);box-shadow:inset 0 0 0 1.5px var(--muted);transform:rotate(45deg);transition:background .3s,box-shadow .3s}
-.kd-route a span{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;white-space:nowrap;font:500 12px/1 var(--text);color:var(--muted);opacity:0;transition:opacity .25s}
-.kd-route a:hover span,.kd-route a[aria-current] span{opacity:1}
-.kd-route a[aria-current] span{color:var(--fg)}
+.kd-route a span{white-space:nowrap}
+.kd-route a:hover,.kd-route a[aria-current]{color:var(--fg)}
 .kd-route a[data-lit] i{background:var(--cyan);box-shadow:none}
 .kd-route a[aria-current] i{background:var(--amber);box-shadow:0 0 8px color-mix(in srgb,var(--amber) 60%,transparent)}
 .kd-trace{min-width:0;max-width:46ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 12px/1 var(--mono);color:var(--cyan)}
@@ -329,11 +329,14 @@ body{margin:0;background:var(--bg)}
 	.kd-portrait .hud .tl{left:22px}
 	.kd-portrait .hud .tr,.kd-portrait .hud .br{right:22px}
 	.kd-portrait .hud .bl{left:20px}
-	.kd-route{gap:22px}
+	.kd-route{gap:16px}
+	.kd-route a{font-size:12px;gap:7px}
+	.kd-route a i{width:7px;height:7px}
+	.kd-top .kd-mark{display:none}
+	.kd-top{padding-left:16px;padding-right:16px}
 	.kd-band li{width:300px;gap:14px}
 	.kd-band .mark{width:52px;height:52px}
 	.kd-band b{font-size:17px}
-	.kd-route a span{display:none}
 	/* phones have no gutter: the waypoints go back inline before the headings, and the hero one sits on the kicker's diamond */
 	.kd-head .kd-anchor{position:static;margin-top:0;flex:none}
 	.kd-hero-text>.kd-anchor{left:-1px;top:3px}
@@ -346,6 +349,10 @@ body{margin:0;background:var(--bg)}
 	.kd-readouts div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:baseline}
 	.kd-readouts span{margin-top:0}
 	.kd-field{grid-template-columns:minmax(0,1fr);gap:8px;padding:20px 0 14px}
+	/* phones: labels only, the current one underlined in amber */
+	.kd-route a i{display:none}
+	.kd-route a{padding:4px 0}
+	.kd-route a[aria-current]{box-shadow:inset 0 -2px 0 var(--amber)}
 	.kd-facts .row{grid-template-columns:minmax(0,1fr)}
 	.kd-facts .k{padding-top:0}
 }

@@ -294,6 +294,16 @@ pnpm preview
 - **Astro SSG + React islands:** Minimal JavaScript shipped, best performance for static portfolio
 - **Flexbox layout:** Terminal fills viewport dynamically without fixed heights
 
+## Coding Rules (Kevin's standing rules, apply to every change)
+
+- No inline SVG scattered through markup. Icons are reusable components in `src/components/icons/` and are imported where used.
+- Everything lives in the folder of its responsibility: section components in `src/components/portfolio/sections/`, data in `src/components/portfolio/data.ts`, behaviours as one module per concern in `src/components/portfolio/behaviours/`, features (network scene, dot portrait, chatbot) under `src/features/`.
+- Single responsibility per file. When a component or module grows a second job, split it.
+- Reuse over copy. Before adding an icon, a helper or a style, look for the existing one.
+- Readable code only: clear names, short functions, a comment only where the why is not obvious. No throwaway or commented-out code.
+- UI copy in neutral Spanish, no emojis, no numbering, no left accent borders.
+- Verify with `pnpm build` and Playwright at 1440 and 390 before calling a change done.
+
 ## Git Workflow
 
 - Repository: https://github.com/KevinDM15/portfolio.git

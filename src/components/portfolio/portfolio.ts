@@ -137,6 +137,8 @@ export function initPortfolio() {
 		const onPaper = paper.getBoundingClientRect().top < 40;
 		if (onPaper) { bar.dataset.paper = '1'; root!.dataset.paper = '1'; } else { delete bar.dataset.paper; delete root!.dataset.paper; }
 		if (scrollY > 24) bar.dataset.scrolled = '1'; else delete bar.dataset.scrolled;
+		const span = document.documentElement.scrollHeight - innerHeight;
+		bar.style.setProperty('--progress', String(span > 0 ? Math.min(1, scrollY / span) : 0));
 	}
 	addEventListener('scroll', () => { route(); tone(); }, { passive: true });
 	route();
