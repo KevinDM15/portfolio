@@ -147,11 +147,6 @@ body{margin:0;background:var(--bg)}
 .kd-now b{font-weight:500;color:var(--amber)}
 .kd-now small{font-size:12px;opacity:.7}
 .kd-copy p{margin:0 0 16px;max-width:52ch;font-size:clamp(17px,1.35vw,20px);color:var(--muted)}
-/* the bio reads short by default; a second length is one tap away */
-.kd-bio-switch{display:inline-flex;gap:2px;margin-bottom:14px;padding:2px;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);background:color-mix(in srgb,var(--fg) 8%,transparent)}
-[data-kd] .kd-bio-switch button{padding:6px 12px;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);font:500 12px/1 var(--mono);color:var(--muted);transition:background .25s,color .25s}
-[data-kd] .kd-bio-switch button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
-.kd-copy[data-bio="corta"] .long,.kd-copy[data-bio="larga"] .short{display:none}
 /* fact rows: who I work with and what I use, scannable in a glance */
 .kd-facts{display:grid;gap:12px;margin-top:8px}
 .kd-facts .row{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;align-items:start}

@@ -75,14 +75,6 @@ export function initPortfolio() {
 	viewport();
 	addEventListener('resize', viewport, { passive: true });
 
-	/* ---------- bio length ---------- */
-	const bio = $<HTMLElement>('[data-k="bio"]');
-	$$<HTMLButtonElement>('[data-bio-set]').forEach((btn) => btn.addEventListener('click', () => {
-		if (!bio) return;
-		bio.dataset.bio = btn.dataset.bioSet;
-		$$<HTMLButtonElement>('[data-bio-set]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-	}));
-
 	/* ---------- job descriptions: two lines, then "ver más" ---------- */
 	$$<HTMLElement>('[data-k="clamp"]').forEach((box) => {
 		const p = box.querySelector('p'), more = box.querySelector<HTMLButtonElement>('[data-more]');
