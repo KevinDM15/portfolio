@@ -140,12 +140,6 @@ body{margin:0;background:var(--bg)}
 .kd-about .kd-plate{padding:clamp(36px,5vw,76px) clamp(30px,5vw,72px)}
 .kd-statement{font-family:var(--display);font-weight:600;letter-spacing:-.025em;font-size:clamp(32px,4.2vw,62px);line-height:1.04;text-wrap:balance;margin-bottom:26px}
 .kd-statement b{font-weight:400;color:var(--muted)}
-/* what is happening right now, kept by hand */
-.kd-now{display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px;margin:0 0 26px;font:400 14px/1.5 var(--mono);color:var(--muted)}
-.kd-now i{flex:none;width:8px;height:8px;background:var(--amber);transform:rotate(45deg);animation:kd-pulse 2.4s ease-in-out infinite}
-.kd-now span{flex:1 1 30ch;min-width:0}
-.kd-now b{font-weight:500;color:var(--amber)}
-.kd-now small{font-size:12px;opacity:.7}
 .kd-copy p{margin:0 0 16px;max-width:52ch;font-size:clamp(17px,1.35vw,20px);color:var(--muted)}
 /* fact rows: who I work with and what I use, scannable in a glance */
 .kd-facts{display:grid;gap:12px;margin-top:8px}
@@ -357,6 +351,6 @@ body{margin:0;background:var(--bg)}
 }
 @media (prefers-reduced-motion:reduce){
 	[data-reveal]{transform:none;opacity:1;transition:none}
-	.kd-orbit .halo,.kd-band ul,.kd-band .meta i,.kd-now i,.kd-building .wait,.kd-waves path{animation:none}
+	.kd-orbit .halo,.kd-band ul,.kd-band .meta i,.kd-building .wait,.kd-waves path{animation:none}
 	.kd-portrait-w{transition:none}
 }
