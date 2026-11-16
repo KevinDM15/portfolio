@@ -264,49 +264,40 @@ body{margin:0;background:var(--bg)}
 .kd-paper .kd-up{background:var(--surface);box-shadow:none;color:var(--fg);margin-right:84px}
 .kd-paper .kd-foot small{color:var(--muted)}
 
-/* ---------- contacto ---------- */
-.kd-contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,540px);gap:clamp(24px,4vw,56px);align-items:start}
+/* ---------- contacto: a statement, a form of lines and the details as plain text ---------- */
+.kd-contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,320px);gap:clamp(32px,6vw,96px);align-items:start}
 .kd-contact h2{font-size:clamp(36px,4.6vw,68px);line-height:1.02;text-wrap:balance}
 .kd-contact h2 b{display:block;font-weight:400;color:var(--muted)}
-.kd-contact-lede{margin:22px 0 0;max-width:44ch;color:var(--muted);font-size:17px}
-.kd-mail,[data-kd] .kd-mail{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;width:min(100%,520px);margin-top:30px;padding:14px 18px 14px 14px;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);background:var(--amber);color:var(--on-accent);text-align:left;transition:transform .3s}
-.kd-mail .ic{display:grid;place-items:center;width:52px;height:52px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:var(--on-accent);color:var(--amber)}
-.kd-mail .ic svg{width:24px;height:24px}
-.kd-mail span{min-width:0}
-.kd-mail b{display:block;font:600 clamp(16px,1.5vw,21px)/1.15 var(--display);letter-spacing:-.015em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.kd-mail small{display:block;margin-top:4px;font:400 12px/1 var(--mono);opacity:.75}
-.kd-mail .act{display:grid;place-items:center;width:36px;height:36px;color:var(--on-accent);opacity:.8}
-.kd-mail .act svg{width:20px;height:20px;grid-area:1/1;transition:opacity .25s,transform .25s}
-.kd-mail .act .ok{opacity:0;transform:scale(.6)}
-.kd-mail[data-done] .act .cp{opacity:0;transform:scale(.6)}
-.kd-mail[data-done] .act .ok{opacity:1;transform:none}
-.kd-mail:hover{transform:translateY(-2px)}
-.kd-contact-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;font:400 13px/1 var(--mono);color:var(--muted)}
-.kd-contact-meta span{display:inline-flex;align-items:center;gap:10px}
-.kd-contact-meta i{width:7px;height:7px;background:var(--cyan);transform:rotate(45deg)}
-/* the contact card: a dark plate standing on the paper, with the channels and the clock */
-.kd-card{--bg:var(--night-bg);--surface:var(--night-surface);--fg:var(--night-fg);--muted:var(--night-muted);--cyan:var(--night-cyan);--amber:var(--night-amber);--on-accent:var(--night-on);--line:color-mix(in srgb,var(--night-fg) 10%,transparent);--line-strong:color-mix(in srgb,var(--night-fg) 24%,transparent);
-	display:grid;gap:30px;padding:clamp(26px,3vw,40px);color:var(--fg);background:linear-gradient(160deg,var(--plate-hi),var(--plate-lo))}
-.kd-card h3{font-size:15px;font-weight:500;letter-spacing:0;margin-bottom:12px;color:var(--cyan)}
-/* what helps me answer: three rows before the mail button */
-.kd-brief{display:grid;gap:10px;margin:22px 0 0}
-.kd-brief li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:center}
-.kd-brief .ic{display:grid;place-items:center;width:40px;height:40px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--fg)}
-.kd-brief .ic svg{width:20px;height:20px}
-.kd-brief b{display:block;font:500 15px/1.3 var(--text)}
-.kd-brief small{display:block;margin-top:2px;font:400 12px/1.4 var(--mono);color:var(--muted)}
-.kd-tiles{display:grid;gap:10px}
-.kd-tiles>li>*{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;padding:10px 14px 10px 10px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:color-mix(in srgb,var(--paper-fg) 4.5%,transparent);text-decoration:none;color:inherit;transition:background .25s,transform .25s}
-.kd-tiles a:hover{background:color-mix(in srgb,var(--cyan) 12%,transparent);transform:translateX(4px)}
-.kd-tiles .ic{display:grid;place-items:center;width:44px;height:44px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);background:var(--fg);color:var(--bg)}
-.kd-tiles .ic svg{width:21px;height:21px}
-.kd-tiles a:hover .ic{background:var(--cyan)}
-.kd-tiles b{display:block;font:500 15px/1.3 var(--text)}
-.kd-tiles small{display:block;margin-top:2px;font:400 12px/1.4 var(--mono);color:var(--muted)}
-.kd-clock{display:flex;align-items:center;gap:18px;color:var(--cyan)}
-.kd-clock svg{width:72px;height:72px;stroke:currentColor;fill:currentColor}
-.kd-clock b{font:600 26px/1 var(--display);letter-spacing:-.02em;color:var(--fg)}
-.kd-clock p{margin:4px 0 0;font:400 12px/1 var(--mono);color:var(--muted)}
+.kd-contact-lede{margin:22px 0 0;max-width:48ch;color:var(--muted);font-size:17px}
+.kd-form{margin:0}
+.kd-field{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:baseline;padding:26px 0 18px;border-bottom:1px solid var(--line-strong);transition:border-color .3s}
+.kd-contact-lede+.kd-field{margin-top:36px;border-top:1px solid var(--line-strong)}
+.kd-field span{font:400 13px/1.4 var(--mono);color:var(--muted)}
+[data-kd] .kd-field input,[data-kd] .kd-field textarea{width:100%;border:0;background:none;padding:0;margin:0;font:400 clamp(18px,1.6vw,22px)/1.4 var(--text);color:var(--fg);resize:none;outline:none;border-radius:0}
+[data-kd] .kd-field ::placeholder{color:color-mix(in srgb,var(--muted) 65%,transparent)}
+.kd-field:focus-within{border-color:var(--fg)}
+.kd-form-foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-top:30px}
+[data-kd] .kd-send{display:inline-flex;align-items:center;gap:14px;padding:13px 14px 13px 28px}
+.kd-send .ext{display:grid;place-items:center;width:30px;height:30px;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);background:var(--on-accent);color:var(--amber)}
+.kd-send .ext svg{width:15px;height:15px}
+.kd-form-foot small{font:400 12px/1.5 var(--mono);color:var(--muted)}
+.kd-details{display:grid;gap:28px;padding-top:14px}
+.kd-details>div{display:grid;gap:7px;justify-items:start}
+.kd-details small{font:400 12px/1 var(--mono);color:var(--muted)}
+.kd-details a,.kd-details b,.kd-details .txt{font:500 17px/1.3 var(--text);color:var(--fg);text-decoration:none}
+.kd-details a:hover{text-decoration:underline;text-underline-offset:4px}
+.kd-details .row{display:flex;flex-wrap:wrap;gap:6px 20px}
+[data-kd] .kd-copy{display:inline-flex;align-items:center;gap:10px;text-align:left}
+.kd-copy .act{display:grid;place-items:center;width:22px;height:22px;color:var(--muted)}
+.kd-copy .act svg{width:16px;height:16px;grid-area:1/1;transition:opacity .25s,transform .25s}
+.kd-copy .act .ok{opacity:0;transform:scale(.6);color:var(--cyan)}
+.kd-copy[data-done] .act .cp{opacity:0;transform:scale(.6)}
+.kd-copy[data-done] .act .ok{opacity:1;transform:none}
+.kd-details em{font:400 12px/1 var(--mono);font-style:normal;color:var(--muted)}
+.kd-clock{display:inline-flex;align-items:center;gap:10px;color:var(--cyan)}
+.kd-clock svg{width:26px;height:26px;stroke:currentColor;fill:currentColor}
+.kd-clock b{font:500 17px/1 var(--text);color:var(--fg)}
+.kd-clock span{font:400 12px/1 var(--mono);color:var(--muted)}
 
 /* ---------- footer ---------- */
 .kd-foot{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:60px var(--gx) 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px;align-items:end}
@@ -331,7 +322,7 @@ body{margin:0;background:var(--bg)}
 @media (max-width:1100px){
 	.kd-about{grid-template-columns:minmax(0,1fr) minmax(0,360px)}
 	.kd-exp{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
-	.kd-contact{grid-template-columns:minmax(0,1fr) minmax(0,440px)}
+	.kd-contact{grid-template-columns:minmax(0,1fr) minmax(0,280px)}
 	.kd-hero{grid-template-columns:minmax(0,1fr) minmax(0,440px)}
 }
 @media (max-width:900px){
@@ -365,6 +356,7 @@ body{margin:0;background:var(--bg)}
 	.kd-readouts{grid-template-columns:minmax(0,1fr);gap:14px}
 	.kd-readouts div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:baseline}
 	.kd-readouts span{margin-top:0}
+	.kd-field{grid-template-columns:minmax(0,1fr);gap:8px;padding:20px 0 14px}
 	.kd-facts .row{grid-template-columns:minmax(0,1fr)}
 	.kd-facts .k{padding-top:0}
 }

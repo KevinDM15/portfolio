@@ -57,6 +57,18 @@ export function initPortfolio() {
 		try { navigator.clipboard.writeText(EMAIL).then(ok, fail); } catch { fail(); }
 	}));
 
+	/* ---------- the contact form opens the visitor's mail app with the message already written ---------- */
+	const form = $<HTMLFormElement>('[data-k="form"]');
+	form?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		if (!form.reportValidity()) return;
+		const d = new FormData(form);
+		const subject = `Idea de ${d.get('nombre')}`;
+		const body = `${d.get('mensaje')}\n\n${d.get('nombre')} · ${d.get('correo')}`;
+		location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+		say('Abriendo tu correo');
+	});
+
 	/* ---------- HUD: the viewport the page is being read in ---------- */
 	const vp = $<HTMLElement>('[data-k="vp"]');
 	const viewport = () => { if (vp) vp.textContent = `${innerWidth}×${innerHeight}`; };
