@@ -1,0 +1,43 @@
+---
+/* a project's architecture drawn from data: chamfered boxes, links with a diamond at the target, the stack marks below */
+import type { Schematic } from '../data';
+interface Props { schematic: Schematic; title: string }
+const { schematic, title } = Astro.props;
+const H = 64, CUT = 8;
+const box = (x: number, y: number, w: number) => `${x + CUT},${y} ${x + w},${y} ${x + w},${y + H - CUT} ${x + w - CUT},${y + H} ${x},${y + H} ${x},${y + CUT}`;
+const centre = (id: string) => { const n = schematic.nodes.find((n) => n.id === id)!; return { x: n.x + n.w / 2, y: n.y + H / 2, n }; };
+/* a link leaves the source and enters the target on the facing edges, so lines never cross the boxes */
+const edge = (from: string, to: string) => {
+	const a = centre(from), b = centre(to);
+	const dx = b.x - a.x, dy = b.y - a.y;
+	const horizontal = Math.abs(dx) > Math.abs(dy);
+	const start = horizontal ? { x: a.n.x + (dx > 0 ? a.n.w : 0), y: a.y } : { x: a.x, y: a.n.y + (dy > 0 ? H : 0) };
+	const end = horizontal ? { x: b.n.x + (dx > 0 ? 0 : b.n.w), y: b.y } : { x: b.x, y: b.n.y + (dy > 0 ? 0 : H) };
+	const mid = horizontal ? { x: (start.x + end.x) / 2, y: start.y } : { x: start.x, y: (start.y + end.y) / 2 };
+	const path = horizontal ? `M${start.x} ${start.y}H${mid.x}V${end.y}H${end.x}` : `M${start.x} ${start.y}V${mid.y}H${end.x}V${end.y}`;
+	return { path, end, label: { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 - 8 } };
+};
+---
+
+<figure class="kd-schematic">
+	<svg viewBox="0 0 480 300" role="img" aria-label={`Esquema: ${title}`}>
+		{schematic.links.map((l) => { const e = edge(l.from, l.to); return (
+			<g class="link">
+				<path d={e.path} />
+				<rect x={e.end.x - 4} y={e.end.y - 4} width="8" height="8" transform={`rotate(45 ${e.end.x} ${e.end.y})`} />
+				{l.label && <text x={e.label.x} y={e.label.y}>{l.label}</text>}
+			</g>
+		); })}
+		{schematic.nodes.map((n) => (
+			<g class={`node ${n.tone ?? 'signal'}`}>
+				<polygon points={box(n.x, n.y, n.w)} />
+				<text class="label" x={n.x + 14} y={n.y + 28}>{n.label}</text>
+				{n.sub && <text class="sub" x={n.x + 14} y={n.y + 47}>{n.sub}</text>}
+			</g>
+		))}
+	</svg>
+	<figcaption>
+		{schematic.icons.map((icon) => <i><img src={`/svg/tech/${icon}.svg`} alt="" width="18" height="18" /></i>)}
+		<span>esquema de arquitectura</span>
+	</figcaption>
+</figure>

@@ -51,9 +51,20 @@
 	.kd-tl {
 		margin-right: 24px;
 	}
-	/* the work ledger stacks each row: title, client, stack, year, with the chevron beside the title */
+	/* the work ledger stacks each row (title, client, year, chevron beside the title) and the schematic moves into the open row */
+	.kd-work-wrap {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.kd-work-preview,
 	.kd-work-cols {
 		display: none;
+	}
+	.kd-work-inline {
+		display: block;
+		margin: 0 0 24px;
+		padding: 18px;
+		clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+		background: color-mix(in srgb, var(--fg) 5%, transparent);
 	}
 	[data-kd] .kd-work-head {
 		grid-template-columns: minmax(0, 1fr) 24px;
@@ -61,7 +72,6 @@
 	}
 	.kd-work-head .title,
 	.kd-work-head .client,
-	.kd-work-head .stack,
 	.kd-work-head .when {
 		grid-column: 1;
 	}

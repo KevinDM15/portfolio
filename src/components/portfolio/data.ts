@@ -55,13 +55,82 @@ export const readouts = [
 	{ figure: 'Yo + IA', text: 'Personas deciden, agentes ejecutan' },
 ];
 
-/** the work ledger: what was built, for whom, with what and when; each row opens into what I did */
-export const work = [
-	{ title: 'Migración de módulos legacy a React y Python serverless', client: companies.cuc, stack: ['React', 'Vite', 'Python'], when: '2026', text: 'Aplicaciones web con Vite y React sobre una plataforma universitaria en producción. Diseño la arquitectura y el plan técnico de cada módulo y migro de forma progresiva código en PHP, JavaScript y jQuery a React en el frontend y Python serverless en el backend, sin detener el servicio.' },
-	{ title: 'Aplicaciones web y móviles multiplataforma', client: companies.elsol, stack: ['Next.js', 'React', 'React Native'], when: '2026', text: 'Interfaces para web y móvil que comparten lógica y priorizan rendimiento, usabilidad y consistencia visual. Arquitecturas y planes técnicos definidos antes de construir, en un equipo que trabaja con Scrum.' },
-	{ title: 'APIs con arquitectura hexagonal e integración de LLMs', client: companies.rocket, stack: ['NestJS', 'PostgreSQL', 'AWS', 'LLMs'], when: '2023 — 2026', text: 'APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, modelos de lenguaje integrados por API para automatizar procesos, y componentes reutilizables con React, MaterialUI, Redux y Next.js que hicieron escalar las aplicaciones del cliente.' },
-	{ title: 'Servicios backend y funciones serverless en Go', client: companies.wawandco, stack: ['Go', 'GCP', 'Firestore'], when: '2020 — 2023', text: 'Servicios en Go con SOLID, Clean Code y MVC, funciones serverless en GCP y una reducción sostenida de deuda técnica, con librerías migradas a versiones actuales.' },
-	{ title: 'Este portafolio, en código abierto', client: { name: 'kevindev.co', short: 'KD', url: REPO }, stack: ['Astro', 'PixiJS', 'TypeScript'], when: '2026', text: 'La landing como mapa de red con PixiJS sobre Astro, con un asistente que responde con el CV como contexto. Diseñado y construido junto a agentes de IA bajo especificaciones con criterios comprobables.', repo: REPO },
+/**
+ * A schematic: the architecture of a project as boxes and links on a 480×300 canvas.
+ * `tone` picks the box colour: signal (default), action or muted. Links point from one box to another.
+ */
+export type SchematicNode = { id: string; label: string; sub?: string; x: number; y: number; w: number; tone?: 'signal' | 'action' | 'muted' };
+export type SchematicLink = { from: string; to: string; label?: string };
+export type Schematic = { nodes: SchematicNode[]; links: SchematicLink[]; icons: string[] };
+
+/** the work ledger: what was built, for whom, with what and when; each row opens into what I did and shows its schematic */
+export const work: { title: string; client: { name: string; short: string; url: string }; stack: string[]; when: string; text: string; repo?: string; schematic: Schematic }[] = [
+	{
+		title: 'Migración de módulos legacy a React y Python serverless', client: companies.cuc, stack: ['React', 'Vite', 'Python'], when: '2026',
+		text: 'Aplicaciones web con Vite y React sobre una plataforma universitaria en producción. Diseño la arquitectura y el plan técnico de cada módulo y migro de forma progresiva código en PHP, JavaScript y jQuery a React en el frontend y Python serverless en el backend, sin detener el servicio.',
+		schematic: {
+			nodes: [
+				{ id: 'legacy', label: 'módulos legacy', sub: 'PHP · jQuery', x: 20, y: 110, w: 150, tone: 'muted' },
+				{ id: 'ui', label: 'frontend', sub: 'React · Vite', x: 300, y: 40, w: 160 },
+				{ id: 'api', label: 'backend', sub: 'Python serverless', x: 300, y: 190, w: 160 },
+			],
+			links: [{ from: 'legacy', to: 'ui', label: 'migración progresiva' }, { from: 'legacy', to: 'api' }],
+			icons: ['react', 'python'],
+		},
+	},
+	{
+		title: 'Aplicaciones web y móviles multiplataforma', client: companies.elsol, stack: ['Next.js', 'React', 'React Native'], when: '2026',
+		text: 'Interfaces para web y móvil que comparten lógica y priorizan rendimiento, usabilidad y consistencia visual. Arquitecturas y planes técnicos definidos antes de construir, en un equipo que trabaja con Scrum.',
+		schematic: {
+			nodes: [
+				{ id: 'core', label: 'lógica compartida', sub: 'React · TypeScript', x: 160, y: 110, w: 170, tone: 'action' },
+				{ id: 'web', label: 'web', sub: 'Next.js', x: 20, y: 220, w: 130 },
+				{ id: 'mobile', label: 'móvil', sub: 'React Native', x: 330, y: 220, w: 130 },
+			],
+			links: [{ from: 'core', to: 'web' }, { from: 'core', to: 'mobile' }],
+			icons: ['nextdotjs', 'react', 'typescript'],
+		},
+	},
+	{
+		title: 'APIs con arquitectura hexagonal e integración de LLMs', client: companies.rocket, stack: ['NestJS', 'PostgreSQL', 'AWS', 'LLMs'], when: '2023 — 2026',
+		text: 'APIs con NestJS, PostgreSQL y AWS bajo arquitectura hexagonal, modelos de lenguaje integrados por API para automatizar procesos, y componentes reutilizables con React, MaterialUI, Redux y Next.js que hicieron escalar las aplicaciones del cliente.',
+		schematic: {
+			nodes: [
+				{ id: 'client', label: 'clientes', sub: 'React · Next.js', x: 20, y: 110, w: 130, tone: 'muted' },
+				{ id: 'api', label: 'API hexagonal', sub: 'NestJS en AWS', x: 180, y: 110, w: 140, tone: 'action' },
+				{ id: 'db', label: 'datos', sub: 'PostgreSQL', x: 350, y: 30, w: 110 },
+				{ id: 'llm', label: 'LLM', sub: 'por API', x: 350, y: 190, w: 110 },
+			],
+			links: [{ from: 'client', to: 'api' }, { from: 'api', to: 'db' }, { from: 'api', to: 'llm' }],
+			icons: ['nestjs', 'postgresql', 'amazonwebservices', 'llm'],
+		},
+	},
+	{
+		title: 'Servicios backend y funciones serverless en Go', client: companies.wawandco, stack: ['Go', 'GCP', 'Firestore'], when: '2020 — 2023',
+		text: 'Servicios en Go con SOLID, Clean Code y MVC, funciones serverless en GCP y una reducción sostenida de deuda técnica, con librerías migradas a versiones actuales.',
+		schematic: {
+			nodes: [
+				{ id: 'svc', label: 'servicios', sub: 'Go · MVC', x: 20, y: 110, w: 140, tone: 'action' },
+				{ id: 'fn', label: 'funciones', sub: 'Cloud Functions', x: 190, y: 110, w: 140 },
+				{ id: 'store', label: 'datos', sub: 'Firestore', x: 360, y: 110, w: 100 },
+			],
+			links: [{ from: 'svc', to: 'fn' }, { from: 'fn', to: 'store' }],
+			icons: ['go', 'googlecloud'],
+		},
+	},
+	{
+		title: 'Este portafolio, en código abierto', client: { name: 'kevindev.co', short: 'KD', url: REPO }, stack: ['Astro', 'PixiJS', 'TypeScript'], when: '2026',
+		text: 'La landing como mapa de red con PixiJS sobre Astro, con un asistente que responde con el CV como contexto. Diseñado y construido junto a agentes de IA bajo especificaciones con criterios comprobables.', repo: REPO,
+		schematic: {
+			nodes: [
+				{ id: 'astro', label: 'landing', sub: 'Astro · estático', x: 160, y: 30, w: 160, tone: 'action' },
+				{ id: 'map', label: 'mapa', sub: 'PixiJS · WebGL', x: 20, y: 190, w: 140 },
+				{ id: 'chat', label: 'asistente', sub: 'React · Groq', x: 320, y: 190, w: 140 },
+			],
+			links: [{ from: 'astro', to: 'map' }, { from: 'astro', to: 'chat' }],
+			icons: ['typescript', 'react', 'llm'],
+		},
+	},
 ];
 
 export const jobs = [

@@ -7,6 +7,14 @@
 	color: var(--fg);
 }
 
+/* the ledger beside its preview plate */
+.kd-work-wrap {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+	gap: clamp(28px, 4vw, 64px);
+	align-items: start;
+}
+
 .kd-work {
 	border-top: 1px solid var(--line-strong);
 }
@@ -15,7 +23,7 @@
 .kd-work-cols,
 [data-kd] .kd-work-head {
 	display: grid;
-	grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 110px 32px;
+	grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) 90px 28px;
 	gap: clamp(16px, 2.5vw, 40px);
 	align-items: center;
 	width: 100%;
@@ -45,7 +53,7 @@
 }
 
 .kd-work-head .title {
-	font: 600 clamp(22px, 2.3vw, 34px)/1.12 var(--display);
+	font: 600 clamp(20px, 1.9vw, 28px)/1.12 var(--display);
 	letter-spacing: -.025em;
 	color: var(--fg);
 	transition: color .3s;
@@ -61,7 +69,13 @@
 	color: var(--fg);
 }
 
-.kd-work-head .stack,
+.kd-work-head .client small {
+	display: block;
+	margin-top: 4px;
+	font: 400 12px/1.5 var(--mono);
+	color: var(--muted);
+}
+
 .kd-work-head .when {
 	font: 400 13px/1.5 var(--mono);
 	color: var(--muted);
@@ -145,4 +159,116 @@
 		opacity: 1;
 		transform: none;
 	}
+}
+
+/* the schematic: boxes and links drawn from data, in the colours of the map */
+.kd-schematic {
+	margin: 0;
+}
+
+.kd-schematic svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.kd-schematic .node polygon {
+	fill: color-mix(in srgb, var(--fg) 6%, transparent);
+	stroke: color-mix(in srgb, var(--cyan) 55%, transparent);
+	stroke-width: 1.2;
+}
+
+.kd-schematic .node.action polygon {
+	stroke: var(--amber);
+	fill: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+
+.kd-schematic .node.muted polygon {
+	stroke: color-mix(in srgb, var(--muted) 60%, transparent);
+	stroke-dasharray: 4 5;
+}
+
+.kd-schematic .label {
+	font: 500 14px var(--text);
+	fill: var(--fg);
+}
+
+.kd-schematic .sub {
+	font: 400 11px var(--mono);
+	fill: var(--muted);
+}
+
+.kd-schematic .link path {
+	fill: none;
+	stroke: color-mix(in srgb, var(--cyan) 50%, transparent);
+	stroke-width: 1.2;
+}
+
+.kd-schematic .link rect {
+	fill: var(--cyan);
+}
+
+.kd-schematic .link text {
+	font: 400 10px var(--mono);
+	fill: var(--muted);
+	text-anchor: middle;
+}
+
+.kd-schematic figcaption {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 18px;
+	font: 400 12px/1 var(--mono);
+	color: var(--muted);
+}
+
+.kd-schematic figcaption i {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+	background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+
+.kd-schematic figcaption img {
+	width: 16px;
+	height: 16px;
+	filter: brightness(0) invert(1);
+	opacity: .9;
+}
+
+.kd-schematic figcaption span {
+	margin-left: 8px;
+}
+
+/* the preview plate: sticky beside the ledger, one slide per row, the active one visible */
+.kd-work-preview {
+	position: sticky;
+	top: 110px;
+}
+
+.kd-work-preview .kd-plate {
+	padding: clamp(22px, 2.4vw, 32px);
+	display: grid;
+}
+
+.kd-work-slide {
+	grid-area: 1 / 1;
+	opacity: 0;
+	transform: translateY(8px);
+	transition: opacity .35s, transform .35s;
+	pointer-events: none;
+}
+
+.kd-work-slide[data-on] {
+	opacity: 1;
+	transform: none;
+}
+
+/* on desktop the schematic lives on the plate; inside the row it appears only on phones */
+.kd-work-inline {
+	display: none;
 }

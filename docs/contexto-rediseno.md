@@ -41,7 +41,7 @@ React, Next.js, React Native, TypeScript, NestJS, Go, Python, PostgreSQL, AWS, G
 
 ### Proyectos
 
-Todavía no hay casos de estudio publicados. La sección es un libro mayor de trabajo entregado: cinco filas (proyecto, para quién, stack, año) que se despliegan con lo que hizo Kevin, cuatro de sus empleos y este portafolio en código abierto. Los datos viven en el array `work` de `data.ts`.
+Todavía no hay casos de estudio publicados. La sección es un libro mayor de trabajo entregado: cinco filas (proyecto, para quién, stack, año) que se despliegan con lo que hizo Kevin, cuatro de sus empleos y este portafolio en código abierto. Cada proyecto lleva un esquema de arquitectura dibujado desde datos (cajas y enlaces, `Schematic.astro`) en una placa fija junto al libro mayor en escritorio y dentro de la fila en móvil. Los datos viven en el array `work` de `data.ts`.
 
 ### Experiencia (2018 — hoy)
 
