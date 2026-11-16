@@ -57,6 +57,7 @@ Markup talks to behaviours only through hooks: `data-k="…"` for elements a beh
 - Readable code only: clear names, short functions, one declaration per line in CSS, a comment only where the why is not obvious. No dead code, no commented-out code, no unused files or dependencies.
 - UI copy in neutral Spanish, no emojis, no numbering in the interface, no left accent borders.
 - Verify with `pnpm build` and Playwright at 1440 and 390 before calling a change done.
+- After every commit, and always before a push: run `pnpm check:dead` (files, assets and dependencies nothing uses) and re-read the diff against these rules. Delete what is dead, fix what breaks a rule, and only then push. The script exits with 1 while something is pending.
 
 ## Design rules already decided
 
