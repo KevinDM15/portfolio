@@ -105,8 +105,6 @@ body{margin:0;background:var(--bg)}
 .kd-btn,[data-kd] .kd-btn{display:inline-block;padding:15px 28px;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:var(--amber);color:var(--on-accent);font:600 16px/1 var(--display);letter-spacing:-.01em;text-decoration:none;transition:transform .3s}
 .kd-btn:hover{transform:translateY(-2px)}
 .kd-btnw{display:inline-block;filter:drop-shadow(0 10px 24px color-mix(in srgb,var(--amber) 25%,transparent))}
-.kd-avail{display:flex;align-items:center;gap:12px;margin-top:40px;color:var(--muted);font-size:15px}
-.kd-avail i{width:8px;height:8px;background:var(--amber);transform:rotate(45deg);animation:kd-pulse 2.4s ease-in-out infinite}
 @keyframes kd-pulse{50%{transform:rotate(45deg) scale(.55);opacity:.6}}
 .kd-portrait-w{justify-self:end;width:100%;transform:rotateY(-6deg) rotateX(1deg);transition:transform .6s cubic-bezier(.2,.8,.2,1);will-change:transform}
 .kd-portrait{aspect-ratio:1;overflow:hidden;isolation:isolate;--cut:22px;background:linear-gradient(160deg,color-mix(in srgb,var(--plate-hi) 90%,transparent),color-mix(in srgb,var(--plate-lo) 85%,transparent))}
@@ -366,6 +364,6 @@ body{margin:0;background:var(--bg)}
 }
 @media (prefers-reduced-motion:reduce){
 	[data-reveal]{transform:none;opacity:1;transition:none}
-	.kd-band ul,.kd-band .meta i,.kd-avail i,.kd-now i,.kd-building .wait,.kd-waves path{animation:none}
+	.kd-band ul,.kd-band .meta i,.kd-now i,.kd-building .wait,.kd-waves path{animation:none}
 	.kd-portrait-w{transition:none}
 }

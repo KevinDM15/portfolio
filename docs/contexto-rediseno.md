@@ -23,7 +23,7 @@ Una sola landing que un reclutador o cliente pueda leer en dos minutos y que al 
 - Frase actual: "Construyo software que el equipo puede mantener. Hoy lo hago con agentes de IA." (se puede reescribir).
 - Descripción: "Desarrollador full-stack en Barranquilla. APIs, apps web y móviles, con una arquitectura que aguanta el paso del tiempo."
 - Llamado a la acción: escribirle (lleva a contacto).
-- Estado: disponible para nuevos proyectos.
+- Estado: (la línea "Disponible para nuevos proyectos" se retiró del hero en nov 2026).
 - Retrato: `public/img/retrato.jpg` (busto, fondo de interior). Existe una máscara de la silueta en `public/img/retrato-mascara.png` (blanco = persona) por si se quiere recortar.
 
 ### Tecnologías
