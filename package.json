@@ -33,7 +33,6 @@
   "devDependencies": {
     "@types/node": "^25.9.1",
     "@unocss/astro": "^66.6.0",
-    "@unocss/preset-wind": "^66.6.0",
     "@unocss/reset": "^66.6.0",
     "unocss": "^66.6.0"
   }
