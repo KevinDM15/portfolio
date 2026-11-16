@@ -85,12 +85,15 @@ body{margin:0;background:var(--bg)}
 
 /* section anchors: where the cable plugs in */
 .kd-sec{position:relative;max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,140px) var(--gx)}
-.kd-head{display:flex;align-items:center;gap:18px;margin-bottom:clamp(28px,4vw,48px)}
-.kd-anchor{flex:none;display:block;width:10px;height:10px;background:var(--cyan);transform:rotate(45deg);box-shadow:0 0 10px color-mix(in srgb,var(--cyan) 50%,transparent)}
+/* the waypoint column: every anchor sits in the gutter beside the content, where the star travels */
+.kd-head{position:relative;display:flex;align-items:center;gap:18px;margin-bottom:clamp(28px,4vw,48px)}
+.kd-anchor{position:absolute;left:max(-30px,calc(10px - var(--gx)));top:50%;margin-top:-5px;display:block;width:10px;height:10px;background:var(--cyan);transform:rotate(45deg);box-shadow:0 0 10px color-mix(in srgb,var(--cyan) 50%,transparent)}
 .kd-head h2{font-size:clamp(28px,3.2vw,46px);line-height:1.05}
 .kd-head small{margin-left:auto;font:400 13px/1 var(--mono);color:var(--muted);white-space:nowrap}
 
 /* ---------- hero ---------- */
+.kd-hero-text{position:relative}
+.kd-hero-text>.kd-anchor{top:10px;margin-top:0}
 .kd-hero{position:relative;min-height:100vh;max-width:1240px;margin:0 auto;padding:130px var(--gx) 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,540px);align-items:center;gap:clamp(24px,4vw,56px)}
 .kd-kicker{display:flex;align-items:center;gap:10px;margin:0 0 18px;font:400 13px/1 var(--mono);color:var(--cyan)}
 .kd-kicker i{width:7px;height:7px;background:currentColor;transform:rotate(45deg)}
@@ -255,10 +258,10 @@ body{margin:0;background:var(--bg)}
 .kd-waves .w2{fill:color-mix(in srgb,var(--paper-bg) 28%,transparent);animation:kd-wave 21s linear infinite reverse}
 .kd-waves .w3{fill:var(--paper-bg);animation:kd-wave 15s linear infinite}
 @keyframes kd-wave{to{transform:translateX(-50%)}}
-.kd-waves .kd-anchor{position:absolute;right:calc(var(--gx) + 1px);top:18%;background:var(--cyan);box-shadow:0 0 10px color-mix(in srgb,var(--cyan) 50%,transparent)}
-.kd-head .kd-anchor:last-child{margin-left:14px}
 .kd-paper .kd-sec{padding-top:clamp(60px,8vw,110px);padding-bottom:clamp(40px,6vw,80px)}
 .kd-paper .kd-anchor{background:var(--fg);box-shadow:none}
+/* the last waypoint sits on the crest of the waves, in the same column, so the landing stays in view above the paper */
+.kd-waves .kd-anchor{left:calc(max(0px,(100% - 1240px) / 2) + var(--gx) + max(-30px,10px - var(--gx)));top:18%;margin-top:0;background:var(--cyan);box-shadow:0 0 10px color-mix(in srgb,var(--cyan) 50%,transparent)}
 .kd-paper .kd-top-fade{display:none}
 .kd-paper .kd-clock{color:var(--cyan)}
 .kd-paper .kd-up{background:var(--surface);box-shadow:none;color:var(--fg);margin-right:84px}
@@ -345,6 +348,10 @@ body{margin:0;background:var(--bg)}
 	.kd-band .mark{width:52px;height:52px}
 	.kd-band b{font-size:17px}
 	.kd-route a span{display:none}
+	/* phones have no gutter: the waypoints go back inline before the headings, and the hero one sits on the kicker's diamond */
+	.kd-head .kd-anchor{position:static;margin-top:0;flex:none}
+	.kd-hero-text>.kd-anchor{left:-1px;top:3px}
+	.kd-waves .kd-anchor{left:var(--gx)}
 	#sobre{padding-top:calc(clamp(90px,12vw,160px) + 8vh)}
 	.kd-foot{grid-template-columns:minmax(0,1fr)}
 }

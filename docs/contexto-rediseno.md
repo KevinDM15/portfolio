@@ -81,7 +81,7 @@ Asistente flotante que responde preguntas sobre Kevin con su CV como contexto. Y
 - React 19 solo como isla para el chatbot (`src/components/islands/ChatBot.tsx`, lógica en `src/features/chatbot/`: hooks, componentes, API, estilos en `chatbot.css`). Lee los tokens de color del contenedor raíz `[data-kd]`: `--bg`, `--surface`, `--fg`, `--muted`, `--line`, `--line-strong`, `--accent`.
 - Endpoint `src/pages/api/chat.ts` contra Groq (modelo `openai/gpt-oss-20b`); la clave vive en `.env` / `.env.local`, nunca en el repo.
 - La landing vive en `src/components/portfolio/` (`Portfolio.astro`, `portfolio.css`, `portfolio.ts`) y se monta desde `src/pages/index.astro`. Es libre de reescribirse por completo.
-- Hay una escena WebGL con PixiJS 8 en `src/features/network/scene.ts` (mapa de red detrás del contenido, cables entre secciones, un paquete que avanza con el scroll y un pequeño reto entre inicio y sobre mí). Se puede reutilizar, reducir o eliminar; no es un requisito del rediseño.
+- Hay una escena WebGL con PixiJS 8 en `src/features/network/scene.ts` (mapa de red detrás del contenido y una estrella que baja con el scroll por la columna de anclas, del hero al cierre, donde aterriza). Se puede reutilizar, reducir o eliminar; no es un requisito del rediseño.
 - GSAP y UnoCSS están instalados. UnoCSS inyecta un reset y utilidades globales: nombres de clase como `ring`, `where` o `row` pueden recibir estilos inesperados; usar nombres con prefijo propio.
 - Fuentes autoalojadas en `public/fonts/` (Geist, Geist Mono, Barlow Condensed, Instrument Serif, DM Mono, Reenie Beanie). Se pueden cambiar; las fuentes de Google se descargan como woff2 latin y se sirven desde ahí.
 - Otros assets: `public/svg/favicon.svg`, `public/svg/textura-grano.svg`.

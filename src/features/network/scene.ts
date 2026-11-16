@@ -1,13 +1,13 @@
 import { Application, BlurFilter, Container, Graphics } from 'pixi.js';
 
 /*
- * The living network behind the landing. The visitor is a data packet: scrolling moves it along a
- * route whose nodes are anchored to the page sections (the portrait first). Ambient nodes, links
- * and traffic fill the map. Between the first two nodes there is a hop to play: pick the open link,
- * firewalls drop the packet; scrolling past routes the packet automatically.
+ * The living network behind the landing. The visitor is a star travelling down the page: the section
+ * anchors are its waypoints, all in one column beside the content, and scrolling moves the star from
+ * the hero to the contact block, where it lands. Behind it the travelled path stays lit; ahead only a
+ * short dotted stretch shows where it is going. Ambient nodes, links and traffic fill the map.
  */
 
-export type NodeDef = { id: string; label: string; el: HTMLElement; anchor?: 'bottom' | 'left'; /** element used instead on narrow screens */ narrow?: HTMLElement };
+export type NodeDef = { id: string; label: string; el: HTMLElement };
 export type Status = { hops: number; ms: number; text: string };
 export type NetworkOptions = { canvas: HTMLCanvasElement; nodes: NodeDef[]; reduce: boolean; onStatus: (s: Status) => void };
 
@@ -18,53 +18,24 @@ const tok = (name: string, fallback: number) => {
 	const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 	return /^#[0-9a-f]{6}$/i.test(v) ? parseInt(v.slice(1), 16) : fallback;
 };
-const CYAN = tok('--cyan', 0x5ad3f3), AMBER = tok('--amber', 0xf5b544), MAGENTA = tok('--hot', 0xf0548f), VIOLET = tok('--violet', 0x6d4cff), MUTED = tok('--muted', 0x96a0c8), FG = tok('--fg', 0xeef2ff), BG = tok('--bg', 0x060a16);
+const CYAN = tok('--cyan', 0x5ad3f3), AMBER = tok('--amber', 0xf5b544), VIOLET = tok('--violet', 0x6d4cff), MUTED = tok('--muted', 0x96a0c8), FG = tok('--fg', 0xeef2ff);
 
-/*
- * an angular cable between two nodes: a 45° diagonal, a vertical middle segment and another 45°
- * diagonal; `bend` pushes the vertical segment sideways. When the nodes are too close vertically
- * for both diagonals the cable degrades to a single elbow at mid-height.
- */
-const angular = (p0: Pt, p1: Pt, bend: number, xAt?: number): Pt[] => {
-	const X = xAt ?? (p0.x + p1.x) / 2 + bend;
-	const d1 = Math.abs(X - p0.x), d2 = Math.abs(p1.x - X);
-	if (p0.y + d1 >= p1.y - d2) return [p0, { x: X, y: (p0.y + p1.y) / 2 }, p1];
-	return [p0, { x: X, y: p0.y + d1 }, { x: X, y: p1.y - d2 }, p1];
-};
-/* the point at normalized length `t` of a polyline */
-const along = (pts: Pt[], t: number): Pt => {
-	const lens = pts.slice(1).map((p, i) => Math.hypot(p.x - pts[i].x, p.y - pts[i].y));
-	const total = lens.reduce((a, b) => a + b, 0);
-	let d = Math.max(0, Math.min(1, t)) * total;
-	for (let i = 0; i < lens.length; i++) {
-		if (d <= lens[i] || i === lens.length - 1) {
-			const k = lens[i] ? Math.min(1, d / lens[i]) : 0, a = pts[i], b = pts[i + 1];
-			return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k };
-		}
-		d -= lens[i];
-	}
-	return pts[pts.length - 1];
-};
-/* the midpoint of the vertical middle segment (or of the whole polyline when there is none) */
-const mid = (pts: Pt[]): Pt => (pts.length === 4 ? { x: pts[1].x, y: (pts[1].y + pts[2].y) / 2 } : along(pts, 0.5));
-const ease = (t: number) => t * t * (3 - 2 * t);
 /* a square rotated 45°, `h` is the half-diagonal */
 const diamond = (x: number, y: number, h: number): Pt[] => [{ x, y: y - h }, { x: x + h, y }, { x, y: y + h }, { x: x - h, y }];
-const path = (g: Graphics, pts: Pt[]) => { g.moveTo(pts[0].x, pts[0].y); for (let i = 1; i < pts.length; i++) g.lineTo(pts[i].x, pts[i].y); return g; };
 
 export async function createNetwork({ canvas, nodes, reduce, onStatus }: NetworkOptions) {
 	const app = new Application();
 	await app.init({ canvas, resizeTo: window, backgroundAlpha: 0, antialias: true, resolution: Math.min(devicePixelRatio || 1, 2), autoDensity: true });
 
-	const route = new Graphics(), gates = new Graphics(), packet = new Graphics();
-	// bloom: the live cable and the packet are drawn a second time, wide and blurred, under the sharp pass
+	const route = new Graphics(), star = new Graphics();
+	// bloom: the lit path and the star are drawn a second time, wide and blurred, under the sharp pass
 	const glow = new Graphics();
 	const glowLayer = new Container();
 	glowLayer.addChild(glow);
 	glowLayer.filters = [new BlurFilter({ strength: 16, quality: 3 })];
 	glowLayer.alpha = 0.4;
 	const world = new Container();
-	app.stage.addChild(world, gates, packet);
+	app.stage.addChild(world, star);
 
 	/* ---------- ambient map in three depths: far is small, dim and slow; near is big, bright and quick ---------- */
 	type ANode = Pt & { r: number };
@@ -77,7 +48,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		{ par: 0.14, alpha: 0.55, size: 1.9, density: 1 / 170000, g: new Graphics(), tr: new Graphics(), nodes: [], links: [], cars: [] },
 	];
 	layers.forEach((l) => world.addChild(l.g, l.tr));
-	// the cable sits between the mid and near layers, so the nearest nodes pass in front of it: it reads as background
+	// the path sits between the mid and near layers, so the nearest nodes pass in front of it: it reads as background
 	world.addChildAt(glowLayer, 4);
 	world.addChildAt(route, 5);
 	function buildAmbient() {
@@ -99,10 +70,9 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 		});
 	}
 
-	/* ---------- route nodes anchored to the page ---------- */
+	/* ---------- waypoints anchored to the page ---------- */
 	type RNode = { def: NodeDef; doc: Pt; lit: boolean };
 	let rNodes: RNode[] = [];
-	const narrow = () => innerWidth < 760;
 	// document box of an element ignoring CSS transforms, so a section mid-reveal (rotated and shifted) still anchors where it will settle
 	function box(el: HTMLElement) {
 		let x = 0, y = 0;
@@ -111,92 +81,31 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	}
 	function layout() {
 		rNodes = nodes.map((def, i) => {
-			const useNarrow = narrow() && !!def.narrow;
-			const r = box(useNarrow ? def.narrow! : def.el);
-			// on phones the first node sits in the hero's bottom padding, clear of the band that follows
-			const doc = def.anchor === 'bottom' || i === 0
-				? { x: r.left + r.width / 2, y: r.top + r.height + (useNarrow ? -44 : 6) }
-				: { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-			return { def, doc, lit: rNodes[i]?.lit ?? false };
+			const r = box(def.el);
+			return { def, doc: { x: r.left + r.width / 2, y: r.top + r.height / 2 }, lit: rNodes[i]?.lit ?? false };
 		});
 	}
 
-	/* ---------- the first hop: three candidate links, one open ---------- */
-	const hop = { state: 'idle' as 'idle' | 'open' | 'done', open: Math.floor(Math.random() * 3), chosen: 1, drops: 0, flash: 0 };
-	// the fan of candidate links narrows on phones and is centred on screen, whatever the node positions
-	const hopBends = () => {
-		const a = rNodes[0], b = rNodes[1];
-		const k = Math.min(1, innerWidth / 900);
-		const shift = a && b ? Math.max(-200, Math.min(200, (innerWidth / 2 - (a.doc.x + b.doc.x) / 2) / 0.75)) : 0;
-		return [-230, 0, 230].map((v) => v * k + shift);
-	};
-	// one candidate link of the first hop; on phones every link drops to a shared row of markers under the band of modules, then converges on the next node
-	const hopPath = (bend: number): Pt[] => {
-		const a = rNodes[0].doc, b = rNodes[1].doc;
-		if (!narrow()) return angular(a, b, bend);
-		const X = (a.x + b.x) / 2 + bend, row = a.y + (b.y - a.y) * 0.72;
-		return [a, { x: X, y: a.y + Math.abs(X - a.x) }, { x: X, y: row + 36 }, b];
-	};
-	const hopMarker = (pts: Pt[]): Pt => (narrow() ? { x: pts[2].x, y: pts[2].y - 36 } : mid(pts));
 	let hops = 0, ms = 0;
 	const status = (text: string) => onStatus({ hops, ms, text });
-	// after the first hop the cable runs in the gutters beside the plates, switching sides between sections:
-	// odd nodes (sobre mí, experiencia) anchor on the left, even ones (proyectos, contacto) on the right
-	const side = (i: number) => (i % 2 ? 'left' : 'right');
-	const gutter = (s: 'left' | 'right') => s === 'left'
-		? Math.max(14, (rNodes[1]?.doc.x ?? 40) - 34)
-		: Math.min(innerWidth - 14, (rNodes[2]?.doc.x ?? innerWidth - 40) + 34);
-	function cable(i: number): Pt[] {
-		const a = rNodes[i].doc, b = rNodes[i + 1].doc;
-		const ga = gutter(side(i)), gb = gutter(side(i + 1));
-		// down its own gutter, across the empty band above the next heading, down the other gutter, into the anchor
-		const yGap = Math.max(a.y + Math.abs(a.x - ga) + 20, b.y - 110);
-		return [a, { x: ga, y: a.y + Math.abs(a.x - ga) }, { x: ga, y: yGap }, { x: gb, y: yGap }, { x: gb, y: b.y - Math.abs(b.x - gb) }, b];
-	}
 
-	function markers(): Pt[] {
-		const a = rNodes[0], b = rNodes[1];
-		if (!a || !b) return [];
-		return hopBends().map((bend) => { const p = hopMarker(hopPath(bend)); return { x: p.x, y: p.y - scrollY }; });
-	}
-	addEventListener('pointerdown', (e) => {
-		if (hop.state !== 'open') return;
-		if ((e.target as Element).closest?.('a, button, input, textarea, [data-kd] header')) return;
-		const hitI = markers().findIndex((m) => (m.x - e.clientX) ** 2 + (m.y - e.clientY) ** 2 < 40 * 40);
-		if (hitI < 0) return;
-		if (hitI === hop.open) { resolve(hitI, 'enlace abierto · en camino'); }
-		else { hop.drops++; hop.flash = 1; status('firewall · paquete descartado, prueba otro'); }
-	});
-	function resolve(i: number, text: string) {
-		hop.state = 'done'; hop.chosen = i;
-		status(text);
-	}
-
-	/* ---------- packet ---------- */
+	/* ---------- the star ---------- */
 	const pos: Pt = { x: 0, y: 0 };
-	let seg = 0, segT = 0, first = true;
+	let seg = 0, segT = 0, first = true, landed = 0;
 	const trail: Pt[] = [];
 	let clock = 0;
+	const small = () => innerWidth < 760;
 
+	// where the star should be: the reading line of the viewport, clamped to the column between the first and last waypoint
 	function target(): Pt {
-		const cy = scrollY + innerHeight * 0.45;
 		if (rNodes.length < 2) return { x: innerWidth / 2, y: innerHeight / 2 };
+		const last = rNodes[rNodes.length - 1].doc;
+		const cy = Math.max(rNodes[0].doc.y, Math.min(last.y, scrollY + innerHeight * 0.45));
 		seg = 0;
 		while (seg < rNodes.length - 2 && cy >= rNodes[seg + 1].doc.y) seg++;
-		const a = rNodes[seg], b = rNodes[seg + 1];
-		segT = Math.max(0, Math.min(1, (cy - a.doc.y) / Math.max(1, b.doc.y - a.doc.y)));
-		// jumped past the first hop without playing: the packet routed itself
-		if (seg > 0 && hop.state !== 'done') resolve(hop.open, 'ruta automática');
-		// first hop: the packet waits at the node while the link is being chosen
-		if (seg === 0) {
-			if (hop.state === 'idle' && segT > 0.03) { hop.state = 'open'; status('elige el enlace abierto'); }
-			// phones have only a short stretch between the hero and the next heading, so the link stays open almost until it
-			if (hop.state === 'open' && segT >= (narrow() ? 0.96 : 0.62)) resolve(hop.open, 'ruta automática');
-			if (hop.state !== 'done') return { x: a.doc.x, y: a.doc.y - scrollY };
-		}
-		const pts = seg === 0 ? hopPath(hopBends()[hop.chosen]) : cable(seg);
-		const p = along(pts, ease(segT));
-		return { x: p.x, y: p.y - scrollY };
+		const a = rNodes[seg].doc, b = rNodes[seg + 1].doc;
+		segT = Math.max(0, Math.min(1, (cy - a.y) / Math.max(1, b.y - a.y)));
+		return { x: a.x + (b.x - a.x) * segT, y: cy - scrollY };
 	}
 
 	function arrive() {
@@ -205,69 +114,82 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 			const reached = i === 0 ? true : i === seg + 1 ? segT >= 0.985 : i <= seg;
 			if (!reached) return;
 			n.lit = true;
-			if (i > 0) { hops++; ms += 14 + Math.round(Math.abs(n.doc.y - rNodes[i - 1].doc.y) / 60); status(`${n.def.label} alcanzado`); }
+			if (i > 0) {
+				hops++; ms += 14 + Math.round(Math.abs(n.doc.y - rNodes[i - 1].doc.y) / 60);
+				const end = i === rNodes.length - 1;
+				if (end) landed = 1;
+				status(end ? 'destino alcanzado' : `${n.def.label} alcanzado`);
+			}
 		});
 	}
 
 	function draw(dt: number) {
 		clock += dt;
-		const w = app.screen.width;
 		layers.forEach((L) => {
 			L.g.y = L.tr.y = -scrollY * L.par;
 			L.tr.clear();
 			if (!reduce) L.cars.forEach((c) => { c.t += c.v * dt; if (c.t > 1 || c.t < 0) { c.l = Math.floor(Math.random() * L.links.length); c.t = c.v > 0 ? 0 : 1; } });
 			L.cars.forEach((c) => { const l = L.links[c.l]; if (!l) return; const a = L.nodes[l.a], b = L.nodes[l.b]; const x = a.x + (b.x - a.x) * c.t, y = a.y + (b.y - a.y) * c.t; L.tr.rect(x - c.s / 2, y - c.s / 2, c.s, c.s).fill({ color: c.c, alpha: 0.8 * L.alpha }); });
 		});
-		// route
-		route.clear();
-		glow.clear();
-		for (let i = 0; i < rNodes.length - 1; i++) {
-			const a = rNodes[i], b = rNodes[i + 1];
-			const p0 = { x: a.doc.x, y: a.doc.y - scrollY }, p1 = { x: b.doc.x, y: b.doc.y - scrollY };
-			if (p1.y < -600 || p0.y > innerHeight + 600) continue;
-			const bends = i === 0 && hop.state !== 'done' ? hopBends() : [i === 0 ? hopBends()[hop.chosen] : 0];
-			bends.forEach((bend) => {
-				const pts = (i === 0 ? hopPath(bend) : cable(i)).map((p) => ({ x: p.x, y: p.y - scrollY }));
-				const live = b.lit || (i === seg && hop.state === 'done');
-				path(route, pts).stroke({ color: live ? CYAN : i === 0 && hop.state === 'open' ? CYAN : MUTED, alpha: live ? 0.5 : 0.28, width: live ? 1.6 : 1 });
-				if (live) path(glow, pts).stroke({ color: CYAN, alpha: 0.4, width: 7 });
-			});
-			// node: a diamond core inside a diamond ring that pulses once lit
-			const lit = b.lit, pulse = reduce ? 0 : (Math.sin(clock * 3 + i) + 1) / 2;
-			route.poly(diamond(p1.x, p1.y, 16 + (lit ? pulse * 5 : 0)), true).stroke({ color: lit ? CYAN : MUTED, alpha: lit ? 0.5 + pulse * 0.4 : 0.5, width: 1.5 });
-			route.poly(diamond(p1.x, p1.y, 7), true).fill({ color: lit ? CYAN : MUTED, alpha: lit ? 1 : 0.6 });
-			if (lit) glow.poly(diamond(p1.x, p1.y, 14), true).fill({ color: CYAN, alpha: 0.8 });
-		}
-		if (rNodes[0]) { const p = { x: rNodes[0].doc.x, y: rNodes[0].doc.y - scrollY }; route.poly(diamond(p.x, p.y, 7), true).fill({ color: CYAN }); glow.poly(diamond(p.x, p.y, 12), true).fill({ color: CYAN, alpha: 0.8 }); }
-		// hop markers
-		gates.clear();
-		if (hop.state === 'open') {
-			hop.flash = Math.max(0, hop.flash - dt * 2);
-			markers().forEach((m, k) => {
-				const isOpen = k === hop.open;
-				if (isOpen) {
-					const pulse = reduce ? 0.5 : (Math.sin(clock * 5) + 1) / 2;
-					gates.poly(diamond(m.x, m.y, 18 + pulse * 6), true).stroke({ color: CYAN, alpha: 0.9, width: 2 });
-					gates.poly(diamond(m.x, m.y, 7), true).fill({ color: CYAN });
-				} else {
-					const s = 15 + hop.flash * 6;
-					gates.poly(diamond(m.x, m.y, s), true).fill({ color: MAGENTA, alpha: 0.85 + hop.flash * 0.15 });
-					gates.moveTo(m.x - 6, m.y - 6).lineTo(m.x + 6, m.y + 6).moveTo(m.x + 6, m.y - 6).lineTo(m.x - 6, m.y + 6).stroke({ color: BG, width: 2.5 });
-				}
-			});
-		}
-		// packet with trail
+
 		const t = target();
 		if (first || reduce) { pos.x = t.x; pos.y = t.y; first = false; }
 		else { pos.x += (t.x - pos.x) * Math.min(1, dt * 7); pos.y += (t.y - pos.y) * Math.min(1, dt * 7); }
+
+		route.clear();
+		glow.clear();
+		const pts = rNodes.map((n) => ({ x: n.doc.x, y: n.doc.y - scrollY }));
+		// phones have no gutter beside the plates: the star and its tail are the whole reference there, no path lines
+		if (pts.length && !small()) {
+			// the travelled path: lit from the first waypoint down to the star
+			const lit: Pt[] = [pts[0]];
+			for (let i = 1; i < pts.length && pts[i].y <= pos.y; i++) lit.push(pts[i]);
+			lit.push({ x: pos.x, y: pos.y });
+			route.moveTo(lit[0].x, lit[0].y);
+			lit.slice(1).forEach((p) => route.lineTo(p.x, p.y));
+			route.stroke({ color: CYAN, alpha: 0.45, width: 1.4 });
+			glow.moveTo(lit[0].x, lit[0].y);
+			lit.slice(1).forEach((p) => glow.lineTo(p.x, p.y));
+			glow.stroke({ color: CYAN, alpha: 0.35, width: 6 });
+			// ahead: a short dotted stretch that fades out, so the destination is hinted, never drawn across the page
+			const last = pts[pts.length - 1];
+			if (pos.y < last.y - 4) {
+				const reach = Math.min(small() ? 150 : 220, last.y - pos.y);
+				for (let d = 18; d < reach; d += 12) {
+					const k = seg < rNodes.length - 1 ? (pts[seg + 1].x - pos.x) / Math.max(1, pts[seg + 1].y - pos.y) : 0;
+					route.rect(pos.x + k * d - 1, pos.y + d - 1, 2, 2).fill({ color: MUTED, alpha: 0.6 * (1 - d / reach) });
+				}
+			}
+		}
+		if (pts.length) {
+			const last = pts[pts.length - 1];
+			// waypoints: a diamond core inside a ring that pulses once lit
+			pts.forEach((p, i) => {
+				if (p.y < -80 || p.y > innerHeight + 80) return;
+				const on = rNodes[i].lit, pulse = reduce ? 0 : (Math.sin(clock * 3 + i) + 1) / 2;
+				route.poly(diamond(p.x, p.y, 14 + (on ? pulse * 4 : 0)), true).stroke({ color: on ? CYAN : MUTED, alpha: on ? 0.5 + pulse * 0.4 : 0.45, width: 1.5 });
+				route.poly(diamond(p.x, p.y, 6), true).fill({ color: on ? CYAN : MUTED, alpha: on ? 1 : 0.6 });
+				if (on) glow.poly(diamond(p.x, p.y, 12), true).fill({ color: CYAN, alpha: 0.8 });
+			});
+			// landing: two rings open from the last waypoint once the star arrives
+			if (landed > 0) {
+				const k = 1 - landed;
+				[0, 0.35].forEach((o) => { const r = Math.max(0, k - o); if (r > 0) route.poly(diamond(last.x, last.y, 10 + r * 70), true).stroke({ color: AMBER, alpha: (1 - r) * 0.8, width: 1.5 }); });
+				landed = reduce ? 0 : Math.max(0, landed - dt * 0.6);
+			}
+		}
+
+		// the star and its tail
 		trail.unshift({ x: pos.x, y: pos.y });
-		if (trail.length > 14) trail.pop();
-		packet.clear();
-		trail.forEach((p, i) => { const s = 4.5 - i * 0.25; packet.rect(p.x - s, p.y - s, s * 2, s * 2).fill({ color: AMBER, alpha: Math.max(0.04, 0.9 - i * 0.07) }); });
-		packet.rect(pos.x - 6, pos.y - 6, 12, 12).fill({ color: AMBER });
-		packet.rect(pos.x - 2, pos.y - 2, 4, 4).fill({ color: FG });
-		glow.circle(pos.x, pos.y, 18).fill({ color: AMBER, alpha: 0.9 });
-		if (w > 0) arrive();
+		if (trail.length > 16) trail.pop();
+		star.clear();
+		const core = small() ? 5 : 6;
+		if (!reduce) trail.forEach((p, i) => { const s = Math.max(0.5, core * 0.75 - i * 0.28); star.poly(diamond(p.x, p.y, s), true).fill({ color: AMBER, alpha: Math.max(0.03, 0.8 - i * 0.055) }); });
+		star.poly(diamond(pos.x, pos.y, core + 3), true).fill({ color: AMBER, alpha: 0.35 });
+		star.poly(diamond(pos.x, pos.y, core), true).fill({ color: AMBER });
+		star.poly(diamond(pos.x, pos.y, core * 0.4), true).fill({ color: FG });
+		glow.circle(pos.x, pos.y, core * 3).fill({ color: AMBER, alpha: 0.9 });
+		arrive();
 	}
 
 	buildAmbient();
@@ -277,7 +199,7 @@ export async function createNetwork({ canvas, nodes, reduce, onStatus }: Network
 	app.renderer.on('resize', () => { if (app.screen.width !== lastW) { lastW = app.screen.width; buildAmbient(); } layout(); });
 	// anchors move as fonts, images and reveals settle: re-measure every frame (five offset reads, no transform maths)
 	app.ticker.add(layout);
-	status('paquete listo · haz scroll');
+	status('en ruta · haz scroll');
 	app.ticker.add((tk) => draw(Math.min(0.05, tk.deltaMS / 1000)));
 	return { relayout: layout };
 }

@@ -139,15 +139,11 @@ export function initPortfolio() {
 	/* ---------- the living network ---------- */
 	const net = $<HTMLCanvasElement>('[data-k="net"]');
 	const trace = $<HTMLElement>('[data-k="trace"]');
-	const first = $<HTMLElement>('[data-node="inicio"]');
-	if (net && first) {
-		const rest = $$<HTMLElement>('[data-node]').filter((el) => el !== first);
+	const waypoints = $$<HTMLElement>('[data-node]');
+	if (net && waypoints.length > 1) {
 		import('../../features/network/scene').then((m) => m.createNetwork({
 			canvas: net, reduce,
-			nodes: [
-				{ id: 'inicio', label: 'inicio', el: first, anchor: 'bottom', narrow: root!.querySelector<HTMLElement>('.kd-hero') ?? undefined },
-				...rest.map((el) => ({ id: el.dataset.node!, label: NODE_LABELS[el.dataset.node!] ?? el.dataset.node!, el })),
-			],
+			nodes: waypoints.map((el) => ({ id: el.dataset.node!, label: NODE_LABELS[el.dataset.node!] ?? el.dataset.node!, el })),
 			onStatus: (s) => { if (trace) trace.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${s.hops} ${s.hops === 1 ? 'salto' : 'saltos'} · ${s.ms} ms` }), ` ${s.text}`); },
 		})).catch(() => {});
 	}

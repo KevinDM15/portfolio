@@ -61,7 +61,8 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 
 <main id="top">
 <section class="kd-hero" aria-label="Inicio">
-	<div>
+	<div class="kd-hero-text">
+		<i class="kd-anchor" data-node="inicio" aria-hidden="true"></i>
 		<p class="kd-kicker"><i aria-hidden="true"></i>Desarrollador full-stack · Barranquilla</p>
 		<h1>Kevin<br>Díaz</h1>
 		<p class="kd-claim">Software que el equipo puede mantener. Hoy, con agentes de IA.</p>
@@ -71,7 +72,7 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 		</div>
 		<div class="kd-avail"><i></i>Disponible para nuevos proyectos</div>
 	</div>
-	<div class="kd-pw kd-portrait-w" data-tilt data-node="inicio">
+	<div class="kd-pw kd-portrait-w" data-tilt>
 		<div class="kd-plate kd-portrait">
 			<canvas data-k="cv" role="img" aria-label="Retrato de Kevin Díaz hecho de puntos que se apartan del cursor"></canvas>
 			<div class="hud" aria-hidden="true">
@@ -142,7 +143,7 @@ const pct = (m: number) => `${((m / 108) * 100).toFixed(1)}%`;
 </section>
 
 <section id="proyectos" class="kd-sec">
-	<div class="kd-head"><i class="kd-anchor" aria-hidden="true"></i><h2>Proyectos</h2><small>construyendo</small><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i></div>
+	<div class="kd-head"><i class="kd-anchor" data-node="proyectos" aria-hidden="true"></i><h2>Proyectos</h2><small>construyendo</small></div>
 	<div class="kd-pw kd-building" data-reveal>
 		<div class="kd-plate">
 			<p class="kd-building-lede">Lo que tengo abierto ahora, con su código a la vista. El primer caso de estudio con contexto, decisiones y resultados está en camino.</p>
